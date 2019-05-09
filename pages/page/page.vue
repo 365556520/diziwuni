@@ -1,5 +1,6 @@
 <template>
 	<view class="content">
+		<image class="logo" src="/static/logo.png"></image>
 		<view>
 			<text class="title"  @click="goto()">{{title}}</text>
 		</view>
@@ -10,7 +11,7 @@
 	export default {
 		data() {
 			return {
-				title: 'ceshi'
+				title: '我是page'
 			}
 		},
 
