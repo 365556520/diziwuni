@@ -1,7 +1,15 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/page/page"
+    "pages/page/page",
+    "pages/pages/home",
+    "pages/pages/my",
+    "pages/pages/news",
+    "pages/pages/shopping",
+    "pages/pages/menu/tabbar",
+    "pages/pages/tabbar/fabu",
+    "pages/pages/tabbar/imgs",
+    "pages/pages/tabbar/tiwen"
   ],
   "subPackages": [],
   "window": {
@@ -9,6 +17,44 @@
     "navigationBarTitleText": "uni-app",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "borderStyle": "black",
+    "backgroundColor": "#333",
+    "color": "#8F8F94",
+    "selectedColor": "#f33e54",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/img/tabbar/home.png",
+        "selectedIconPath": "static/img/tabbar/homeactive.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/pages/news",
+        "iconPath": "static/img/tabbar/guanzhu.png",
+        "selectedIconPath": "static/img/tabbar/guanzhuactive.png",
+        "text": "关注"
+      },
+      {
+        "pagePath": "pages/pages/menu/tabbar",
+        "iconPath": "static/img/tabbar/add.png",
+        "selectedIconPath": "static/img/tabbar/addactive.png",
+        "text": "发布"
+      },
+      {
+        "pagePath": "pages/pages/shopping",
+        "iconPath": "static/img/tabbar/news.png",
+        "selectedIconPath": "static/img/tabbar/newsactive.png",
+        "text": "消息"
+      },
+      {
+        "pagePath": "pages/pages/my",
+        "iconPath": "static/img/tabbar/me.png",
+        "selectedIconPath": "static/img/tabbar/meactive.png",
+        "text": "我"
+      }
+    ]
   },
   "usingComponents": {}
 }

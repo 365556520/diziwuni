@@ -106,7 +106,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 var _default =
 {
   data: function data() {
@@ -118,9 +117,9 @@ var _default =
 
   },
   methods: {
-    goto: function goto() {
+    goto: function goto(url) {
       uni.navigateTo({
-        url: '/pages/page/page?id=1&name=uniapp' });
+        url: url });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))

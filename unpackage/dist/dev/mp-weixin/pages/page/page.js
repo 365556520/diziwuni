@@ -116,14 +116,13 @@ var _default =
   },
 
   onLoad: function onLoad(option) {//option为object类型，会序列化上个页面传递的参数
-    this.title = option.name;
     console.log(option.id); //打印出上个页面传递的参数。
     console.log(option.name); //打印出上个页面传递的参数。
   },
   methods: {
-    goto: function goto() {
+    goto: function goto(url) {
       uni.navigateTo({
-        url: '/pages/index/index' });
+        url: url });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))

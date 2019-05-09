@@ -2,7 +2,7 @@
 	<view class="content">
 		<image class="logo" src="/static/logo.png"></image>
 		<view>
-			<text class="title"  @click="goto()">{{title}}</text>
+			<text class="title"  @click="goto('/pages/index/index')">{{title}}</text>
 		</view>
 	</view>
 </template>
@@ -16,14 +16,13 @@
 		},
 
 		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
-			this.title = option.name;
 			console.log(option.id); //打印出上个页面传递的参数。
 			console.log(option.name); //打印出上个页面传递的参数。
 		},
 		methods: {
-			goto(){
+			goto(url){
 				uni.navigateTo({
-					url: '/pages/index/index'
+					url: url
 				});
 			}
 		}
