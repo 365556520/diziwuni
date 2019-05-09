@@ -11,7 +11,7 @@
 	export default {
 		data() {
 			return {
-				title: '我是page'
+				title: '我是page测试'
 			}
 		},
 
