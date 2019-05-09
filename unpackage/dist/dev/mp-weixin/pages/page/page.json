@@ -1,0 +1,5 @@
+{
+  "navigationBarTitleText": "我是标题",
+  "enablePullDownRefresh": true,
+  "usingComponents": {}
+}
