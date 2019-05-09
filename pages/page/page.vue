@@ -10,7 +10,7 @@
 	export default {
 		data() {
 			return {
-				title: '我是page'
+				title: 'ceshi'
 			}
 		},
 

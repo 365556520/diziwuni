@@ -19,7 +19,7 @@
 		methods: {
 			goto(){
 				uni.navigateTo({
-					url: '/pages/page/page?id=1&name=uniapp'
+					url: '/pages/page/page?id=1&name=传递过去的参数'
 				});
 			}
 		}
