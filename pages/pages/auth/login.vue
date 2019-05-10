@@ -1,9 +1,6 @@
 <template>
 	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view>
-			<text class="title"  @click="goto('/pages/index/index')">{{title}}</text>
-		</view>
+		
 	</view>
 </template>
 
@@ -11,20 +8,13 @@
 	export default {
 		data() {
 			return {
-				title: '我是page'
 			}
 		},
-
 		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
-			console.log(option.id); //打印出上个页面传递的参数。
-			console.log(option.name); //打印出上个页面传递的参数。
+			
 		},
 		methods: {
-			goto(url){
-				uni.navigateTo({
-					url: url
-				});
-			}
+			
 		}
 	}
 </script>

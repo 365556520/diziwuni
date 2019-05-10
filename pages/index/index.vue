@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view>
-			<text class="title" @click="goto('/pages/page/page?id=1&name=传递过去的参数')">{{title}}</text>
+			<text class="title">{{title}}</text>
 		</view>
 	</view>
 </template>
@@ -17,11 +17,7 @@
 
 		},
 		methods: {
-			goto(url){
-				uni.navigateTo({
-					url: url
-				});
-			}
+			
 		}
 	}
 </script>
