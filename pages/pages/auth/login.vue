@@ -1,17 +1,9 @@
 <template>
-	<view class="content center">
+	<view class="content ">
 		 <view class="input-group">
-		    <view class="input-row border">
-		        <text class="title">账号：</text>
-		        <m-input class="m-input" type="text" clearable focus v-model="account" placeholder="请输入账号"></m-input>
-		    </view>
-		    <view class="input-row">
-		        <text class="title">密码：</text>
-		        <m-input type="password" displayable v-model="password" placeholder="请输入密码"></m-input>
-		    </view>
-		</view>
-		<view class="btn-row">
-		    <button type="primary" class="primary" @tap="login">登 录</button>
+		    <inputs :inputsArray="inputsArray" activeName="登 录"  
+		     @activeFc="login" animationType="rotate3d-fade" :animationDuration=".1"
+		     submitReSet :buttonStyle="buttonStyle" :inputDebounceSet="inputDebounceSet"/>
 		</view>
 		<view class="action-row">
 		    <navigator url="">注册账号</navigator>
@@ -22,92 +14,98 @@
 </template>
 
 <script>
-	import mInput from '../../../components/m-input/m-input.vue'
+	import inputs from "@/components/QuShe-inputs/inputs.vue";
 	export default {
 		components: {
-		    mInput
+		    inputs
 		},
 		data() {
 			return {
-				providerList: [],
-				hasProvider: false,
-				account: '',
-				password: '',
-				positionTop: 0
+				inputDebounceSet: {
+                    openInputDebounce: true,
+                    delay: 50
+                },
+				"buttonStyle": { //按钮样式
+                    "activeButton": "background-color: #0faeff;border-radius: 30px;box-shadow: 2px 2px 1px 1px #c0ebd7;", //主按钮样式
+                },
+                "inputsArray": [
+                    {
+                        "title": "账号",
+						"variableName":"username",//自定义变量名取值时候用
+                        "ignore":true,
+						"verifyFc": function(value) {
+                            if (/^[a-zA-Z0-9]{2,15}$/.test(value)) // '/^[1][3,4,5,7,8][0-9]{9}$/'电话号码正则
+                                return true;
+                            return false;
+                        },
+                        "verifyErr": "账号和密码错误"
+                    }, {
+                        "title": "密码",
+						"ignore":true,
+						"variableName":"password",//自定义变量名取值时候用
+                        //"tapClear": true, //input一键清除功能
+                        "password": true, //input密码类型
+						"verifyFc": function(value) {
+						    if (/^[a-zA-Z0-9]{6,15}$/.test(value)) // '/^[1][3,4,5,7,8][0-9]{9}$/'电话号码正则
+						        return true;
+						    return false;
+						},
+						"verifyErr": "账号和密码错误",
+                        "filterFc": function(value) { //input值过滤函数
+                            //自定义过滤函数
+                            value = value;
+                            return value;
+						}
+					}
+				]   
 			}
 		},
 		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
 			
 		},
 		methods: {
-			login(){
-				  /**
-				 * 客户端对账号信息进行一些必要的校验。
-				 * 实际开发中，根据业务需要进行处理，这里仅做示例。
-				 */
-				if (this.account.length < 5) {
-				    uni.showToast({
-				        icon: 'none',
-				        title: '账号最短为 5 个字符'
-				    });
-				    return;
+			login(res){
+				/* // 最终取值
+				//主方法，携带用户输入的数据对象
+				// 如果项内定义了variableName属性，则取值为定义的variableName，否则取值为 this.onloadData + index, onloadData默认值为'data_'
+				// 需要把数据传至服务器时也可以把整个对象传过去，由后端直接处理数据，这样可以实现整体的表单类型、布局、取值都由后端决定
+				//let _this = this; */
+				console.log(JSON.stringify(res));
+				 let data = {
+				    username:res.username,
+				    password:res.password,
 				}
-				if (this.password.length < 6) {
+				//获取文章分类
+				this.$api.post('/api/login',data).then((res)=>{
+				    console.log('数据请求成功', res)
 				    uni.showToast({
-				        icon: 'none',
-				        title: '密码最短为 6 个字符'
+				        title: '登录成功',
+				        icon: 'success',
+				        mask: true
 				    });
-				    return;
-				}
+				    this.res = '请求结果 : ' + JSON.stringify(res);
+				}).catch((err)=>{
+				    
+				    console.log('数据请求失败', err);
+				})
 			}
 		}
 	}
 </script>
 
 <style>
-	.center{
-		 background-color: #efeff4;
+	.content{
+
 	}
-	 .action-row {
+	.action-row {
 	    display: flex;
 	    flex-direction: row;
 	    justify-content: center;
 	}
-	
 	.action-row navigator {
 	    color: #007aff;
 	    padding: 0 20upx;
 	}
 	
-	.oauth-row {
-	    display: flex;
-	    flex-direction: row;
-	    justify-content: center;
-	    position: absolute;
-	    top: 0;
-	    left: 0;
-	    width: 100%;
-	}
-	
-	.oauth-image {
-	    width: 100upx;
-	    height: 100upx;
-	    border: 1upx solid #dddddd;
-	    border-radius: 100upx;
-	    margin: 0 40upx;
-	    background-color: #ffffff;
-	}
-	
-	.oauth-image image {
-	    width: 60upx;
-	    height: 60upx;
-	    margin: 20upx;
-	}
-	/* 原生组件模式下需要注意组件外部样式 */
-	m-input {
-		width: 100%;
-		min-height: 100%;
-		display: flex;
-	}
 	
 </style>
