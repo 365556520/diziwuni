@@ -82,6 +82,7 @@
 	
 	.center {
 		flex-direction: column;
+		background-color: #FFFFFF;
 	}
 	
 	.logo {
