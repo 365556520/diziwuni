@@ -1,1 +1,0 @@
-<view class="content" bind:__l="__l"><view><text data-event-opts="{{[['tap',[['goto',['/pages/page/page?id=1&name=传递过去的参数']]]]]}}" class="title" bindtap="__e">{{title}}</text></view></view>
