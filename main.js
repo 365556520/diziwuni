@@ -8,6 +8,8 @@ import api from '@/components/vmeitime-http/'
 Vue.prototype.$api = api
 /*vuex全局应用*/
 import store from './vuex'
+// vuex全局挂载后使用
+Vue.prototype.$store = store  
 const app = new Vue({
 	store,
     ...App

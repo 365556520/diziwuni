@@ -52,13 +52,13 @@
 			}
 		},
 		computed:{//数据计算
-		    ...mapState(['userToken','userdata']),
+			...mapState(['userToken','userdata']),
 		},
 		methods: {
 			//用vuex里面的方法
 			...mapMutations([
 			    'deleteUser'
-			]),
+			]), 
 			goLogin(url) {
 				if (!this.login) {
 					uni.navigateTo({
@@ -94,7 +94,7 @@
 					    icon: 'success',
 					    mask: true
 					});
-			    }
+			    } 
 			}
 		}
 	}
