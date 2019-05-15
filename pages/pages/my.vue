@@ -32,16 +32,17 @@
 				<text class="list-text">服务条款及隐私</text>
 			</view>
 		</view>
-		<view class="center-list">
+		<view class="center-list" @click="quitUser()">
 			<view class="center-list-item">
 				<text class="list-icon">&#xe614;</text>
-				<text class="list-text">关于应用</text>
+				<text class="list-text">用户退出</text>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import {mapState,mapMutations,mapGetters} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	export default {
 		data() {
 			return {
@@ -50,7 +51,14 @@
 				uerInfo: {}
 			}
 		},
+		computed:{//数据计算
+		    ...mapState(['userToken','userdata']),
+		},
 		methods: {
+			//用vuex里面的方法
+			...mapMutations([
+			    'deleteUser'
+			]),
 			goLogin(url) {
 				if (!this.login) {
 					uni.navigateTo({
@@ -58,6 +66,35 @@
 					});			
 					console.log('点击前往登录');
 				}
+			},
+			 //退出用户
+			quitUser(){
+				console.log('chakan',this.userToken);
+				//用户登录
+			    if(this.userToken!=""){
+					let token = 'Bearer ' + this.userToken;
+					this.$api.postToken('/api/logout','',token).then((res)=>{
+						let userData=JSON.parse(res.data);//把json转换数组
+						console.log('数据请求', res);
+						if(res.statusCode=='200'){
+							  this.deleteUser();//vuex删除用户数据
+							  uni.showToast({
+							     title: userData.message,
+							     icon: 'success',
+							     mask: true
+							 });
+						}
+					  //  this.res = '请求结果 : ' + JSON.stringify(res);
+					}).catch((err)=>{
+					    console.log('数据请求失败', err);
+					})
+			    }else{
+					 uni.showToast({
+					    title: "请用户登录，后再退出",
+					    icon: 'success',
+					    mask: true
+					});
+			    }
 			}
 		}
 	}

@@ -10,11 +10,15 @@
 		    <text>|</text>
 		    <navigator url="">忘记密码</navigator>
 		</view>
+		<view>
+			{{userToken}}
+		</view>
 	</view>
 </template>
 
 <script>
 	import inputs from "@/components/QuShe-inputs/inputs.vue";
+	import {mapState,mapMutations,mapGetters} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	export default {
 		components: {
 		    inputs
@@ -63,29 +67,38 @@
 		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
 			
 		},
+		computed:{//数据计算
+		    ...mapState(['userToken','userdata']),
+		},
 		methods: {
+			 //用vuex里面的方法
+			...mapMutations([
+			    'setToken',
+			    'deleteUser'
+			]),
 			login(res){
 				/* // 最终取值
 				//主方法，携带用户输入的数据对象
 				// 如果项内定义了variableName属性，则取值为定义的variableName，否则取值为 this.onloadData + index, onloadData默认值为'data_'
 				// 需要把数据传至服务器时也可以把整个对象传过去，由后端直接处理数据，这样可以实现整体的表单类型、布局、取值都由后端决定
 				//let _this = this; */
-				console.log(JSON.stringify(res));
 				 let data = {
 				    username:res.username,
 				    password:res.password,
 				}
-				//获取文章分类
+				//用户登录
 				this.$api.post('/api/login',data).then((res)=>{
-				    console.log('数据请求成功', res)
-				    uni.showToast({
-				        title: '登录成功',
-				        icon: 'success',
-				        mask: true
-				    });
-				    this.res = '请求结果 : ' + JSON.stringify(res);
+					let userData=JSON.parse(res.data);//把json转换数组
+					if(res.statusCode=='200'){
+						 this.setToken(userData.token);//把token保存到vuex里面
+						  uni.showToast({
+						     title: userData.message,
+						     icon: 'success',
+						     mask: true
+						 });
+					}
+				  //  this.res = '请求结果 : ' + JSON.stringify(res);
 				}).catch((err)=>{
-				    
 				    console.log('数据请求失败', err);
 				})
 			}

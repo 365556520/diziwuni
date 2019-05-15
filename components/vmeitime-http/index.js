@@ -51,6 +51,30 @@ export const post = (url,data) => {
         data,
     })
 }
+//带token的请求
+export const postToken = (url,data,token) => {
+	//http.config.baseUrl = "http://www.diziw.cn"
+	//设置请求前拦截器
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Accept':'application/json',
+			"Authorization": token,
+		}
+	} 
+	//设置请求结束后拦截器
+	http.interceptor.response = (response) => {
+		console.log('个性化response....')
+		//判断返回状态 执行相应操作
+		return response;
+	}
+    return http.request({
+		baseUrl: 'http://www.diziw.cn',
+		method: 'POST', 
+        url: url,
+		dataType: 'text',
+        data,
+    })
+}
 
 // 轮播图
 export const banner = (data) => {
@@ -66,5 +90,6 @@ export const banner = (data) => {
 export default {
 	test,
     banner,
-	post
+	post,
+	postToken
 }
