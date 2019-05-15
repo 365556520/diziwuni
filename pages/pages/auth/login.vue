@@ -17,7 +17,7 @@
 </template>
 
 <script>
-	import inputs from "@/components/QuShe-inputs/inputs.vue";
+	import inputs from "../../../components/QuShe-inputs/inputs.vue";
 	import {mapState,mapMutations,mapGetters} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	export default {
 		components: {

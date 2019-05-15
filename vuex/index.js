@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import createPersistedState from '../node_modules/vuex-persistedstate' //持久化存储状态信息
 Vue.use(Vuex);
 
 const state={
@@ -82,9 +81,7 @@ const getters = {
 export default new Vuex.Store({
     state,
     mutations,
-    getters,
-    // ...这样配置表示把VUEX中的所有数据存到localStorage中
-    plugins: [createPersistedState()]
+    getters
 })
 
 
