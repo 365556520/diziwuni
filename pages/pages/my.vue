@@ -90,7 +90,7 @@
 					})
 			    }else{
 					 uni.showToast({
-					    title: "请用户登录，后再退出",
+					    title: "未登录",
 					    icon: 'success',
 					    mask: true
 					});
@@ -101,13 +101,6 @@
 </script>
 
 <style>
-	@font-face {
-		font-family: texticons;
-		font-weight: normal;
-		font-style: normal;
-		src: url('https://at.alicdn.com/t/font_984210_5cs13ndgqsn.ttf') format('truetype');
-	}
-	
 	page,
 	view {
 		display: flex;

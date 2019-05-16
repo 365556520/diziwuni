@@ -96,6 +96,8 @@
 						     icon: 'success',
 						     mask: true
 						 });
+						// console.log('打印token', uni.getStorageSync('userToken'));
+					
 					}
 				  //  this.res = '请求结果 : ' + JSON.stringify(res);
 				}).catch((err)=>{
