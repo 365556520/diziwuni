@@ -6,8 +6,8 @@ const state={
     count:3,//测试数据
     userToken:'',//用户token身份
     userdata:{
-        userName:'',//用户名字
-        hasEnter:'',//用户登录状态
+        user:'',//用户信息
+        hasEnter:false,//用户登录状态
     },
     userbaidumap:{
         ak:'LQjsPOAqD3uooTTVrIUePWUm',//百度地图秘钥
@@ -28,13 +28,15 @@ const mutations={
 			// error
 		}
     },
-    //设置名字
-    setName(state,name){
-        state.userdata.userName = name;
-    },
-    //设置用户登录状态
-    setHasEntere(state,hasEnter){
-        state.userdata.hasEnter = hasEnter;
+    //设置用户信息
+    setName(state,data,hasEnter=true){
+        state.userdata = data;
+		state.userdata.hasEnter = hasEnter;
+		try {
+			uni.setStorageSync('userdata', state.userdata);//存到缓存中
+		} catch (e) {
+			// error
+		}
     },
     //设置当前位置的经纬度
     setMapCenter(state,center){
@@ -68,11 +70,12 @@ const mutations={
 			    //清空tiken和用户信息
 			    state.userToken = '';
 			    state.userdata = {
-			        userName:'',//用户名字
-			        hasEnter:'',//用户登录状态
+			        user:'',//用户信息
+			        hasEnter:false,//用户登录状态
 			     };
 			}
 			uni.removeStorageSync('userToken'); //清除本地缓存中的token
+			uni.removeStorageSync('userdata'); //清除本地缓存中的token
 		} catch (e) {
 			// error
 		}

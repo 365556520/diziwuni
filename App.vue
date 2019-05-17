@@ -24,8 +24,9 @@
 
 <style>
 	/*每个页面公共css */
+
 	@font-face {
-		font-family: texticons;
+		font-family: yticon;
 		font-weight: normal;
 		font-style: normal;
 		src: url('https://at.alicdn.com/t/font_984210_5cs13ndgqsn.ttf') format('truetype');

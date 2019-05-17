@@ -1,6 +1,6 @@
 <template>
 	<view class="content ">
-		 <view class="input-group">
+		 <view>
 		    <inputs :inputsArray="inputsArray" activeName="登 录"  
 		     @activeFc="login" animationType="rotate3d-fade" :animationDuration=".1"
 		     submitReSet :buttonStyle="buttonStyle" :inputDebounceSet="inputDebounceSet"/>
@@ -9,9 +9,6 @@
 		    <navigator url="">注册账号</navigator>
 		    <text>|</text>
 		    <navigator url="">忘记密码</navigator>
-		</view>
-		<view>
-			{{userToken}}
 		</view>
 	</view>
 </template>
@@ -27,7 +24,7 @@
 			return {
 				inputDebounceSet: {
                     openInputDebounce: true,
-                    delay: 50
+                    delay: 500
                 },
 				"buttonStyle": { //按钮样式
                     "activeButton": "background-color: #0faeff;border-radius: 30px;box-shadow: 2px 2px 1px 1px #c0ebd7;", //主按钮样式
@@ -74,7 +71,8 @@
 			 //用vuex里面的方法
 			...mapMutations([
 			    'setToken',
-			    'deleteUser'
+			    'setName'
+				
 			]),
 			login(res){
 				/* // 最终取值
@@ -91,19 +89,40 @@
 					let userData=JSON.parse(res.data);//把json转换数组
 					if(res.statusCode=='200'){
 						 this.setToken(userData.token);//把token保存到vuex里面
-						  uni.showToast({
+						 //获取用户信息
+						 this.getuserdata(this.userToken);
+						 uni.showToast({
 						     title: userData.message,
 						     icon: 'success',
 						     mask: true
 						 });
+						 uni.navigateBack({
+							delta: 1, //返回上一页
+							animationType: 'pop-out', //动画
+							animationDuration: 300 //动画时间
+						});
 						// console.log('打印token', uni.getStorageSync('userToken'));
-					
 					}
 				  //  this.res = '请求结果 : ' + JSON.stringify(res);
 				}).catch((err)=>{
 				    console.log('数据请求失败', err);
 				})
+			},
+			//获取用户信息
+			getuserdata(token){
+				if(this.userToken!=""){
+					this.$api.postToken('/api/passport',token).then((res)=>{
+						if(res.statusCode=='200'){
+							let user=JSON.parse(res.data);
+							this.setName(user);
+						}
+						console.log('用户数据信息', this.userdata);
+					}).catch((err)=>{
+					    console.log('数据请求失败', err);
+					})
+				}
 			}
+		
 		}
 	}
 </script>

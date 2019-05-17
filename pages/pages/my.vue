@@ -3,7 +3,7 @@
 		<view class="logo" @click="goLogin('/pages/pages/auth/login')" :hover-class="!login ? 'logo-hover' : ''">
 			<image class="logo-img" :src="login ? uerInfo.avatarUrl :avatarUrl"></image>
 			<view class="logo-title">
-				<text class="uer-name">Hi，{{login ? uerInfo.name : '您未登录!'}}</text>
+				<text class="uer-name">Hi，{{userdata.hasEnter ? userdata.user.name : '您未登录!'}}</text>
 				
 			</view>
 		</view>
@@ -44,9 +44,12 @@
 <script>
 	import {mapState,mapMutations,mapGetters} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	export default {
+		mounted(){ //这个挂在第一次进入页面后运行一次
+		  
+		},
 		data() {
 			return {
-				login: false,
+				login:false,
 				avatarUrl: '/static/logo.png',
 				uerInfo: {}
 			}
@@ -60,11 +63,15 @@
 			    'deleteUser'
 			]), 
 			goLogin(url) {
-				if (!this.login) {
-					uni.navigateTo({
-						url: url
-					});			
-					console.log('点击前往登录');
+				if(this.userdata.hasEnter){
+					return ;
+				}else{
+					if (!this.login) {
+						uni.navigateTo({
+							url: url
+						});			
+						console.log('点击前往登录');
+					}
 				}
 			},
 			 //退出用户
@@ -72,8 +79,8 @@
 				console.log('chakan',this.userToken);
 				//用户登录
 			    if(this.userToken!=""){
-					let token = 'Bearer ' + this.userToken;
-					this.$api.postToken('/api/logout','',token).then((res)=>{
+					let token = this.userToken;
+					this.$api.postToken('/api/logout',token).then((res)=>{
 						let userData=JSON.parse(res.data);//把json转换数组
 						console.log('数据请求', res);
 						if(res.statusCode=='200'){

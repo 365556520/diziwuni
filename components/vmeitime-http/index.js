@@ -52,13 +52,13 @@ export const post = (url,data) => {
     })
 }
 //带token的请求
-export const postToken = (url,data,token) => {
+export const postToken = (url,token,data='') => {
 	//http.config.baseUrl = "http://www.diziw.cn"
 	//设置请求前拦截器
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Accept':'application/json',
-			"Authorization": token,
+			"Authorization": 'Bearer ' + token,
 		}
 	} 
 	//设置请求结束后拦截器
