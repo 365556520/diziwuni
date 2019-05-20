@@ -154,7 +154,8 @@
 						})
 						this.tabBars = tabList;
 						this.loadNewsList('add');
-						//console.log('数据请求成功', v.data)
+						
+						console.log('看看', this.tabBars)
 					}
 				   // this.res = '请求结果 : ' + JSON.stringify(res);
 				}).catch((err)=>{
@@ -164,7 +165,6 @@
 			//新闻列表
 			loadNewsList(type){
 				let tabItem = this.tabBars[this.tabCurrentIndex];
-			
 				//type add 加载更多 refresh下拉刷
 				if(type === 'add'){
 					if(tabItem.loadMoreStatus === 2){
@@ -177,33 +177,75 @@
 					tabItem.refreshing = true;
 				}
 				// #endif
-				
-				//setTimeout模拟异步请求数据
-				setTimeout(()=>{
-					let list = json.newsList;
-					list.sort((a,b)=>{
-						return Math.random() > .5 ? -1 : 1; //静态数据打乱顺序
-					})
-					if(type === 'refresh'){
-						tabItem.newsList = []; //刷新前清空数组
+				//获取文章
+				this.$api.test('/api/getArticles',{
+						limit:'20', //每页10个数据
+						page:'1', //当前页数默认第一页
+						reload:'', //搜索内容
+						ifs:'', //搜索的列名
+						category_id:tabItem.id,//分类id
+						articles_ids:tabItem.id //分类id数组
+				}).then((res)=>{
+					let data = JSON.parse(res.data);
+					if(data.code == "200"){
+						console.log('数据请求成功', data.msg)
+						let list = data.data.data //获取数据
+						console.log('数据请求成功', list)
+				/* 		list.sort((a,b)=>{
+							return Math.random() > .5 ? -1 : 1; //静态数据打乱顺序
+						}) */
+						if(type === 'refresh'){
+							tabItem.newsList = []; //刷新前清空数组
+						}
+						list.forEach(item=>{
+							item.id = parseInt(Math.random() * 10000);
+							tabItem.newsList.push(item);
+						})
+						//下拉刷新 关闭刷新动画
+						if(type === 'refresh'){
+							this.$refs.mixPulldownRefresh && this.$refs.mixPulldownRefresh.endPulldownRefresh();
+							// #ifdef APP-PLUS
+							tabItem.refreshing = false;
+							// #endif
+							tabItem.loadMoreStatus = 0;
+						}
+						//上滑加载 处理状态
+						if(type === 'add'){
+							tabItem.loadMoreStatus = tabItem.newsList.length > 40 ? 2: 0;
+						}
 					}
-					list.forEach(item=>{
-						item.id = parseInt(Math.random() * 10000);
-						tabItem.newsList.push(item);
-					})
-					//下拉刷新 关闭刷新动画
-					if(type === 'refresh'){
-						this.$refs.mixPulldownRefresh && this.$refs.mixPulldownRefresh.endPulldownRefresh();
-						// #ifdef APP-PLUS
-						tabItem.refreshing = false;
-						// #endif
-						tabItem.loadMoreStatus = 0;
+				   // this.res = '请求结果 : ' + JSON.stringify(res);
+				}).catch((err)=>{
+					console.log('数据请求失败', err);
+				})
+			},
+			//文章列表数据整理
+			getArticles(data,path){
+				let lists = []; 
+				for(let i= 0;i<=data.length;i++ ){
+						
+					if(data[i]['thumb'].length > 1){
+						data[i]['thumb'] = this.getimgurl(data[i]['thumb'],path);
 					}
-					//上滑加载 处理状态
-					if(type === 'add'){
-						tabItem.loadMoreStatus = tabItem.newsList.length > 40 ? 2: 0;
+					/* lists[i].id = data[i].id;
+					lists[i]['title'] = data[i].title;
+					lists[i]['author'] = data[i].description;
+					lists[i]['images'] = this.getimgurl(data[i].thumb,path)
+					lists[i]['time'] = data[i].created_at;
+					lists[i]['type'] = data[i].thumb.length-1; */
+				}
+				console.log('kankan',data);
+				return lists;
+			},
+			//获取图片全地址
+			getimgurl(data,path){
+				let images = []; 
+				for (let i= 0;i<=data.length;i++ ) {
+					if(data[i]!=''){
+						images[i] = 'http://www.diziw.cn'+path+data[i]; 
 					}
-				}, 600)
+				}
+				return images;
 			},
 			//新闻详情
 			navToDetails(item){
@@ -233,7 +275,6 @@
 					this.enableScroll = enable;
 				}
 			},
-
 			//tab切换
 			async changeTab(e){
 				
