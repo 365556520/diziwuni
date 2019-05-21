@@ -48,23 +48,20 @@
 							* class 和 style的绑定限制了一些语法，其他并没有不同
 						-->
 						<view v-for="(item, index) in tabItem.newsList" :key="index" class="news-item" @click="navToDetails(item)">
-							<text :class="['title', 'title'+item.type]">{{item.title}}</text>
-							<view v-if="item.images.length > 0" :class="['img-list', 'img-list'+item.type, item.images.length === 1 && item.type===3 ? 'img-list-single': '']">
+							<!-- 根据图片是否存在和个数设置标题 <!-- 'img-list-single' 设置图片列 'img-wrapper-single'设置打图片- ->-->
+							<text :class="['title',item.thumb[0]==''?'':item.thumb.length==1?'title1':'title2' ]">{{item.title}}</text> 
+							<view v-if="item.thumb['0']!=''" :class="['img-list', 'img-list'+item.thumb.length]">
 								<view 
-									v-for="(imgItem, imgIndex) in item.images" :key="imgIndex"
-									:class="['img-wrapper', 'img-wrapper'+item.type, item.images.length === 1 && item.type===3 ? 'img-wrapper-single': '']"
+									v-for="(imgItem, imgIndex) in item.thumb" :key="imgIndex"
+									:class="['img-wrapper', 'img-wrapper'+item.thumb.length]"
 								>
-									<image class="img" :src="imgItem"></image>
-									<view class="video-tip" v-if="item.videoSrc">
-										<image class="video-tip-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAEC0lEQVRoQ+2ajVEVMRDHdzuwA6ACpQKxArECtQKxAqECoQKhAqECoQKxAqEDrWCdn7Nx8vJy+bp3T4YhM2+O8S7J/rO7//2IKo9k6CPBIU9Acpo0s10ReSkiPA8mtH0tIncicqOqPDcyZmvEhX8rIu8cQI9gtyJyKSIXc0ENA3EAnxxAj/BT356LyEdV/TWyWDcQM3smIgA4mtjwXkQ4aX4Mngj3QkSYy5PfTmb+laoeLg7EzBDga8aEEB4TOVfVAKAoj2sUc+QXQC0PxMzY8Esi3W8ROVbV05FTDHPMDC1AEBzEcqY1AeLMQQxtXANuZvjMa/cb/i6Oqo9kQKCFI1WtLl7bfOq9mUHd3/w9ND1F5f+WKAJxn/gebQiIg1Y/mAEEUsDX8J0zVZ0iljoQZydAYLuMrYCIwXOQrYc2qREzw4E/RAu/X9KcRrUX5mWBODX+jBY/UdXjuZuNznd5PnscepNjtikgODJpRzCp3VFaHBU+MTEOkSDMIJ0hFKyMNSAZbZA2NMUJn7ujqjebABDWyDDnXpqb5YDEvnGvqsHZi7I5CMgBxiHDxRx5bmSYGZlyyADWmCwHBN8IwjdRH5Im3B+En5UIJuYFBeMnjFtV3Y/frwDJmNV+K/1NAGEvIv+pqp7MUU1GthXzSoHE+VSzWRU0EsuOaUDhw+aWmNdKOEiBxOzQlYkWNJIqAiAI0V0dmhkZNvkXYyUkpEDYhFJ17cOaWXQACUtxaPhgc9JpZvFBr+Rg/xNI8B+0w0lXR0LDzUCIoE0bNPpISdC1uJD7uJQVlzTyEIFQgFGhMpo10pVfDfgIwlAiU9s0af4h+gglARkE8WURZ98G/V65Fhal3zgg3qnqXpVK/IMG0/rhAOYExDh9KgZEcqy4DtlEirKpTgutqLjsnk5RnEaLWeaUhiY0srFOS1KxrqVPtTS+2by8xsdsnkONNN5G0pDCQcVmtcaoLYVVV63e0zDo8L+0OVgvrNy84lIXemRiM022CtjynWsabVCwMdpKXQeSOlZXcGwRsPWbJAgyLZvOPOh2UKZWn6xYS0Dibl/IVF+1VoytJ15wbqyCtmkwKdIZGnZZE+9tmbLI4mC8VRuDAG8xpo00sQFDi2iRJrabU2jGBYVVmbMKxJ0/dzfSXeGVzM3ZiRZt2tGsgmDdJiAFMGiHNPxijk+YGV1NsuHgD82aCB82A4lomdohvf8jrQm3s61XbzgzAMJtVXwWOPZhD7F0AXEwnBrqjzv1sRCACnfp/HvIdsNlTbiDn+pgDuVn3UCCxN4wA1Bods+xrr8R26/yuuuULh8p8D0nSzsTE8ldOZcAhttgKsUhAEM+Ujty1xIm1PJfOK7nCh/LM2xaNVDbfv8EZNsnXtvvDyrmF1FIBKIwAAAAAElFTkSuQmCC"></image>
-									</view>
+									<image class="img"  :src="urlpath + imgItem"></image>
 								</view>
 							</view>
-							<!-- 空图片占位 -->
-							<view v-else class="img-empty"></view>
-							<view :class="['bot', 'bot'+item.type]">
-								<text class="author">{{item.author}}</text>
-								<text class="time">{{item.time}}</text>
+							<!-- 空图片占位 --><!-- 根据图片是否存在和个数设置底部内容 -->
+							<view :class="['bot',item.thumb[0]==''?'':item.thumb.length==1?'bot1':'bot2']">
+								<text class="author">{{item.get_user.name}}</text>
+								<text class="time">{{item.created_at}}</text>
 							</view>
 						</view>
 						
@@ -79,7 +76,6 @@
 </template>
 
 <script>
-	import json from '@/json'
 	import mixPulldownRefresh from '@/components/mix-pulldown-refresh/mix-pulldown-refresh';
 	import mixLoadMore from '@/components/mix-load-more/mix-load-more';
 	let windowWidth = 0, scrollTimer = false, tabBar;
@@ -94,6 +90,7 @@
 				scrollLeft: 0, //顶部选项卡左滑距离
 				enableScroll: true,
 				tabBars: [], //文章分类数据
+				urlpath:''//图片路径
 			}
 		},
 		computed: {
@@ -139,7 +136,6 @@
 			 * 这里直接写的
 			 * mixin使用方法看index.nuve
 			 */
-
 			//获取分类
 			loadTabbars(){
 				//获取文章分类
@@ -154,7 +150,6 @@
 						})
 						this.tabBars = tabList;
 						this.loadNewsList('add');
-						
 						console.log('看看', this.tabBars)
 					}
 				   // this.res = '请求结果 : ' + JSON.stringify(res);
@@ -177,7 +172,7 @@
 					tabItem.refreshing = true;
 				}
 				// #endif
-				//获取文章
+				//获取文章列表
 				this.$api.test('/api/getArticles',{
 						limit:'20', //每页10个数据
 						page:'1', //当前页数默认第一页
@@ -189,8 +184,8 @@
 					let data = JSON.parse(res.data);
 					if(data.code == "200"){
 						console.log('数据请求成功', data.msg)
+						this.urlpath = 'http://www.diziw.cn/'+data.msg
 						let list = data.data.data //获取数据
-						console.log('数据请求成功', list)
 				/* 		list.sort((a,b)=>{
 							return Math.random() > .5 ? -1 : 1; //静态数据打乱顺序
 						}) */
@@ -201,6 +196,7 @@
 							item.id = parseInt(Math.random() * 10000);
 							tabItem.newsList.push(item);
 						})
+						console.log('数据请求成功', list)
 						//下拉刷新 关闭刷新动画
 						if(type === 'refresh'){
 							this.$refs.mixPulldownRefresh && this.$refs.mixPulldownRefresh.endPulldownRefresh();
@@ -236,16 +232,6 @@
 				}
 				console.log('kankan',data);
 				return lists;
-			},
-			//获取图片全地址
-			getimgurl(data,path){
-				let images = []; 
-				for (let i= 0;i<=data.length;i++ ) {
-					if(data[i]!=''){
-						images[i] = 'http://www.diziw.cn'+path+data[i]; 
-					}
-				}
-				return images;
 			},
 			//新闻详情
 			navToDetails(item){
