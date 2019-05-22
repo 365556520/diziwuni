@@ -1,9 +1,9 @@
 <template>
 	<view class="content ">
-		 <view>
-		    <inputs :inputsArray="inputsArray" activeName="登 录"  
-		     @activeFc="login" animationType="rotate3d-fade" :animationDuration=".1"
-		     submitReSet :buttonStyle="buttonStyle" :inputDebounceSet="inputDebounceSet"/>
+		<view>
+				<inputs :inputsArray="inputsArray" activeName="登 录"  
+				 @activeFc="login" animationType="rotate3d-fade" :animationDuration=".1"
+				 submitReSet :buttonStyle="buttonStyle" :inputDebounceSet="inputDebounceSet"/>
 		</view>
 		<view class="action-row">
 		    <navigator url="">注册账号</navigator>
@@ -27,21 +27,21 @@
                     delay: 500
                 },
 				"buttonStyle": { //按钮样式
-                    "activeButton": "background-color: #0faeff;border-radius: 30px;box-shadow: 2px 2px 1px 1px #c0ebd7;", //主按钮样式
+                    "activeButton": "background-color: #ec706b;border-radius: 2px;box-shadow: 2px 2px 1px 1px #c0ebd7;", //主按钮样式
                 },
                 "inputsArray": [
                     {
-                        "title": "账号",
+                        "title": "用户名",
 						"variableName":"username",//自定义变量名取值时候用
-                        "ignore":true,
+			            "ignore":true,
 						"verifyFc": function(value) {
                             if (/^[a-zA-Z0-9]{2,15}$/.test(value)) // '/^[1][3,4,5,7,8][0-9]{9}$/'电话号码正则
                                 return true;
                             return false;
                         },
-                        "verifyErr": "账号和密码错误"
+                        "verifyErr": "用户名和密码错误"
                     }, {
-                        "title": "密码",
+                        "title": "密 码",
 						"ignore":true,
 						"variableName":"password",//自定义变量名取值时候用
                         //"tapClear": true, //input一键清除功能
@@ -51,14 +51,14 @@
 						        return true;
 						    return false;
 						},
-						"verifyErr": "账号和密码错误",
+						"verifyErr": "用户名和密码错误",
                         "filterFc": function(value) { //input值过滤函数
                             //自定义过滤函数
                             value = value;
                             return value;
-						}
-					}
-				]   
+						},
+					},
+				]
 			}
 		},
 		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
@@ -140,6 +140,11 @@
 	    color: #007aff;
 	    padding: 0 20upx;
 	}
-	
+	view,button, textarea, input{
+		box-sizing: border-box;
+	}
+	button::after {
+		border: none;
+	}
 	
 </style>

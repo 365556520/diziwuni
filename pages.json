@@ -26,9 +26,16 @@
 			}
 		},
 		{
-			"path": "pages/pages/news",
+			"path": "pages/pages/news/news",
 			"style": {
-				"navigationBarTitleText": "新闻"
+				"navigationBarTitleText": "关注",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": false,
+					"navigationBarTextStyle": "white",
+					// #endif
+					"bounce": "none"
+				}
 			}
 		},
 		{
@@ -58,9 +65,9 @@
 	],
 	"tabBar": {
         "borderStyle": "black",
-        "backgroundColor": "#F8F8F8",
-        "color": "#8F8F94",
-        "selectedColor": "#f33e54",
+        "backgroundColor": "#FFFFFF",
+        "color": "#C0C4CC",
+        "selectedColor": "#fa436a",
         "list": [{
                 "pagePath": "pages/index/index",
                 "iconPath": "static/img/tabbar/home.png",
@@ -68,7 +75,7 @@
                 "text": "首页"
             },
             {
-                "pagePath": "pages/pages/news",
+                "pagePath": "pages/pages/news/news",
                 "iconPath": "static/img/tabbar/guanzhu.png",
                 "selectedIconPath": "static/img/tabbar/guanzhuactive.png",
                 "text": "关注"
@@ -105,8 +112,8 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#0faeff",
-		"backgroundColor": "#fbf9fe"
+		"navigationBarBackgroundColor": "#ec706b",
+		"backgroundColor": "#f8f8f8"
 	},
 	"condition" : { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)

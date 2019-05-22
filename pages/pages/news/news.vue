@@ -215,24 +215,6 @@
 					console.log('数据请求失败', err);
 				})
 			},
-			//文章列表数据整理
-			getArticles(data,path){
-				let lists = []; 
-				for(let i= 0;i<=data.length;i++ ){
-						
-					if(data[i]['thumb'].length > 1){
-						data[i]['thumb'] = this.getimgurl(data[i]['thumb'],path);
-					}
-					/* lists[i].id = data[i].id;
-					lists[i]['title'] = data[i].title;
-					lists[i]['author'] = data[i].description;
-					lists[i]['images'] = this.getimgurl(data[i].thumb,path)
-					lists[i]['time'] = data[i].created_at;
-					lists[i]['type'] = data[i].thumb.length-1; */
-				}
-				console.log('kankan',data);
-				return lists;
-			},
 			//新闻详情
 			navToDetails(item){
 				let data = {
