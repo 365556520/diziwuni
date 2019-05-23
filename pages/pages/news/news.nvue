@@ -63,7 +63,7 @@
 </template>
 
 <script>
-	import uniTabBar from '@/components/tab-nvue/tabbar.nvue'
+	import uniTabBar from '@/components/mix-news/tab-nvue/tabbar.nvue'
 	//远程连接nvue和vue不一样不能直接从main.js中用里面挂在的
 	import api from '@/components/vmeitime-http/'
 	const domModule = weex.requireModule('dom')
@@ -171,7 +171,6 @@
 							tabItem.newsList = []; //刷新前清空数组
 						}
 						list.forEach(item=>{
-							item.id = parseInt(Math.random() * 10000);
 							tabItem.newsList.push(item);
 						})
 						console.log('数据请求成功', list)
@@ -193,7 +192,20 @@
 					console.log('数据请求失败', err);
 				})
 			},
-
+			//新闻详情
+			navToDetails(item){
+				let data = {
+					id: item.id,
+					title: item.title,
+					author: item.get_user.name,
+					time: item.created_at
+				}
+				//在本目录所以路径直接文件名
+				let url = 'article?data='+JSON.stringify(data)
+				uni.navigateTo({
+					url: url
+				})
+			},	
 			//下拉刷新
 			onRefresh(e){
 				this.loadNewsList('refresh');

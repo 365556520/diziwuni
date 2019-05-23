@@ -13,9 +13,9 @@
 			}
 		},
 		{
-			"path": "pages/pages/home",
+			"path": "pages/pages/news/article",
 			"style": {
-				"navigationBarTitleText": "主页"
+				"navigationBarTitleText": "文章"
 			}
 		},
 		{

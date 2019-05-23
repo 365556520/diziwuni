@@ -14,7 +14,7 @@
 </template>
 
 <script>
-	import inputs from "../../../components/QuShe-inputs/inputs.vue";
+	import inputs from "@/components/QuShe-inputs/inputs.vue";
 	import {mapState,mapMutations,mapGetters} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	export default {
 		components: {
@@ -105,7 +105,12 @@
 					}
 				  //  this.res = '请求结果 : ' + JSON.stringify(res);
 				}).catch((err)=>{
-				    console.log('数据请求失败', err);
+					let data = JSON.parse(err.data);
+					uni.showToast({
+					    title: '用户不存在',
+					    mask: true
+					});
+				    console.log('数据请求失败', data);
 				})
 			},
 			//获取用户信息

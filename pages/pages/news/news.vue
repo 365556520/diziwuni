@@ -76,8 +76,8 @@
 </template>
 
 <script>
-	import mixPulldownRefresh from '@/components/mix-pulldown-refresh/mix-pulldown-refresh';
-	import mixLoadMore from '@/components/mix-load-more/mix-load-more';
+	import mixPulldownRefresh from '@/components/mix-news/mix-pulldown-refresh/mix-pulldown-refresh';
+	import mixLoadMore from '@/components/mix-news/mix-load-more/mix-load-more';
 	let windowWidth = 0, scrollTimer = false, tabBar;
 	export default {
 		components: {
@@ -193,7 +193,6 @@
 							tabItem.newsList = []; //刷新前清空数组
 						}
 						list.forEach(item=>{
-							item.id = parseInt(Math.random() * 10000);
 							tabItem.newsList.push(item);
 						})
 						console.log('数据请求成功', list)
@@ -220,13 +219,13 @@
 				let data = {
 					id: item.id,
 					title: item.title,
-					author: item.author,
-					time: item.time
+					author: item.get_user.name,
+					time: item.created_at
 				}
-				let url = item.videoSrc ? 'videoDetails' : 'details'; 
-
+				//在本目录所以路径直接文件名
+				let url = 'article?data='+JSON.stringify(data)
 				uni.navigateTo({
-					url: `/pages/details/${url}?data=${JSON.stringify(data)}`
+					url: url
 				})
 			},	
 			//下拉刷新

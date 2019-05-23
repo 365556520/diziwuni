@@ -29,7 +29,7 @@
 		font-family: yticon;
 		font-weight: normal;
 		font-style: normal;
-		src: url('https://at.alicdn.com/t/font_984210_5cs13ndgqsn.ttf') format('truetype');
+		src: url('https://at.alicdn.com/t/font_1078604_3mrhac2o3oi.ttf') format('truetype');
 	}
 	.yticon {
 		font-family: "yticon" !important;
