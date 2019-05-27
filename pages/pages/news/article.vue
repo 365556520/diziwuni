@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-	
+		<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="backText">返回</block><block slot="content">{{detailData.title}}</block></cu-custom>
 		<scroll-view class="scroll" scroll-y>
 			<view class="scroll-content">
 				<view class="introduce-section">

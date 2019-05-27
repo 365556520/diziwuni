@@ -1,5 +1,6 @@
 <template>
 	<view class="content">
+		<cu-custom bgColor="bg-gradual-pink" ><block slot="content">主页</block></cu-custom>
 		<view>
 			<text class="title">{{title}}</text>
 		</view>
