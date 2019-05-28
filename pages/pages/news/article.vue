@@ -205,7 +205,6 @@
 		display: flex;
 		flex-direction: column;
 		height: 100%;
-		background: #fff;
 	}
 	.video-wrapper{
 		height: 422upx;

@@ -28,7 +28,7 @@
                     delay: 500
                 },
 				"buttonStyle": { //按钮样式
-                    "activeButton": "background-color: #6739b6;border-radius: 2px;box-shadow: 2px 2px 1px 1px #6739b6;", //主按钮样式
+                    "activeButton": "background-color: #EC208C;border-radius: 2px;box-shadow: 2px 2px 1px 1px #EC208C;", //主按钮样式
                 },
                 "inputsArray": [
                     {
