@@ -13,7 +13,7 @@
 		mounted(){
 			this.getmap();
 		
-			 console.log('地图缩放级别'+this.mapobj.includePoints);
+			
 		},
 		data() {
 			return {
@@ -29,8 +29,8 @@
 		},
 		methods: {
 			getmap(){
-				this.mapobj = uni.createMapContext('mymap',this);
-				
+				this.mapobj = uni.createMapContext('mymap',this).$getAppMap;
+				 console.log('地图缩放级别'+this.mapobj);
 			}
 		}
 	}
