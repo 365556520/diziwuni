@@ -1,6 +1,5 @@
 <template>
 	<view class="content">
-		<cu-custom bgColor="bg-gradual-pink" ><block slot="content">关注</block></cu-custom>
 		<!--
 		* 广告组件
 		* timedown 倒计时时间

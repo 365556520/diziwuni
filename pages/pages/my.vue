@@ -1,6 +1,5 @@
 <template>
 	<view class="center">
-		<cu-custom bgColor="bg-gradual-pink" ><block slot="content">我的</block></cu-custom>
 		<view class="logo" @click="goLogin('/pages/pages/auth/login')" :hover-class="!login ? 'logo-hover' : ''">
 			<image class="logo-img" :src="login ? uerInfo.avatarUrl :avatarUrl"></image>
 			<view class="logo-title">
@@ -128,7 +127,7 @@
 		height: 240upx;
 		padding: 20upx;
 		box-sizing: border-box;
-		background-color: #EC208C;
+		background-color: #ec706b;
 		flex-direction: row;
 		align-items: center;
 	}

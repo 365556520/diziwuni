@@ -1,47 +1,41 @@
 <template>
-	<view class="content">
-		<cu-custom bgColor="bg-gradual-pink" ><block slot="content">主页</block></cu-custom>
-		<view>
-			  <map id='mymap' style="width: 100%; height: 800upx;" :latitude="latitude" :longitude="longitude"  scale=13>
-               </map>
-		</view>
+	<view class="content ">
+		
+		
+			<web-view :webview-styles="webviewStyles" src="http://m.diziw.cn/#/BusRouteApi"></web-view>
+		
 	</view>
 </template>
+
 
 <script>
 	export default {
 		mounted(){
-			this.getmap();
 		
-			
 		},
 		data() {
 			return {
-				title: 'Hello nui-vue我来了',
-				latitude:33.28,
-				longitude:111.48,
-				mapobj:'',
-				map:''
+				webviewStyles: {
+                    progress: {
+                        color: '#FF3333'
+                    }
+                }
 			}
 		},
 		onLoad() {
 
 		},
 		methods: {
-			getmap(){
-				this.mapobj = uni.createMapContext('mymap',this).$getAppMap;
-				 console.log('地图缩放级别'+this.mapobj);
-			}
+		
 		}
 	}
 </script>
 
 <style>
 	.content {
-		text-align: center;
+	
 		height: 400upx;
 	}
-
 	.logo {
 		height: 200upx;
 		width: 200upx;

@@ -1,6 +1,5 @@
 <template>
 	<view class="content ">
-		<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="backText">返回</block><block slot="content">登录</block></cu-custom>
 		<view>
 				<inputs :inputsArray="inputsArray" activeName="登 录"  
 				 @activeFc="login" animationType="rotate3d-fade" :animationDuration=".1"
@@ -28,7 +27,7 @@
                     delay: 500
                 },
 				"buttonStyle": { //按钮样式
-                    "activeButton": "background-color: #EC208C;border-radius: 2px;box-shadow: 2px 2px 1px 1px #EC208C;", //主按钮样式
+                    "activeButton": "background-color: #ec706b;border-radius: 2px;box-shadow: 2px 2px 1px 1px #ec706b;", //主按钮样式
                 },
                 "inputsArray": [
                     {

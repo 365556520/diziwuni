@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<cu-custom bgColor="bg-gradual-pink" ><block slot="content">信息</block></cu-custom>
+
 		<image class="logo" src="/static/logo.png"></image>
 		<view>
 			<text class="title"  @click="goto()">{{title}}</text>
