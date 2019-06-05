@@ -127,6 +127,33 @@
 <style>
 	@import "components/colorui/main.css";
 	@import "components/colorui/icon.css";
+	@keyframes show {
+		0% {
+			transform: translateY(-50px);
+		}
+	
+		60% {
+			transform: translateY(40upx);
+		}
+	
+		100% {
+			transform: translateY(0px);
+		}
+	}
+	
+	@-webkit-keyframes show {
+		0% {
+			transform: translateY(-50px);
+		}
+	
+		60% {
+			transform: translateY(40upx);
+		}
+	
+		100% {
+			transform: translateY(0px);
+		}
+	}
 	/*每个页面公共css */
 	@font-face {
 		font-family: yticon;

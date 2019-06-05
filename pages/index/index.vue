@@ -1,49 +1,173 @@
-<template>
-	<view class="content ">
-		
-		
-			<web-view :webview-styles="webviewStyles" src="http://m.diziw.cn/#/BusRouteApi"></web-view>
-		
+<template name="components">
+	<view>
+		<scroll-view scroll-y class="page">
+			<image src="/static/componentBg.png" mode="widthFix" class="response"></image>
+			<view class="nav-list">
+				<navigator hover-class='none' :url="item.route" class="nav-li" navigateTo :class="'bg-'+item.color"
+				 :style="[{animation: 'show ' + ((index+1)*0.2+1) + 's 1'}]" v-for="(item,index) in elements" :key="index">
+					<view class="nav-title">{{item.title}}</view>
+					<view class="nav-name">{{item.name}}</view>
+					<text :class="'cuIcon-' + item.icon"></text>
+				</navigator>
+			</view>
+			<view class="cu-tabbar-height"></view>
+		</scroll-view>
 	</view>
 </template>
 
-
 <script>
 	export default {
-		mounted(){
-		
-		},
 		data() {
 			return {
-				webviewStyles: {
-                    progress: {
-                        color: '#FF3333'
-                    }
-                }
-			}
-		},
-		onLoad() {
-
-		},
-		methods: {
-		
+				elements: [{
+						title: '公交站点',
+						name: 'busroute',
+						route: '/pages/pages/bus/busroute',
+						color: 'purple',
+						icon: 'location'
+					},
+					{
+						title: '班线查询 ',
+						name: 'bus',
+						route: '/pages/pages/bus/busroute',
+						color: 'mauve',
+						icon: 'search'
+					},
+					{
+						title: '列表',
+						name: 'list',
+						color: 'pink',
+						icon: 'list'
+					},
+					{
+						title: '卡片',
+						name: 'card',
+						color: 'brown',
+						icon: 'newsfill'
+					},
+					{
+						title: '表单',
+						name: 'form',
+						color: 'red',
+						icon: 'formfill'
+					},
+					{
+						title: '时间轴',
+						name: 'timeline',
+						color: 'orange',
+						icon: 'timefill'
+					},
+				
+				],
+			};
 		}
 	}
 </script>
 
 <style>
-	.content {
+	.nav-list {
+		display: flex;
+		flex-wrap: wrap;
+		padding: 0px 40upx 0px;
+		justify-content: space-between;
+	}
 	
-		height: 400upx;
+	.nav-li {
+		padding: 30upx;
+		border-radius: 12upx;
+		width: 45%;
+		margin: 0 2.5% 40upx;
+		background-image: url(https://cdn.nlark.com/yuque/0/2019/png/280374/1552996358352-assets/web-upload/cc3b1807-c684-4b83-8f80-80e5b8a6b975.png);
+		background-size: cover;
+		background-position: center;
+		position: relative;
+		z-index: 1;
 	}
-	.logo {
-		height: 200upx;
-		width: 200upx;
-		margin-top: 200upx;
+	
+	.nav-li::after {
+		content: "";
+		position: absolute;
+		z-index: -1;
+		background-color: inherit;
+		width: 100%;
+		height: 100%;
+		left: 0;
+		bottom: -10%;
+		border-radius: 10upx;
+		opacity: 0.2;
+		transform: scale(0.9, 0.9);
 	}
+	
+	.nav-li.cur {
+		color: #fff;
+		background: rgb(94, 185, 94);
+		box-shadow: 4upx 4upx 6upx rgba(94, 185, 94, 0.4);
+	}
+	
+	.nav-title {
+		font-size: 32upx;
+		font-weight: 300;
+	}
+	
+	.nav-title::first-letter {
+		font-size: 40upx;
+		margin-right: 4upx;
+	}
+	
+	.nav-name {
+		font-size: 28upx;
+		text-transform: Capitalize;
+		margin-top: 20upx;
+		position: relative;
+	}
+	
+	.nav-name::before {
+		content: "";
+		position: absolute;
+		display: block;
+		width: 40upx;
+		height: 6upx;
+		background: #fff;
+		bottom: 0;
+		right: 0;
+		opacity: 0.5;
+	}
+	
+	.nav-name::after {
+		content: "";
+		position: absolute;
+		display: block;
+		width: 100upx;
+		height: 1px;
+		background: #fff;
+		bottom: 0;
+		right: 40upx;
+		opacity: 0.3;
+	}
+	
+	.nav-name::first-letter {
+		font-weight: bold;
+		font-size: 36upx;
+		margin-right: 1px;
+	}
+	
+	.nav-li text {
+		position: absolute;
+		right: 30upx;
+		top: 30upx;
+		font-size: 52upx;
+		width: 60upx;
+		height: 60upx;
+		text-align: center;
+		line-height: 60upx;
+	}
+	.text-light {
+		font-weight: 300;
+	}
+	
 
-	.title {
-		font-size: 20upx;
-		color: #8f8f94;
+	.page {
+		height: 100vh;
 	}
+	
 </style>
