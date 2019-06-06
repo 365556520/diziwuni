@@ -4,7 +4,8 @@
 			"path": "pages/index/index",
 			
 			"style": {
-				"titleNView":false,
+				"titleNView":false, //app和5+app取消导航
+				"navigationStyle":"custom",//微信小程序百度小程序取消导航
 				"navigationBarTitleText": "主页"
 			}
 		},

@@ -1,7 +1,31 @@
 <template name="components">
 	<view>
 		<scroll-view scroll-y class="page">
-			<image src="/static/componentBg.png" mode="widthFix" class="response"></image>
+			<swiper class="screen-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
+			 :autoplay="true" interval="5000" duration="500">
+				<swiper-item v-for="(item,index) in swiperList" :key="index">
+					<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
+					<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false" objectFit="cover" v-if="item.type=='video'"></video>
+				</swiper-item>
+			</swiper>
+			
+			
+			<view class="padding bg-white">
+				
+				<view class="text-left padding flex">
+					<text class="text-black text-lg  flex-treble">{{baiduapidate[0].weather_data[0].date}}</text>
+					<button class="cu-btn round shadow flex-sub ">{{baiduapidate[0].currentCity}}</button>
+				</view>
+				<view class="text-left padding flex">
+					<text class="text-gray  flex-treble ">{{baiduapidate[0].weather_data[0].temperature}}</text>
+					<text class="text-gray  flex-treble ">{{baiduapidate[0].weather_data[0].weather}}</text>
+					<text class="text-gray  flex-treble "> PM:{{baiduapidate[0].pm25}}</text>
+				
+				</view>
+				<view class="text-left padding"><text class="text-gray  flex-treble ">{{baiduapidate[0].index[0].des}}</text></view>
+	
+			</view>
+			
 			<view class="nav-list">
 				<navigator hover-class='none' :url="item.route" class="nav-li" navigateTo :class="'bg-'+item.color"
 				 :style="[{animation: 'show ' + ((index+1)*0.2+1) + 's 1'}]" v-for="(item,index) in elements" :key="index">
@@ -16,7 +40,12 @@
 </template>
 
 <script>
+	import {mapState} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	export default {
+		mounted(){ //这个挂在第一次进入页面后运行一次
+			this.getWeatherForecast();
+
+		},
 		data() {
 			return {
 				elements: [{
@@ -59,9 +88,75 @@
 					},
 				
 				],
+				cardCur: 0, 
+				swiperList: [
+					{
+						id: 0,
+						type: 'image',
+						url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big84000.jpg'
+					}, {
+						id: 1,
+						type: 'image',
+						url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big37006.jpg',
+					}, {
+						id: 2,
+						type: 'image',
+						url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big39000.jpg'
+					}, {
+						id: 3,
+						type: 'image',
+						url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg'
+					}, {
+						id: 4,
+						type: 'image',
+						url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big25011.jpg'
+					}, {
+						id: 5,
+						type: 'image',
+						url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big21016.jpg'
+					}, {
+						id: 6,
+						type: 'image',
+						url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big99008.jpg'
+					},
+				],
+				dotStyle: true, //轮播图的样式
+				baiduapidate:[
+					
+				] //天气预报数据
 			};
+		},
+		computed: {//数据计算
+		    ...mapState(['userbaidumap']),
+		},
+		methods: {
+			
+			  //获天气预报
+			getWeatherForecast(){
+				let this_ = this;
+				uni.getLocation({
+					type: 'wgs84',
+					success: function (res) {
+						let url = "/telematics/v3/weather?location=" + res.longitude+','+res.latitude + "&output=json&ak=" + this_.userbaidumap.ak;
+						//获取天气数据
+						this_.$api.baiduapi(url).then((res)=>{
+							let apidata =  JSON.parse(res.data);
+							if(apidata.error == 0){
+								this_.baiduapidate = apidata.results;
+								this_.baiduapidate.date = apidata.date;
+							}
+						    console.log(this_.baiduapidate);
+						}).catch((err)=>{
+						    console.log('数据请求失败', err);
+						})
+					
+						console.log('当前位置的经度：' + res.longitude);
+						console.log('当前位置的纬度：' + res.latitude);
+					}
+				});
+			},
 		}
-	}
+}
 </script>
 
 <style>

@@ -28,6 +28,28 @@ export const test = (url,data) => {
         data,
     })
 }
+// 天气预报
+export const baiduapi = (url,data) => {
+	//http.config.baseUrl = "http://www.diziw.cn"
+	//设置请求前拦截器
+	/* http.interceptor.request = (config) => {
+		config.header = {
+			"token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+		}
+	} */
+	//设置请求结束后拦截器
+	http.interceptor.response = (response) => {
+		console.log('个性化response....')
+		//判断返回状态 执行相应操作
+		return response;
+	}
+    return http.request({
+		baseUrl: 'http://api.map.baidu.com',
+        url: url,
+		dataType: 'text',
+        data,
+    })
+}
 //post
 export const post = (url,data) => {
 	//http.config.baseUrl = "http://www.diziw.cn"
@@ -91,5 +113,6 @@ export default {
 	test,
     banner,
 	post,
+	baiduapi,
 	postToken
 }
