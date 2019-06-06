@@ -9,9 +9,8 @@
 				</swiper-item>
 			</swiper>
 			
-			
+			<!-- #ifndef H5 -->
 			<view class="padding bg-white">
-				
 				<view class="text-left padding flex">
 					<text class="text-black text-lg  flex-treble">{{baiduapidate[0].weather_data[0].date}}</text>
 					<button class="cu-btn round shadow flex-sub ">{{baiduapidate[0].currentCity}}</button>
@@ -20,11 +19,15 @@
 					<text class="text-gray  flex-treble ">{{baiduapidate[0].weather_data[0].temperature}}</text>
 					<text class="text-gray  flex-treble ">{{baiduapidate[0].weather_data[0].weather}}</text>
 					<text class="text-gray  flex-treble "> PM:{{baiduapidate[0].pm25}}</text>
-				
 				</view>
 				<view class="text-left padding"><text class="text-gray  flex-treble ">{{baiduapidate[0].index[0].des}}</text></view>
-	
 			</view>
+			<!-- #endif -->
+			<!-- #ifdef H5 -->
+			<view class="padding bg-white">
+				<view class="text-left padding">出山</view>
+			</view>
+			<!-- #endif -->
 			
 			<view class="nav-list">
 				<navigator hover-class='none' :url="item.route" class="nav-li" navigateTo :class="'bg-'+item.color"
@@ -44,7 +47,6 @@
 	export default {
 		mounted(){ //这个挂在第一次进入页面后运行一次
 			this.getWeatherForecast();
-
 		},
 		data() {
 			return {
@@ -130,7 +132,6 @@
 		    ...mapState(['userbaidumap']),
 		},
 		methods: {
-			
 			  //获天气预报
 			getWeatherForecast(){
 				let this_ = this;
