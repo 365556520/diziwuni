@@ -10,22 +10,22 @@
 			</swiper>
 			
 			<!-- #ifndef H5 -->
-			<view class="padding bg-white">
+			<view class="padding">
 				<view class="text-left padding flex">
 					<text class="text-black text-lg  flex-treble">{{baiduapidate[0].weather_data[0].date}}</text>
-					<button class="cu-btn round shadow flex-sub ">{{baiduapidate[0].currentCity}}</button>
+					<text class="text-purple text-lg  flex-sub  "  @click="getchooseLocation()">{{baiduapidate[0].currentCity}}</text>
 				</view>
 				<view class="text-left padding flex">
-					<text class="text-gray  flex-treble ">{{baiduapidate[0].weather_data[0].temperature}}</text>
-					<text class="text-gray  flex-treble ">{{baiduapidate[0].weather_data[0].weather}}</text>
-					<text class="text-gray  flex-treble "> PM:{{baiduapidate[0].pm25}}</text>
+					<text class="text-df  flex-treble ">{{baiduapidate[0].weather_data[0].temperature}}</text>
+					<text class="text-df  flex-treble ">{{baiduapidate[0].weather_data[0].weather}}</text>
+					<text class="text-df  flex-treble ">空气质量:{{baiduapidate[0].pm25}}</text>
 				</view>
 				<view class="text-left padding"><text class="text-gray  flex-treble ">{{baiduapidate[0].index[0].des}}</text></view>
 			</view>
 			<!-- #endif -->
 			<!-- #ifdef H5 -->
-			<view class="padding bg-white">
-				<view class="text-left padding">出山</view>
+			<view class="padding">
+				<view class="text-left padding">这是h5空的地方还没想好弄啥</view>
 			</view>
 			<!-- #endif -->
 			
@@ -46,7 +46,7 @@
 	import {mapState} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	export default {
 		mounted(){ //这个挂在第一次进入页面后运行一次
-			this.getWeatherForecast();
+			this.getLocation(); //获取位置
 		},
 		data() {
 			return {
@@ -60,7 +60,7 @@
 					{
 						title: '班线查询 ',
 						name: 'bus',
-						route: '/pages/pages/bus/busroute',
+						route: '/pages/pages/bus/bus',
 						color: 'mauve',
 						icon: 'search'
 					},
@@ -125,7 +125,11 @@
 				dotStyle: true, //轮播图的样式
 				baiduapidate:[
 					
-				] //天气预报数据
+				], //天气预报数据
+				location:{
+					'longitude':112.47658599066436,
+					'latitude':33.293153982273935
+				}
 			};
 		},
 		computed: {//数据计算
@@ -135,27 +139,50 @@
 			  //获天气预报
 			getWeatherForecast(){
 				let this_ = this;
+				console.log('2度：' + this.location.longitude);
+				console.log('2：' + this.location.latitude);
+				let url = "/telematics/v3/weather?location=" + this.location.longitude+','+this.location.latitude + "&output=json&ak=" + this_.userbaidumap.ak;
+				//获取天气数据
+				this_.$api.baiduapi(url).then((res)=>{
+					let apidata =  JSON.parse(res.data);
+					if(apidata.error == 0){
+						this_.baiduapidate = apidata.results;
+						this_.baiduapidate.date = apidata.date;
+					}
+				    console.log(this_.baiduapidate);
+				}).catch((err)=>{
+				    console.log('数据请求失败', err);
+				})
+			},
+			//获取当前位置
+			getLocation(){
+				let this_ = this;
 				uni.getLocation({
 					type: 'wgs84',
 					success: function (res) {
-						let url = "/telematics/v3/weather?location=" + res.longitude+','+res.latitude + "&output=json&ak=" + this_.userbaidumap.ak;
-						//获取天气数据
-						this_.$api.baiduapi(url).then((res)=>{
-							let apidata =  JSON.parse(res.data);
-							if(apidata.error == 0){
-								this_.baiduapidate = apidata.results;
-								this_.baiduapidate.date = apidata.date;
-							}
-						    console.log(this_.baiduapidate);
-						}).catch((err)=>{
-						    console.log('数据请求失败', err);
-						})
-					
-						console.log('当前位置的经度：' + res.longitude);
-						console.log('当前位置的纬度：' + res.latitude);
+						this_.location.longitude = res.longitude;
+						this_.location.latitude = res.latitude;
+						this_.getWeatherForecast(); //获取天气预报
+						console.log('当前位置的经度：' + this_.location.longitude);
+						console.log('当前位置的纬度：' + this_.location.latitude);
 					}
 				});
 			},
+			//更换位置位置
+			getchooseLocation(){
+				let this_ = this;
+				uni.chooseLocation({
+					success: function (res) {
+						this_.location.longitude = res.longitude;
+						this_.location.latitude = res.latitude;
+						this_.getWeatherForecast();
+						console.log('位置名称：' + res.name);
+						console.log('详细地址：' + res.address);
+						console.log('纬度：' + res.latitude);
+						console.log('经度：' + res.longitude);
+					}
+				});
+			}
 		}
 }
 </script>
@@ -260,10 +287,7 @@
 	.text-light {
 		font-weight: 300;
 	}
-	
-
 	.page {
 		height: 100vh;
 	}
-	
 </style>

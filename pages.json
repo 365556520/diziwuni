@@ -70,6 +70,12 @@
 			"style": {
 				"navigationBarTitleText": "公交车查询车辆"
 			}
+		},
+		{
+			"path": "pages/pages/bus/bus",
+			"style": {
+				"navigationBarTitleText": "班线查询"
+			}
 		}
 	],
 	"tabBar": {

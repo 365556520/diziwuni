@@ -6,7 +6,6 @@
 	</view>
 </template>
 
-
 <script>
 	export default {
 		mounted(){
