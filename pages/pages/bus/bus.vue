@@ -28,7 +28,7 @@
 					<view class="solid-bottom text-sm padding" v-for="vl in v.get_buses" :key="vl.id"  >
 						<view class="flex    ">
 							<view class="flex-treble  padding-sm margin-xs radius text-orange">{{vl.buses_name}}</view>
-							<view class="flex-treble  padding-sm margin-xs radius text-cyan"> 电话:{{vl.buses_phone}}</view>
+							<view class="flex-treble  padding-sm margin-xs radius text-cyan"><text  @click="mymakePhoneCall(vl.buses_phone)">电话:{{vl.buses_phone}}</text></view>
 						</view>
 						<view class="flex    ">
 							<view class="flex-treble  padding-sm margin-xs radius"> <text class="text-grey">发车时间:{{vl.buses_start_date}}</text> </view>
@@ -38,7 +38,6 @@
 				</view>
 			</view>
 		</view>
-	</view>
 	</view>
 </template>
 
@@ -119,6 +118,13 @@
 					});
 				}
 			},
+			mymakePhoneCall(data){
+				//拨打电话
+				uni.makePhoneCall({
+					phoneNumber: data //仅为示例
+				});
+				console.log('电话', data);
+			}
 		}
 	}
 </script>
