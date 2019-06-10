@@ -95,17 +95,24 @@
 			},
 			  //点击查询
 			search(){
+				console.log(this.filterable);
 				if(this.filterable.start != ''){
 					let data  = {buses_start: this.filterable.start,buses_end: this.filterable.end}
 					this.$api.test('/api/getBusesRouteId/',data).then((res) => {
-						let bues =  JSON.parse(res.data);
+						let bues =  JSON.parse(res.data); 
 						if(bues.code == 200){
+							this.busdata = []; //清空以前数据从新添加
 							for (let i in bues.data) {  //去出没有班车的线路
 								if(bues.data[i].get_buses.length !== 0){
 									this.busdata.push(bues.data[i]);
 								}
 							}
 						}
+						//输入框复原
+						this.filterable.end = '';
+						this.filterable.start= '';
+						this.startindex = -1;
+						this.endindex = -1;
 						console.log(this.busdata);
 					}).catch((err)=>{
 						console.log('数据请求失败', err);

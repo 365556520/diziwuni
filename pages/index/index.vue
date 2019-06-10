@@ -65,25 +65,25 @@
 						icon: 'search'
 					},
 					{
-						title: '列表',
+						title: '我的运动',
 						name: 'list',
 						color: 'pink',
 						icon: 'list'
 					},
 					{
-						title: '卡片',
+						title: '关于我们',
 						name: 'card',
 						color: 'brown',
 						icon: 'newsfill'
 					},
 					{
-						title: '表单',
+						title: '未开发',
 						name: 'form',
 						color: 'red',
 						icon: 'formfill'
 					},
 					{
-						title: '时间轴',
+						title: '未开发',
 						name: 'timeline',
 						color: 'orange',
 						icon: 'timefill'
@@ -127,7 +127,7 @@
 					
 				], //天气预报数据
 				location:{
-					'longitude':112.47658599066436,
+					'longitude':111.47658599066436,
 					'latitude':33.293153982273935
 				}
 			};
@@ -160,11 +160,15 @@
 				uni.getLocation({
 					type: 'wgs84',
 					success: function (res) {
-						this_.location.longitude = res.longitude;
-						this_.location.latitude = res.latitude;
+						if(res.longitude){
+							this_.location.longitude = res.longitude;
+							this_.location.latitude = res.latitude;
+							console.log('当前位置的经度：' + this_.location.longitude);
+							console.log('当前位置的纬度：' + this_.location.latitude);
+						}else{
+							this.getchooseLocation();//如果没有位置调动选择位置
+						}
 						this_.getWeatherForecast(); //获取天气预报
-						console.log('当前位置的经度：' + this_.location.longitude);
-						console.log('当前位置的纬度：' + this_.location.latitude);
 					}
 				});
 			},

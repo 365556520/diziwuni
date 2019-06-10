@@ -19,10 +19,12 @@
 							<text class="yticon icon-dianzan-ash reverse"></text>
 							<text>6</text>
 						</view>
+						<!-- #ifdef APP-PLUS -->
 						<view class="action-item">
 							<text class="yticon icon-fenxiang2"></text>
 							<text>分享</text>
 						</view>
+						<!-- #endif -->
 						<view class="action-item">
 							<text class="yticon icon-shoucang active"></text>
 							<text>收藏</text>
