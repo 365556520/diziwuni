@@ -66,15 +66,21 @@
 			}
 		},
 		{
-			"path": "pages/pages/bus/busroute",
+			"path": "pages/index/bus/busroute",
 			"style": {
 				"navigationBarTitleText": "公交车查询车辆"
 			}
 		},
 		{
-			"path": "pages/pages/bus/bus",
+			"path": "pages/index/bus/bus",
 			"style": {
 				"navigationBarTitleText": "班线查询"
+			}
+		},
+		{
+			"path": "pages/index/sports",
+			"style": {
+				"navigationBarTitleText": "我的运动"
 			}
 		}
 	],

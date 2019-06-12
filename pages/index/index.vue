@@ -53,20 +53,21 @@
 				elements: [{
 						title: '公交站点',
 						name: 'busroute',
-						route: '/pages/pages/bus/busroute',
+						route: '/pages/index/bus/busroute',
 						color: 'purple',
 						icon: 'location'
 					},
 					{
 						title: '班线查询 ',
 						name: 'bus',
-						route: '/pages/pages/bus/bus',
+						route: '/pages/index/bus/bus',
 						color: 'mauve',
 						icon: 'search'
 					},
 					{
 						title: '我的运动',
-						name: 'list',
+						name: 'sports',
+						route: '/pages/index/sports',
 						color: 'pink',
 						icon: 'list'
 					},
