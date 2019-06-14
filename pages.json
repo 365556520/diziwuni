@@ -42,10 +42,6 @@
 			}
 		},
 		{
-			"path": "pages/pages/tabbar/fabu",
-			"style": {}
-		},
-		{
 			"path": "pages/pages/tabbar/imgs",
 			"style": {}
 		},
@@ -78,7 +74,7 @@
 			}
 		},
 		{
-			"path": "pages/index/sports",
+			"path": "pages/index/tkiqrcode",
 			"style": {
 				"navigationBarTitleText": "我的运动"
 			}

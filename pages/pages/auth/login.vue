@@ -1,10 +1,18 @@
 <template>
 	<view class="content ">
-		<view>
-				<inputs :inputsArray="inputsArray" activeName="登 录"  
-				 @activeFc="login" animationType="rotate3d-fade" :animationDuration=".1"
-				 submitReSet :buttonStyle="buttonStyle" :inputDebounceSet="inputDebounceSet"/>
-		</view>
+		<form>
+			<view class="cu-form-group margin-top">
+				<view class="title">账 号 </view>
+				<input placeholder="请输入用户名" maxlength=20 name="username" v-model="logindata.username"></input>
+			</view>
+			<view class="cu-form-group">
+				<view class="title">密 码 </view>
+				<input placeholder="请输入密码" name="password" maxlength=20 type="password" v-model="logindata.password"></input>
+			</view>
+			<view class="padding flex flex-direction">
+				<button class="cu-btn bg-red margin-tb-sm lg" @click="login()">登 录</button>
+			</view>
+		</form>
 		<view class="action-row">
 		    <navigator url="">注册账号</navigator>
 		    <text>|</text>
@@ -14,51 +22,17 @@
 </template>
 
 <script>
-	import inputs from "@/components/QuShe-inputs/inputs.vue";
 	import {mapState,mapMutations,mapGetters} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	export default {
 		components: {
-		    inputs
 		},
 		data() {
 			return {
-				inputDebounceSet: {
-                    openInputDebounce: true,
-                    delay: 500
-                },
-				"buttonStyle": { //按钮样式
-                    "activeButton": "background-color: #ec706b;border-radius: 2px;box-shadow: 2px 2px 1px 1px #ec706b;", //主按钮样式
-                },
-                "inputsArray": [
-                    {
-                        "title": "用户名",
-						"variableName":"username",//自定义变量名取值时候用
-			            "ignore":true,
-						"verifyFc": function(value) {
-                            if (/^[a-zA-Z0-9]{2,15}$/.test(value)) // '/^[1][3,4,5,7,8][0-9]{9}$/'电话号码正则
-                                return true;
-                            return false;
-                        },
-                        "verifyErr": "用户名和密码错误"
-                    }, {
-                        "title": "密 码",
-						"ignore":true,
-						"variableName":"password",//自定义变量名取值时候用
-                        //"tapClear": true, //input一键清除功能
-                        "password": true, //input密码类型
-						"verifyFc": function(value) {
-						    if (/^[a-zA-Z0-9]{6,15}$/.test(value)) // '/^[1][3,4,5,7,8][0-9]{9}$/'电话号码正则
-						        return true;
-						    return false;
-						},
-						"verifyErr": "用户名和密码错误",
-                        "filterFc": function(value) { //input值过滤函数
-                            //自定义过滤函数
-                            value = value;
-                            return value;
-						},
-					},
-				]
+				logindata:{
+					'username':'',
+					'password':''
+				}
+			
 			}
 		},
 		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
@@ -74,15 +48,13 @@
 			    'setName'
 				
 			]),
-			login(res){
-				/* // 最终取值
-				//主方法，携带用户输入的数据对象
-				// 如果项内定义了variableName属性，则取值为定义的variableName，否则取值为 this.onloadData + index, onloadData默认值为'data_'
-				// 需要把数据传至服务器时也可以把整个对象传过去，由后端直接处理数据，这样可以实现整体的表单类型、布局、取值都由后端决定
-				//let _this = this; */
+			login(){
+				/*  if (/^[a-zA-Z0-9]{2,15}$/.test(value))
+				*  if (/^[a-zA-Z0-9]{6,15}$/.test(value))
+				*  */
 				 let data = {
-				    username:res.username,
-				    password:res.password,
+				    username:this.logindata.username,
+				    password:this.logindata.password,
 				}
 				//用户登录
 				this.$api.post('/api/login',data).then((res)=>{

@@ -67,7 +67,7 @@
 					{
 						title: '我的运动',
 						name: 'sports',
-						route: '/pages/index/sports',
+						route: '/pages/index/tkiqrcode',
 						color: 'pink',
 						icon: 'list'
 					},
@@ -161,14 +161,15 @@
 				uni.getLocation({
 					type: 'wgs84',
 					success: function (res) {
-						if(res.longitude){
-							this_.location.longitude = res.longitude;
-							this_.location.latitude = res.latitude;
-							console.log('当前位置的经度：' + this_.location.longitude);
-							console.log('当前位置的纬度：' + this_.location.latitude);
-						}else{
-							this.getchooseLocation();//如果没有位置调动选择位置
-						}
+						this_.location.longitude = res.longitude;
+						this_.location.latitude = res.latitude;
+						console.log('当前位置的经度：' + res);
+						console.log('当前位置的经度：' + this_.location.longitude);
+						console.log('当前位置的纬度：' + this_.location.latitude);
+						this_.getWeatherForecast(); //获取天气预报
+					},
+					fail: function (res) {
+						//调用失败后从新选择地点
 						this_.getWeatherForecast(); //获取天气预报
 					}
 				});

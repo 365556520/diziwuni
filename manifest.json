@@ -1,7 +1,7 @@
 {
-    "name" : "diziwuni",
+    "name" : "迪子",
     "appid" : "__UNI__0EA412D",
-    "description" : "s",
+    "description" : "信息新闻资讯",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
@@ -68,10 +68,18 @@
     /* 快应用特有相关 */
     "mp-weixin" : {
         /* 小程序特有相关 */
-        "appid" : "",
+        "appid" : "wx3a275a32889b142b",
         "setting" : {
-            "urlCheck" : false
+            "urlCheck" : false,
+            "minified" : true,
+            "es6" : false,
+            "postcss" : true
         },
-        "usingComponents" : true
+        "usingComponents" : true,
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "获取位置需求"
+            }
+        }
     }
 }

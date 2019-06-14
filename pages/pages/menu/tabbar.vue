@@ -7,9 +7,9 @@
 					<image class="box-image" src="../../../static/img/release.png" mode="aspectFit"></image>
 					<text class="explain">发图文</text>
 				</view>
-				<view class="tabbar-box-item" @click="goToPage('/pages/pages/tabbar/fabu')">
+				<view class="tabbar-box-item" @click="scan">
 					<image class="box-image" src="../../../static/img/video.png" mode="aspectFit"></image>
-					<text class="explain">发视频</text>
+					<text class="explain">扫一扫</text>
 				</view>
 				<view class="tabbar-box-item" @click="goToPage('/pages/pages/tabbar/tiwen')">
 					<image class="box-image" src="../../../static/img/qa.png" mode="aspectFit"></image>
@@ -41,6 +41,15 @@ export default {
 			if (!url) return;
 			uni.navigateTo({
 				url: url
+			});
+		},
+		
+		scan(){//扫二维码
+			uni.scanCode({
+				success: function (res) {
+					console.log('条码类型：' + res.scanType);
+					console.log('条码内容：' + res.result);
+				}
 			});
 		}
 	}
