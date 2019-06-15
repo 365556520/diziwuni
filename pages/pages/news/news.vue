@@ -30,48 +30,46 @@
 		<mix-pulldown-refresh ref="mixPulldownRefresh" class="panel-content" :top="90" @refresh="onPulldownReresh" @setEnableScroll="setEnableScroll">
 			<!-- 内容部分 -->
 			<swiper 
-				id="swiper"
-				class="swiper-box" 
-				:duration="300" 
-				:current="tabCurrentIndex" 
-				@change="changeTab"
-			>
+					id="swiper"
+					class="swiper-box" 
+					:duration="300" 
+					:current="tabCurrentIndex" 
+					@change="changeTab"
+				>
 				<swiper-item v-for="tabItem in tabBars" :key="tabItem.id">
 					<scroll-view 
-						class="panel-scroll-box" 
-						:scroll-y="enableScroll" 
-						@scrolltolower="loadMore"
-						>
-						<!-- 
-							* 新闻列表 
-							* 和nvue的区别只是需要把uni标签转为weex标签而已
-							* class 和 style的绑定限制了一些语法，其他并没有不同
-						-->
-						<view v-for="(item, index) in tabItem.newsList" :key="index" class="news-item" @click="navToDetails(item)">
-							<!-- 根据图片是否存在和个数设置标题 <!-- 'img-list-single' 设置图片列 'img-wrapper-single'设置打图片- ->-->
-							<text :class="['title',item.thumb[0]==''?'':item.thumb.length==1?'title1':'title2' ]">{{item.title}}</text> 
-							<view v-if="item.thumb['0']!=''" :class="['img-list', 'img-list'+item.thumb.length]">
-								<view 
-									v-for="(imgItem, imgIndex) in item.thumb" :key="imgIndex"
-									:class="['img-wrapper', 'img-wrapper'+item.thumb.length]"
-								>
-									<image class="img"  :src="urlpath + imgItem"></image>
+							class="panel-scroll-box" 
+							:scroll-y="enableScroll" 
+							@scrolltolower="loadMore"
+							>
+							<!-- 
+								* 新闻列表 
+								* 和nvue的区别只是需要把uni标签转为weex标签而已
+								* class 和 style的绑定限制了一些语法，其他并没有不同
+							-->
+							<view v-for="(item, index) in tabItem.newsList" :key="index" class="news-item" @click="navToDetails(item)">
+								<!-- 根据图片是否存在和个数设置标题 <!-- 'img-list-single' 设置图片列 'img-wrapper-single'设置打图片- ->-->
+								<text :class="['title',item.thumb[0]==''?'':item.thumb.length==1?'title1':'title2' ]">{{item.title}}</text> 
+								<view v-if="item.thumb['0']!=''" :class="['img-list', 'img-list'+item.thumb.length]">
+									<view 
+										v-for="(imgItem, imgIndex) in item.thumb" :key="imgIndex"
+										:class="['img-wrapper', 'img-wrapper'+item.thumb.length]"
+									>
+										<image class="img"  :src="urlpath + imgItem"></image>
+									</view>
+								</view>
+								<!-- 空图片占位 --><!-- 根据图片是否存在和个数设置底部内容 -->
+								<view :class="['bot',item.thumb[0]==''?'':item.thumb.length==1?'bot1':'bot2']">
+									<text class="author">{{item.get_user.name}}</text>
+									<text class="time">{{item.created_at}}</text>
 								</view>
 							</view>
-							<!-- 空图片占位 --><!-- 根据图片是否存在和个数设置底部内容 -->
-							<view :class="['bot',item.thumb[0]==''?'':item.thumb.length==1?'bot1':'bot2']">
-								<text class="author">{{item.get_user.name}}</text>
-								<text class="time">{{item.created_at}}</text>
-							</view>
-						</view>
-						
-						<!-- 上滑加载更多组件 -->
-						<mix-load-more :status="tabItem.loadMoreStatus"></mix-load-more>
+							<!-- 上滑加载更多组件 -->
+							<mix-load-more :status="tabItem.loadMoreStatus"></mix-load-more>
 					</scroll-view>
 				</swiper-item>
 			</swiper>
 		</mix-pulldown-refresh>
-		
 	</view>
 </template>
 

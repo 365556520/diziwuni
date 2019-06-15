@@ -8,7 +8,7 @@
 					<text class="explain">发图文</text>
 				</view>
 				<view class="tabbar-box-item" @click="scan">
-					<image class="box-image" src="../../../static/img/video.png" mode="aspectFit"></image>
+					<image class="box-image" src="../../../static/img/saoyisao.jpg" mode="aspectFit"></image>
 					<text class="explain">扫一扫</text>
 				</view>
 				<view class="tabbar-box-item" @click="goToPage('/pages/pages/tabbar/tiwen')">
