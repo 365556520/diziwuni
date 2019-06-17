@@ -46,7 +46,9 @@
 	import {mapState} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	export default {
 		mounted(){ //这个挂在第一次进入页面后运行一次
+			//#ifndef H5
 			this.getLocation(); //获取位置
+			//#endif
 		},
 		data() {
 			return {
@@ -65,8 +67,8 @@
 						icon: 'search'
 					},
 					{
-						title: '我的运动',
-						name: 'sports',
+						title: '生成二维码',
+						name: 'QRcode',
 						route: '/pages/index/tkiqrcode',
 						color: 'pink',
 						icon: 'list'

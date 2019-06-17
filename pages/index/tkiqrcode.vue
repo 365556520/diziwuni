@@ -17,10 +17,11 @@
 				:loadingText="loadingText"
 				@result="qrR"
 				  :show="show"/>
+				
+				<view class="uni-title">图片大小</view><slider :value="size" max=500 min=0 @change="sliderChange" show-value />
 				<view class="cu-form-group margin-top">
 					<input placeholder="请输入要生成内容" maxlength=20  v-model="val"></input>
 				</view>
-				图片大小<slider :value="size" max=500 min=0 @change="sliderChange" show-value />
 				<button @click="make">生成二维码</button>
 				<button @click="clear">清除</button>
 				<button @click="save">保存</button>

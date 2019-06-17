@@ -7,35 +7,39 @@
 				
 			</view>
 		</view>
-		<view class="center-list">
-			<view class="center-list-item border-bottom">
-				<text class="list-icon">&#xe60f;</text>
-				<text class="list-text">账号管理</text>
-				<text class="navigat-arrow">&#xe65e;</text>
+		<view class="cu-list menu sm-border  margin-top">
+			<view class="cu-item ">
+				<button class="cu-btn content" open-type="contact">
+					<text class="cuIcon-circlefill text-grey"></text>
+					<text class="text-grey">账号管理</text>
+				</button>
 			</view>
-		</view>
-		<view class="center-list">
-			<view class="center-list-item border-bottom">
-				<text class="list-icon">&#xe639;</text>
-				<text class="list-text">新消息通知</text>
+			<view class="cu-item ">
+				<button class="cu-btn content" open-type="contact">
+					<text class="cuIcon-circlefill text-grey"></text>
+					<text class="text-grey">新消息通知</text>
+				</button>
+				<view class="action">
+					<view class="cu-tag round bg-orange light">30新消息</view>
+				</view>
 			</view>
-		</view>
-		<view class="center-list">
-			<view class="center-list-item border-bottom">
-				<text class="list-icon">&#xe60b;</text>
-				<text class="list-text">帮助与反馈</text>
+			<view class="cu-item ">
+				<button class="cu-btn content" open-type="contact">
+					<text class="cuIcon-circlefill text-grey"></text>
+					<text class="text-grey">帮助与反馈</text>
+				</button>
 			</view>
-		</view>
-		<view class="center-list">
-			<view class="center-list-item border-bottom">
-				<text class="list-icon">&#xe65f;</text>
-				<text class="list-text">服务条款及隐私</text>
+			<view class="cu-item ">
+				<button class="cu-btn content" open-type="contact">
+					<text class="cuIcon-circlefill text-grey"></text>
+					<text class="text-grey">服务条款及隐私</text>
+				</button>
 			</view>
-		</view>
-		<view class="center-list" @click="quitUser()">
-			<view class="center-list-item">
-				<text class="list-icon">&#xe614;</text>
-				<text class="list-text">用户退出</text>
+			<view class="cu-item ">
+				<button class="cu-btn content" open-type="contact" @click="quitUser()">
+					<text class="cuIcon-exit text-grey"></text>
+					<text class="text-grey">用户退出</text>
+				</button>
 			</view>
 		</view>
 	</view>
