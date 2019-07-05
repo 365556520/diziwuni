@@ -14,9 +14,9 @@
 			</view>
 		</form>
 		<view class="action-row">
-		    <navigator url="">注册账号</navigator>
+		    <navigator url="/pages/pages/auth/register">注册账号</navigator>
 		    <text>|</text>
-		    <navigator url="">忘记密码</navigator>
+		    <navigator url="/pages/pages/auth/retrieve">忘记密码</navigator>
 		</view>
 	</view>
 </template>
@@ -80,6 +80,7 @@
 					let data = JSON.parse(err.data);
 					uni.showToast({
 					    title: '用户不存在',
+						icon:'none',
 					    mask: true
 					});
 				    console.log('数据请求失败', data);

@@ -10,13 +10,13 @@
 		<view class="cu-list menu sm-border  margin-top">
 			<view class="cu-item ">
 				<button class="cu-btn content" open-type="contact">
-					<text class="cuIcon-circlefill text-grey"></text>
+					<text class="cuIcon-profile text-grey"></text>
 					<text class="text-grey">账号管理</text>
 				</button>
 			</view>
 			<view class="cu-item ">
 				<button class="cu-btn content" open-type="contact">
-					<text class="cuIcon-circlefill text-grey"></text>
+					<text class="cuIcon-markfill text-grey"></text>
 					<text class="text-grey">新消息通知</text>
 				</button>
 				<view class="action">
