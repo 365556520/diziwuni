@@ -18,10 +18,11 @@
 				@result="qrR"
 				  :show="show"/>
 				
-				<view class="uni-title">图片大小</view><slider :value="size" max=500 min=0 @change="sliderChange" show-value />
+				<view class="uni-title">图片大小</view><slider :value="size" max=600 min=200 @change="sliderChange" show-value />
 				<view class="cu-form-group margin-top">
 					<input placeholder="请输入要生成内容" maxlength=20  v-model="val"></input>
 				</view>
+				<button  type="primary" @tap="selectIcon">选择二维码图标</button>
 				<button @click="make">生成二维码</button>
 				<button @click="clear">清除</button>
 				<button @click="save">保存</button>
@@ -38,18 +39,17 @@
 		data() {
 			return {
 				'size':200,
-				 'unit':'upx',
-				 'show':true,
+				'unit':'upx',
+				'show':true,
 				 'val':'',
 				  'icon':'',
-				  'iconSize':40,
+				  'iconsize':20,
 				  'lv':3,
 				  'onval':false,
 				  'loadMake':false,
 				  'usingComponents':true,
 				  'showLoading':true,
 				  'loadingText':'二维码生成中',
-				  
 			}
 		},
 		onLoad() {
@@ -69,11 +69,28 @@
 			qrR(v){
 				console.log(v);
 			},
-			 sliderChange(e) {
+			sliderChange(e) {
 				 this.size=e.detail.value;
+				 if(this.iconsize<40){ //图标最大只能设置到40
+					this.iconsize = this.size/10;
+				 }
 				console.log('value 发生变化：' + e.detail.value)
+			},
+			selectIcon() {
+				let that = this
+				uni.chooseImage({
+					count: 1, //默认9
+					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					sourceType: ['album'], //从相册选择
+					success: function (res) {
+						that.icon = res.tempFilePaths[0]
+						setTimeout(() => {
+							that.make()
+						}, 100);
+						 console.log(that.icon);
+					}
+				});
 			}
-		
 		}
 	}
 </script>
@@ -83,14 +100,5 @@
 	
 		height: 400upx;
 	}
-	.logo {
-		height: 200upx;
-		width: 200upx;
-		margin-top: 200upx;
-	}
-
-	.title {
-		font-size: 20upx;
-		color: #8f8f94;
-	}
+	
 </style>
