@@ -1,10 +1,9 @@
 <template>
 	<view class="content ">
 		<form>
-	
 			<view class="cu-form-group">
 				<view class="title">电子邮箱</view>
-				<input placeholder="如:1234@qq.com" name="mail" @blur='verify(rinput.mail)' v-model="rinput.mail"></input>
+				<input placeholder="请填写注册时的邮箱" name="mail" @blur='verify(rinput.mail)' v-model="rinput.mail"></input>
 			</view>
 			<view class="padding flex flex-direction">
 				<button class="cu-btn bg-red margin-tb-sm lg" @click="retrieve()">找回密码</button>

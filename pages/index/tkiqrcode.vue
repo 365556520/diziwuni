@@ -6,7 +6,6 @@
 				:val="val"
 				:size="size"
 				:unit="unit"
-			
 				:icon="icon"
 				:iconSize="iconsize"
 				:lv="lv" 
@@ -22,10 +21,12 @@
 				<view class="cu-form-group margin-top">
 					<input placeholder="请输入要生成内容" maxlength=20  v-model="val"></input>
 				</view>
-				<button  type="primary" @tap="selectIcon">选择二维码图标</button>
-				<button @click="make">生成二维码</button>
-				<button @click="clear">清除</button>
-				<button @click="save">保存</button>
+				<view class="padding flex flex-direction">
+					<button class="cu-btn bg-blue margin-tb-sm lg" @click="selectIcon">选择二维码图标</button> 
+					<button class="cu-btn bg-blue margin-tb-sm lg" @click="make">生成二维码</button>
+					<button class="cu-btn bg-blue margin-tb-sm lg" @click="save">保存</button>
+					<button class="cu-btn bg-red margin-tb-sm lg" @click="clear">清除</button>
+				</view>
 			</view>
 	</view>
 </template>
@@ -71,9 +72,7 @@
 			},
 			sliderChange(e) {
 				 this.size=e.detail.value;
-				 if(this.iconsize<40){ //图标最大只能设置到40
-					this.iconsize = this.size/10;
-				 }
+				 this.iconsize = e.detail.value/12;
 				console.log('value 发生变化：' + e.detail.value)
 			},
 			selectIcon() {
