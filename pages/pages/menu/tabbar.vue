@@ -47,6 +47,7 @@ export default {
 		scan(){//扫二维码
 			uni.scanCode({
 				success: function (res) {
+					this.goToPage(res.result)
 					console.log('条码类型：' + res.scanType);
 					console.log('条码内容：' + res.result);
 				}

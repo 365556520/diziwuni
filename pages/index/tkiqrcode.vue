@@ -18,7 +18,7 @@
 				  :show="show"/>
 				<view class="uni-title">图片大小</view><slider :value="size" max=600 min=200 @change="sliderChange" show-value />
 				<view class="cu-form-group margin-top">
-					<input placeholder="请输入要生成内容" maxlength=20  v-model="val"></input>
+					<input placeholder="请输入要生成内容"   v-model="val"></input>
 				</view>
 				<view class="padding flex flex-direction">
 					<button class="cu-btn bg-blue margin-tb-sm lg" @click="selectIcon">选择二维码图标</button> 
