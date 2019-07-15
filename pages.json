@@ -30,9 +30,9 @@
 			}
 		},
 		{
-			"path": "pages/pages/shopping",
+			"path": "pages/pages/info",
 			"style": {
-				"navigationBarTitleText": "购物"
+				"navigationBarTitleText": "消息"
 			}
 		},
 		{
@@ -74,7 +74,7 @@
 			}
 		},
 		{
-			"path": "pages/index/bus/busroute",
+			"path": "pages/common/commonurl",
 			"style": {
 				"navigationBarTitleText": "公交车查询车辆"
 			}
@@ -125,7 +125,7 @@
             },
             //#endif
             {
-                "pagePath": "pages/pages/shopping",
+                "pagePath": "pages/pages/info",
                 "iconPath": "static/img/tabbar/news.png",
                 "selectedIconPath": "static/img/tabbar/newsactive.png",
                 "text": "消息"

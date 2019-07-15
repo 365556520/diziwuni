@@ -37,16 +37,26 @@
 						<text class="tit">网友评论</text>
 					</view>
 					<view class="evalution">
-						<view  v-for="(item, index) in evaList" :key="index"
-							class="eva-item"
-						>
+						<view  v-for="(item, index) in evaList" :key="index" class="eva-item" >
+							<image :src="'http://www.diziw.cn/'+item.get_from_uid.get_user_data.headimg" mode="aspectFill"></image>
 							<view class="eva-right">
-					
-								<view class="zan-box" @click="huifus(item.get_from_uid.id,item.get_from_uid.name)">
-									 回复
+								<text>{{item.get_from_uid.name}}</text>
+								<text>{{item.created_at}}</text>
+								<view class="zan-box">
+									<view @click="huifus(item.get_from_uid.id,item.get_from_uid.name,item.id)" v-if="item.comments_pid == 0">回复</view>
 								</view>
-								<view class="content"><u-parse :content="item.to_uid?item.get_from_uid.name+'  回复  '+item.get_to_uid.name+': '+item.content:item.get_from_uid.name+': '+item.content"/></view>
-								<view>{{item.created_at}} </view>
+								<text class="content">{{item.content}}</text>	
+								<!--回复内容 -->
+								<view v-if=" item.children.length!=0" v-for="(hui, index) in item.children" :key="index" >
+									<view  class="eva-item">
+										<image :src="'http://www.diziw.cn/'+hui.get_from_uid.get_user_data.headimg" mode="aspectFill"></image>
+										<view class="eva-right">
+											<text>{{hui.get_from_uid.name}}</text>
+											<text>{{hui.created_at}}</text>
+											<text class="content">{{hui.content}}</text>	
+										</view>
+									</view>
+								</view>
 							</view>
 						</view>
 					</view>
@@ -55,7 +65,7 @@
 				<mixLoading class="mix-loading" v-if="loading"></mixLoading>
 			</view>
 		</scroll-view>
-		
+	
 		<view class="bottom">
 			<view class="input-box">
 				<text class="yticon icon-huifu"><text @click="qingchu()">{{inputcomments.to_name==''?'':' 回复: '+inputcomments.to_name+':'}} </text></text>
@@ -65,6 +75,7 @@
 					placeholder="点评一下把.." 
 					placeholder-style="color:#adb1b9;"
 					v-model="inputcomments.commentscontent"
+					value = ''
 				/>
 			</view>
 			<text class="confirm-btn" @click="submit()">提交</text>
@@ -90,6 +101,7 @@
 				    commentscontent:'',//回复内容
 				    to_name:'',
 				    to_uid:'',
+					comments_pid:0 //回复关系
 				},
 			}
 		},
@@ -133,13 +145,15 @@
 					return false;
 				})
 			},
-			huifus(id,name){
+			huifus(id,name,comments_pid){
 				this.inputcomments.to_name = name;
 				this.inputcomments.to_uid = id;
+				this.inputcomments.comments_pid = comments_pid;
 			},
 			qingchu(){
 				this.inputcomments.to_name = '';
 				this.inputcomments.to_uid = '';
+				this.inputcomments.comments_pid = 0;
 			},
 			submit(){
 				 if(this.userToken!=""){
@@ -149,6 +163,7 @@
 					             'topic_id':this.detailData.id,//文章id
 					             'content':this.inputcomments.commentscontent, //恢复内容
 					             'to_uid':this.inputcomments.to_uid, //恢复目标id
+								 'comments_pid':this.inputcomments.comments_pid,//回复关系
 							}
 					     }
 					     this.$api.postToken('/api/inputComments',this.userToken,data).then((response) => {
@@ -157,6 +172,7 @@
 					             this.inputcomments.commentscontent = ''; //清空输入框
 					             this.inputcomments.to_uid='';
 					             this.inputcomments.to_name='';
+								 this.inputcomments.comments_pid = 0;
 					             this.loadEvaList(this.detailData.id);
 								 uni.showToast({
 								     title: data.msg,
@@ -386,7 +402,7 @@
 			bottom: 0;
 			right: 0;
 			height: 0;
-			border-bottom: 1px solid #eee;
+			border-bottom: 0px solid #eee;
 			transform: translateY(50%);
 		}
 		&:last-child:after{
