@@ -6,7 +6,11 @@ const state={
     count:3,//测试数据
     userToken:'',//用户token身份
     userdata:{
-        user:'',//用户信息
+        user:{
+			id:'',
+			name:'',
+			getUserData:{}
+		},//用户信息
         hasEnter:false,//用户登录状态
     },
     userbaidumap:{
@@ -32,6 +36,7 @@ const mutations={
     setName(state,data,hasEnter=true){
         state.userdata = data;
 		state.userdata.hasEnter = hasEnter;
+			console.log('用户数据信息2',state.userdata);
 		try {
 			uni.setStorageSync('userdata', state.userdata);//存到缓存中
 		} catch (e) {
@@ -70,7 +75,11 @@ const mutations={
 			    //清空tiken和用户信息
 			    state.userToken = '';
 			    state.userdata = {
-			        user:'',//用户信息
+			        user:{
+						id:'',
+						name:'',
+						getUserData:{}
+					},//用户信息
 			        hasEnter:false,//用户登录状态
 			     };
 			}

@@ -2,6 +2,10 @@
 	<view class="content ">
 		<form>
 			<view class="cu-form-group margin-top">
+				<view class="title">用户名 </view>
+				<input placeholder="必须是数字和字母" maxlength=20 name="name" @blur='verify("name",rinput.name)' v-model="rinput.name"></input>
+			</view>
+			<view class="cu-form-group ">
 				<view class="title">账 号 </view>
 				<input placeholder="必须是数字和字母" maxlength=20 name="username" @blur='verify("username",rinput.username)' v-model="rinput.username"></input>
 			</view>
@@ -11,11 +15,11 @@
 			</view>
 			<view class="cu-form-group">
 				<view class="title">确认密码</view>
-				<input placeholder="和密码一致" name="rpassword" maxlength=20 type="password" @blur='verify("rpassword",rinput.rpassword)'  v-model="rinput.rpassword"></input>
+				<input placeholder="和密码一致" name="c_password" maxlength=20 type="password" @blur='verify("c_password",rinput.c_password)'  v-model="rinput.c_password"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">电子邮箱</view>
-				<input placeholder="如:1234@qq.com" name="mail" @blur='verify("mail",rinput.mail)' v-model="rinput.mail"></input>
+				<input placeholder="如:1234@qq.com" name="email" @blur='verify("email",rinput.email)' v-model="rinput.email"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">手机号码</view>
@@ -29,6 +33,9 @@
 					</view>
 				</view>
 			</view>
+			<view class="cu-form-group">
+				<move-verify @result='verifyResult'></move-verify>
+			</view>
 			<view class="padding flex flex-direction">
 				<button class="cu-btn bg-red margin-tb-sm lg" @click="register()">确 认</button>
 			</view>
@@ -39,20 +46,24 @@
 
 <script>
 	import {mapState,mapMutations,mapGetters} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
+	import moveVerify from "@/components/helang-moveVerify/helang-moveVerify.vue"//滑动验证插件
 	export default {
 		components: {
+			"move-verify":moveVerify
 		},
 		data() {
 			return {
+				isFlag:false,//滑动插件
 				logindata:{
 					'username':'',
 					'password':''
 				},
 				rinput:{
+					'name':'',
 					'username':'',
 					'password':'',
-					'rpassword':'',
-					'mail':'',
+					'c_password':'',
+					'email':'',
 					'phone':''
 				},
 				info:{
@@ -74,8 +85,12 @@
 			    'setName'
 				
 			]),
+			/* 校验成功的回调函数 */
+			verifyResult(){
+				this.isFlag=true;
+			},
 			verify(inputname,v){
-				var mail = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/ //邮箱正则
+				var email = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/ //邮箱正则
 				var phone = /^1[3456789]\d{9}$/   //手机号码正则
 				var username = /^[a-zA-Z0-9]{2,15}$/ //账号字母加数字正则 2-15位
 				var password = /^[a-zA-Z0-9]{6,15}$/  //密码字母加数字正则 6-15位
@@ -106,7 +121,7 @@
 							this.info.code = true;
 						}
 					break;
-					case 'rpassword':
+					case 'c_password':
 						if (this.rinput.password != v){
 							uni.showToast({
 							    title: '确认密码和密码不一样！',
@@ -119,8 +134,8 @@
 							this.info.code = true;
 						}
 					break;
-					case 'mail':
-						if (!mail.test(v)){
+					case 'email':
+						if (!email.test(v)){
 							uni.showToast({
 								title: '邮箱格式错误!',
 								icon:'none',
@@ -149,11 +164,43 @@
 			},
 			register(){
 				if(this.info.code){
-					uni.showToast({
-					    title: '验证成功开始注册',
-						icon:'none',
-						mask: true
-					});
+					if(this.isFlag){
+						let data = {
+						    name:this.rinput.name,
+						    username:this.rinput.username,
+						    password:this.rinput.password,
+						    c_password:this.rinput.c_password,
+						    email:this.rinput.email,
+						}
+						this.$api.post('/api/register',data).then((res)=>{
+							let userData=JSON.parse(res.data);//把json转换数组
+							console.log(userData);
+							if(userData.code == 401){
+								uni.showModal({
+									title: '提示',
+									content: userData.error.email[0],
+									success: function (res) {
+										if (res.confirm) {
+											console.log('用户点击确定');
+										} else if (res.cancel) {
+											console.log('用户点击取消');
+										}
+									}
+								});
+								
+								console.log('数据请求失败',userData.error.email[0]);
+							}
+							
+						}).catch((err)=>{
+						    console.log('数据请求失败',err );
+						})	
+					}else{
+						uni.showToast({
+						    title: '请滑动验证',
+							icon:'none',
+							mask: true
+						});
+					}
 				}else{
 					uni.showToast({
 					    title: this.info.mess,

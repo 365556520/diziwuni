@@ -1,9 +1,9 @@
 <template>
 	<view class="center">
 		<view class="logo" @click="goLogin('/pages/pages/auth/login')" :hover-class="!login ? 'logo-hover' : ''">
-			<image class="logo-img" :src="login ? uerInfo.avatarUrl :avatarUrl"></image>
+			<image class="logo-img" :src="userdata.hasEnter ? 'http://www.diziw.cn/'+ userdata.user[0].get_user_data.headimg:avatarUrl"></image>
 			<view class="logo-title">
-				<text class="uer-name">Hi，{{userdata.hasEnter ? userdata.user.name : '您未登录!'}}</text>
+				<text class="uer-name">Hi，{{userdata.hasEnter ? userdata.user[0].name : '您未登录!'}}</text>
 				
 			</view>
 		</view>

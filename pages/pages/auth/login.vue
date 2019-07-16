@@ -9,6 +9,9 @@
 				<view class="title">密 码 </view>
 				<input placeholder="请输入密码" name="password" maxlength=20 type="password" v-model="logindata.password"></input>
 			</view>
+			<view class="cu-form-group">
+				<move-verify @result='verifyResult'></move-verify>
+			</view>
 			<view class="padding flex flex-direction">
 				<button class="cu-btn bg-red margin-tb-sm lg" @click="login()">登 录</button>
 			</view>
@@ -23,11 +26,14 @@
 
 <script>
 	import {mapState,mapMutations,mapGetters} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
+	import moveVerify from "@/components/helang-moveVerify/helang-moveVerify.vue"//滑动验证插件
 	export default {
 		components: {
+			"move-verify":moveVerify
 		},
 		data() {
 			return {
+				isFlag:false,//滑动插件
 				logindata:{
 					'username':'',
 					'password':''
@@ -48,43 +54,55 @@
 			    'setName'
 				
 			]),
+			/* 校验成功的回调函数 */
+			verifyResult(){
+				this.isFlag=true;
+			},
 			login(){
 				/*  if (/^[a-zA-Z0-9]{2,15}$/.test(value))
 				*  if (/^[a-zA-Z0-9]{6,15}$/.test(value))
 				*  */
-				 let data = {
-				    username:this.logindata.username,
-				    password:this.logindata.password,
-				}
-				//用户登录
-				this.$api.post('/api/login',data).then((res)=>{
-					let userData=JSON.parse(res.data);//把json转换数组
-					if(res.statusCode=='200'){
-						 this.setToken(userData.token);//把token保存到vuex里面
-						 //获取用户信息
-						 this.getuserdata(this.userToken);
-						 uni.showToast({
-						     title: userData.message,
-						     icon: 'success',
-						     mask: true
-						 });
-						 uni.navigateBack({
-							delta: 1, //返回上一页
-							animationType: 'pop-out', //动画
-							animationDuration: 300 //动画时间
-						});
-						// console.log('打印token', uni.getStorageSync('userToken'));
+				if(this.isFlag){ //滑动验证成功后开始登陆
+					let data = {
+					    username:this.logindata.username,
+					    password:this.logindata.password,
 					}
-				  //  this.res = '请求结果 : ' + JSON.stringify(res);
-				}).catch((err)=>{
-					let data = JSON.parse(err.data);
+					//用户登录
+					this.$api.post('/api/login',data).then((res)=>{
+						let userData=JSON.parse(res.data);//把json转换数组
+						if(res.statusCode=='200'){
+							 this.setToken(userData.token);//把token保存到vuex里面
+							 //获取用户信息
+							 this.getuserdata(this.userToken);
+							 uni.showToast({
+							     title: userData.message,
+							     icon: 'success',
+							     mask: true
+							 });
+							 uni.navigateBack({
+								delta: 1, //返回上一页
+								animationType: 'pop-out', //动画
+								animationDuration: 300 //动画时间
+							});
+							// console.log('打印token', uni.getStorageSync('userToken'));
+						}
+					  //  this.res = '请求结果 : ' + JSON.stringify(res);
+					}).catch((err)=>{
+						let data = JSON.parse(err.data);
+						uni.showToast({
+						    title: '用户不存在',
+							icon:'none',
+						    mask: true
+						});
+					    console.log('数据请求失败', data);
+					})
+				}else{
 					uni.showToast({
-					    title: '用户不存在',
+					    title: '请滑动验证',
 						icon:'none',
-					    mask: true
+						mask: true
 					});
-				    console.log('数据请求失败', data);
-				})
+				}
 			},
 			//获取用户信息
 			getuserdata(token){
@@ -94,7 +112,7 @@
 							let user=JSON.parse(res.data);
 							this.setName(user);
 						}
-						console.log('用户数据信息', this.userdata);
+						console.log('用户数据信息', res.data);
 					}).catch((err)=>{
 					    console.log('数据请求失败', err);
 					})
