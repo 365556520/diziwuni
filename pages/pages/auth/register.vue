@@ -54,10 +54,6 @@
 		data() {
 			return {
 				isFlag:false,//滑动插件
-				logindata:{
-					'username':'',
-					'password':''
-				},
 				rinput:{
 					'name':'',
 					'username':'',
@@ -163,6 +159,7 @@
 				}
 			},
 			register(){
+				let this_ =this;
 				if(this.info.code){
 					if(this.isFlag){
 						let data = {
@@ -174,23 +171,15 @@
 						}
 						this.$api.post('/api/register',data).then((res)=>{
 							let userData=JSON.parse(res.data);//把json转换数组
-							console.log(userData);
-							if(userData.code == 401){
-								uni.showModal({
-									title: '提示',
-									content: userData.error.email[0],
-									success: function (res) {
-										if (res.confirm) {
-											console.log('用户点击确定');
-										} else if (res.cancel) {
-											console.log('用户点击取消');
-										}
-									}
+							if(res.statusCode==200){
+								this.setToken(userData.token);//把token保存到vuex里面
+								//获取用户信息
+								this.getuserdata(this.userToken);
+								uni.switchTab({
+									url:'/pages/pages/my'
 								});
-								
-								console.log('数据请求失败',userData.error.email[0]);
 							}
-							
+							console.log('数据请求成功',res);
 						}).catch((err)=>{
 						    console.log('数据请求失败',err );
 						})	
@@ -208,40 +197,6 @@
 						mask: true
 					});
 				}
-			},
-			login(){
-				let data = {
-				    username:this.logindata.username,
-				    password:this.logindata.password,
-				}
-				//用户登录
-				this.$api.post('/api/login',data).then((res)=>{
-					let userData=JSON.parse(res.data);//把json转换数组
-					if(res.statusCode=='200'){
-						 this.setToken(userData.token);//把token保存到vuex里面
-						 //获取用户信息
-						 this.getuserdata(this.userToken);
-						 uni.showToast({
-						     title: userData.message,
-						     icon: 'success',
-						     mask: true
-						 });
-						 uni.navigateBack({
-							delta: 1, //返回上一页
-							animationType: 'pop-out', //动画
-							animationDuration: 300 //动画时间
-						});
-						// console.log('打印token', uni.getStorageSync('userToken'));
-					}
-				  //  this.res = '请求结果 : ' + JSON.stringify(res);
-				}).catch((err)=>{
-					let data = JSON.parse(err.data);
-					uni.showToast({
-					    title: '用户不存在',
-					    mask: true,
-					});
-				    console.log('数据请求失败', data);
-				})
 			},
 			//获取用户信息
 			getuserdata(token){
