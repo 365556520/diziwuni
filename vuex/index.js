@@ -59,15 +59,16 @@ const mutations={
     setMapresults(state,results){
         state.userbaidumap.results=results;
     },
-    //从缓存中获取token方法
+    //从缓存中获取token和用户数据的方法
     getToken(state){
 		try {
 			state.userToken = uni.getStorageSync('userToken');//获取本地缓存中的token
+			state.userdata = uni.getStorageSync('userdata');//获取本地缓存中的数据
 		} catch (e) {
 			// error
 		}
-        return state.userToken;
     },
+	
     //删除用户状态
     deleteUser(state){
 		try {

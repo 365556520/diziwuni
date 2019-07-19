@@ -172,14 +172,14 @@
 						this.$api.post('/api/register',data).then((res)=>{
 							let userData=JSON.parse(res.data);//把json转换数组
 							if(res.statusCode==200){
-								this.setToken(userData.token);//把token保存到vuex里面
+								this_.setToken(userData.data.token);//把token保存到vuex里面
 								//获取用户信息
-								this.getuserdata(this.userToken);
+								this_.getuserdata(this_.userToken);
 								uni.switchTab({
 									url:'/pages/pages/my'
 								});
 							}
-							console.log('数据请求成功',res);
+							console.log('数据请求成功');
 						}).catch((err)=>{
 						    console.log('数据请求失败',err );
 						})	
@@ -200,7 +200,8 @@
 			},
 			//获取用户信息
 			getuserdata(token){
-				if(this.userToken!=""){
+				console.log('获取用户信息的token', token);
+				if(this.userToken!=''){
 					this.$api.postToken('/api/passport',token).then((res)=>{
 						if(res.statusCode=='200'){
 							let user=JSON.parse(res.data);

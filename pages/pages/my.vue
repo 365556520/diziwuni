@@ -1,7 +1,7 @@
 <template>
 	<view class="center">
 		<view class="logo" @click="goLogin('/pages/pages/auth/login')" :hover-class="!login ? 'logo-hover' : ''">
-			<image class="logo-img" :src="userdata.hasEnter ? 'http://www.diziw.cn/'+ userdata.user[0].get_user_data.headimg:avatarUrl"></image>
+			<image class="logo-img" :src="userdata.hasEnter ? userImgUrl:avatarUrl"></image>
 			<view class="logo-title">
 				<text class="uer-name">Hi，{{userdata.hasEnter ? userdata.user[0].name : '您未登录!'}}</text>
 				
@@ -49,7 +49,7 @@
 	import {mapState,mapMutations,mapGetters} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	export default {
 		mounted(){ //这个挂在第一次进入页面后运行一次
-		  
+			this.getToken();  //从缓存中获取token和数据
 		},
 		data() {
 			return {
@@ -60,11 +60,20 @@
 		},
 		computed:{//数据计算
 			...mapState(['userToken','userdata']),
+			userImgUrl:function(){
+				let url = '';
+				if(this.userdata.user[0].get_user_data.headimg!=null){
+					url = 'http://www.diziw.cn/'+ this.userdata.user[0].get_user_data.headimg;
+				}else{
+					url = this.avatarUrl;
+				}
+				return url;
+			}
 		},
 		methods: {
 			//用vuex里面的方法
 			...mapMutations([
-			    'deleteUser'
+			    'deleteUser','getToken'
 			]), 
 			goLogin(url) {
 				if(this.userdata.hasEnter){
