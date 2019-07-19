@@ -225,7 +225,6 @@
 	}
 	.video-wrapper{
 		height: 422upx;
-		
 		.video{
 			width: 100%;
 			height: 100%;
