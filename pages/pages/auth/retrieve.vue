@@ -1,17 +1,10 @@
 <template>
 	<view class="content ">
-		<view class="cu-bar bg-white solid-bottom margin-top">
-			<view class="action">
-				<text class="cuIcon-title text-orange"></text> 找回密码
-			</view>
-			<view class="action">
-				<button class="cu-btn bg-green shadow" @tap="NumSteps">下一步</button>
-			</view>
-		</view>
+		
 		<view class="bg-white padding">
-			<view class="cu-steps">
+			<view class="cu-steps" >
 				<view class="cu-item" :class="index>num?'':'text-blue'" v-for="(item,index) in numList" :key="index">
-					<text class="num" :class="index==1?'err':''" :data-index="index + 1"></text> {{item.name}}
+					<text class="num" :class="index==3?'err':''" :data-index="index + 1"></text> {{item.name}}
 				</view>
 			</view>
 			</br>
@@ -31,6 +24,9 @@
 				<view class="cu-steps">
 					<view class=" padding-sm margin-xs radius"><h1 style="color: #39B54A;">邮件发送成功</h1></view>
 				</view>
+			</view>
+			<view class="action">
+				<button class="cu-btn bg-green shadow" @tap="NumSteps">下一步</button>
 			</view>
 		</view>
 	</view>
@@ -75,20 +71,36 @@
 						//访问api查看账号是否存在！并获取该账号邮箱 赋给isemail
 						//验证成功后认证格式在复原
 						this.info.code = false;
+						let data = {
+						    lname:'username',
+						    data:this.rinput.username,
+						}
+						this.isUserData(data,0); //查看用户是否存在
 					}else if(this.num == 1){
-						//判断邮箱是否正确
-						 if(this.isemail == this.rinput.email){
+						let data = {
+						    lname:'email',
+						    data:this.rinput.email,
+						}
+						this.isUserData(data,1); //查看邮箱是否存在
+					}else if(this.num == 2){
+						let data = {
+						    email:this.rinput.email,
+						}
+						this.$api.post('/api/resetEmail',data).then((res)=>{
+							let data=JSON.parse(res.data);
 							
-						 }else{
-							  uni.showToast({
-							     title: '用户的邮箱不正确',
-							 	icon:'none',
-							 	mask: true
-							 });
-							 return  false;
-						 }
+							console.log(data);
+						}).catch((err)=>{
+							
+							uni.showToast({
+							    title: '数据不存在',
+								icon:'none',
+							    mask: true
+							});
+						    console.log('数据请求失败', err);
+						})
 					}
-					this.num= this.num == this.numList.length - 1 ? 0 : this.num + 1
+					
 				}else{
 					uni.showToast({
 					    title: this.info.mess,
@@ -97,6 +109,31 @@
 					});
 				}
 								
+			},
+			isUserData(datas,isnum){
+				//查询用户和邮箱是否存在
+				this.$api.post('/api/isUser',datas).then((res)=>{
+					let data=JSON.parse(res.data);
+					if(data.code==401){
+						uni.showToast({
+							title:data.message,
+							icon:'none',
+							mask: true
+						});
+						this.num = isnum;
+					}else{
+						this.num= this.num == this.numList.length - 1 ? 0 : this.num + 1;
+					}
+					console.log(data);
+				}).catch((err)=>{
+					let data = JSON.parse(err.data);
+					uni.showToast({
+					    title: '数据不存在',
+						icon:'none',
+					    mask: true
+					});
+				    console.log('数据请求失败', data);
+				})
 			},
 			verify(inputname,v){
 				var email = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/ //邮箱正则
