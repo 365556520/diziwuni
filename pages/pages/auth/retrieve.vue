@@ -4,7 +4,7 @@
 		<view class="bg-white padding">
 			<view class="cu-steps" >
 				<view class="cu-item" :class="index>num?'':'text-blue'" v-for="(item,index) in numList" :key="index">
-					<text class="num" :class="index==3?'err':''" :data-index="index + 1"></text> {{item.name}}
+					<text class="num" :class="index==4?'err':''" :data-index="index + 1"></text> {{item.name}}
 				</view>
 			</view>
 			</br>
@@ -20,13 +20,13 @@
 					<input placeholder="请填写注册时的邮箱" name="email" @blur='verify("email",rinput.email)' v-model="rinput.email"></input>
 				</view>
 			</view>
-			<view class="flex solid-bottom padding justify-center"  v-if='num == 2'>
+			<view class="flex solid-bottom padding justify-center"  v-if='num > 1'>
 				<view class="cu-steps">
-					<view class=" padding-sm margin-xs radius"><h1 style="color: #39B54A;">邮件发送成功</h1></view>
+					<view class=" padding-sm margin-xs radius"><h1 style="color: #39B54A;">{{resetEmailmess}}</h1></view>
 				</view>
 			</view>
-			<view class="action">
-				<button class="cu-btn bg-green shadow" @tap="NumSteps">下一步</button>
+			<view class="action" v-if="nextshow">
+				<button class=" bg-green shadow" @tap="NumSteps">{{btname}}</button>
 			</view>
 		</view>
 	</view>
@@ -54,9 +54,14 @@
 				}, {
 					name: '邮箱'
 				}, {
-					name: '邮件已发送'
-				}, ],
+					name: '发送'
+				}, {
+					name: '结果'
+				},],
 				num: 0,
+				nextshow:true,//下一步按钮的显示
+				resetEmailmess:'' ,//邮件发送成功消息
+				btname:'下一步'
 			}
 		},
 		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
@@ -83,21 +88,24 @@
 						}
 						this.isUserData(data,1); //查看邮箱是否存在
 					}else if(this.num == 2){
-						let data = {
-						    email:this.rinput.email,
+						this.resetEmailmess = '正在发送中...';	
+						//发送找回密码
+						let resetEmail = {
+							email:this.rinput.email,
 						}
-						this.$api.post('/api/resetEmail',data).then((res)=>{
+						this.$api.post('/api/resetEmail',resetEmail).then((res)=>{
 							let data=JSON.parse(res.data);
-							
+							this.resetEmailmess = data.message;	
+							this.num = this.numList.length
+							this.nextshow=false;
 							console.log(data);
 						}).catch((err)=>{
-							
 							uni.showToast({
-							    title: '数据不存在',
+								title: '数据不存在',
 								icon:'none',
-							    mask: true
+								mask: true
 							});
-						    console.log('数据请求失败', err);
+							console.log('数据请求失败', err);
 						})
 					}
 					
@@ -123,6 +131,9 @@
 						this.num = isnum;
 					}else{
 						this.num= this.num == this.numList.length - 1 ? 0 : this.num + 1;
+						if(this.num == 2){
+							this.btname="发送邮件找回密码";
+						}
 					}
 					console.log(data);
 				}).catch((err)=>{
