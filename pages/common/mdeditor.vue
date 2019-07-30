@@ -8,7 +8,7 @@
 </template>
 
 <script>
-	import lyMarkdown from '../../../components/ly-markdown/ly-markdown.vue'
+	import lyMarkdown from '@/components/ly-markdown/ly-markdown.vue'
 	export default {
 		components: {
 			lyMarkdown

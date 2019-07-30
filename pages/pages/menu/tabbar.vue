@@ -3,9 +3,9 @@
 		<image class="logo" :class="{'active':active}" src="../../../static/logo.png"  mode="aspectFit"></image>
 		<view class="tabbar-box-wrap">
 			<view class="tabbar-box">
-				<view class="tabbar-box-item" @click="goToPage('/pages/pages/tabbar/imgs')">
+				<view class="tabbar-box-item" @click="goToPage('/pages/common/mdeditor')">
 					<image class="box-image" src="../../../static/img/release.png" mode="aspectFit"></image>
-					<text class="explain">发图文</text>
+					<text class="explain">写文章</text>
 				</view>
 				<view class="tabbar-box-item" @click="scan">
 					<image class="box-image" src="../../../static/img/saoyisao.jpg" mode="aspectFit"></image>

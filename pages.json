@@ -89,7 +89,13 @@
 			"style": {
 				"navigationBarTitleText": "我的运动"
 			}
-		}
+		},
+		{
+			"path": "pages/common/mdeditor",
+			"style": {
+				"navigationBarTitleText": "发布文章"
+			}
+		}	
 	],
 	"tabBar": {
         "borderStyle": "black",

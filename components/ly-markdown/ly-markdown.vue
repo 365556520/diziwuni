@@ -31,8 +31,8 @@
 </template>
 
 <script>
-	import marked from '../marked'
-	import uParse from '../uParse/src/wxParse.vue'
+	import marked from './marked'
+	import uParse from './uParse/src/wxParse.vue'
 	export default {
 		name: "ly-markdown",
 		components: {
@@ -176,7 +176,7 @@
 
 <style>
 	@import './markdown.css';
-	@import url("../uParse/src/wxParse.css");
+	@import url("./uParse/src/wxParse.css");
 
 	.input-content {
 		width: 100%;
