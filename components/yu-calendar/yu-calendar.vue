@@ -81,6 +81,7 @@
 						date: dayDate,
 						day: i,
 						price: '',
+						data:'',//自己添加
 						bgColor: 'none',
 						color: '#000',
 						status: 1
@@ -94,6 +95,7 @@
 					})
 					if (index >= 0) {
 						obj.price = this.priceList[index].price;
+						obj.data = this.priceList[index].data; //自己添加
 					}
 					// //设置点击灰色日期跳转后的默认值
 					// if (i == 1 && this.status == 0) {
@@ -205,7 +207,8 @@
 				const dataObj = {
 					date: obj.date,
 					day: obj.day,
-					price: obj.price
+					price: obj.price,
+					data:obj.data,//自己添加
 				}
 				this.$emit('click', dataObj)
 			},

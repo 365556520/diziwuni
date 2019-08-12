@@ -17,7 +17,7 @@
 		 },
 		data() {
 			return {
-				priceList:[{'date':'2019-08-01','price':'￥100'}],
+				priceList:[{'date':'2019-08-01','price':'￥100','data':'asdg'}],
 				isdate:''
 			};
 		},
@@ -30,7 +30,7 @@
 		methods: {
 			rili(e) {
 				this.isdate=e;
-						console.log(e);
+				console.log(e);
 			},
 			add(e){
 				uni.showModal({
