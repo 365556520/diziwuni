@@ -31,9 +31,7 @@
 		{
 			"path": "pages/pages/info",
 			"style": {
-				"titleNView":false, //app和5+app取消导航
-				"navigationStyle":"custom",//微信小程序百度小程序取消导航
-				"navigationBarTitleText": "记录"
+				"navigationBarTitleText": "备忘录"
 			}
 		},
 		{

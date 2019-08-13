@@ -3,10 +3,13 @@
 		<view class="yu-calendar-header" :style="{background :bgColor,color:color}">
 			<view class="header-left" >
 				<text  @click="prevMonth()">上月</text> 
+				<text class="lg  cuIcon-titles" @click="today()">今天</text>
 				<text class="lg  cuIcon-titles" @click="nextMonth()">下月</text>
 			</view> 
 			<view class="header-center">{{year+'年'+selectMonth}}月</view>
-			<view class="header-right" @click="add()"><text class="lg  cuIcon-write">添加</text></view>
+			<view class="header-right">
+				<text class="lg  cuIcon-write"  @click="add()">添加备忘</text>
+			</view>
 		</view>
 		<view class="yu-calendar-week" :style="{background :bgColor,color:color}">
 			<view class="list" v-for="(week,idx) in weeks" :key="idx">{{week}}</view>
@@ -60,9 +63,7 @@
 			}
 		},
 		mounted() {
-			this.year = this.date.getFullYear();
-			this.month = this.date.getMonth();
-			this.initDate(this.date.getFullYear(), this.date.getMonth());
+			this.today();
 		},
 		methods: {
 			//初始化日期
@@ -215,6 +216,12 @@
 			//添加备忘
 			add(){
 				this.$emit('add',this.date);	
+			},
+			//今天
+			today(){
+				this.year = this.date.getFullYear();
+				this.month = this.date.getMonth();
+				this.initDate(this.date.getFullYear(), this.date.getMonth());
 			}
 		}
 	}

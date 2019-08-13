@@ -14,7 +14,7 @@
 				<textarea maxlength="-1"   placeholder="请输入备忘内容" name="content" v-model="inpt.content"></textarea>
 			</view>
 			<view class="cu-form-group">
-				<view class="title">是否设置提醒(默认现在时间不提醒)</view>
+				<view class="title">是否设置时间(默认现在时间)</view>
 				<switch @change="SwitchA" :class="switchA?'checked':''" :checked="switchA?true:false"></switch>
 			</view>
 			<view v-if="switchA">
@@ -28,7 +28,7 @@
 				</view>
 				<view class="cu-form-group">
 					<view class="title">时间选择</view>
-					<picker mode="time" :value="inpt.time" start="00:00" end="23:5" @change="TimeChange">
+					<picker mode="time" :value="inpt.time" start="00:00" end="23:59" @change="TimeChange">
 						<view class="picker">
 							{{inpt.time}}
 						</view>
@@ -76,10 +76,19 @@
 		methods: {
 			rili(e) {
 				this.isdate=e;
-				console.log(e);
+				
 			},
 			//添加备忘录
-			add(){
+			add(e){
+				let year = e.getFullYear(); //年
+				let month = e.getMonth()+1; //月份
+				let day =e.getDate(); //日
+				let hour =e.getHours(); //时
+				let minute =e.getMinutes(); //分
+				let second =e.getDate(); //秒
+				this.inpt.date = year+'-'+month+'-'+day;
+				this.inpt.time = hour+':'+minute;
+				console.log(e.toUTCString());
 				this.inptshow=this.inptshow?false:true;//切换显示添加备忘录
 				this.datashow=this.inptshow?false:true;//显示备忘录不显示内容
 			},
