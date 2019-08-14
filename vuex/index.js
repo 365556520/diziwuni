@@ -91,6 +91,21 @@ const mutations={
 		}
         return state;
     },
+	//判断用户是否登录
+	ifLogin(state,m){
+		if (state.userToken == "") {
+			uni.showToast({
+				title: "请登录账号",
+				icon: 'none',
+				mask: true
+			});
+			setTimeout(function() {
+				uni.navigateTo({
+					url: '/pages/pages/auth/login'
+				});
+			}, m);
+		}
+	},
     //下面是测试
     add(state,n){
         state.count+=n;
