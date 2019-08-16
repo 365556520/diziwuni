@@ -229,9 +229,10 @@
 			},
 			//获取数据
 			getMonthNote(year,month){
-				let months = month + 1; //月份
-				this.$api.test('/api/getNote/' + year+'/'+months).then((res) => {
+				//let months = month + 1; //月份
+				this.$api.test('/api/getNote/' + year+'/'+month).then((res) => {
 					let v = JSON.parse(res.data);
+					this.priceList = []
 					if(v.code == 200){
 						let tabList = v.data;
 						tabList.forEach(item=>{
