@@ -53,14 +53,9 @@
 		components: {
 			yuCalendar
 		},
-
 		data() {
 			return {
-				priceList: [{
-					'date': '2019-08-01',
-					'price': '￥100',
-					'data': 'asdg'
-				}],
+				priceList: [],
 				isdate: '',
 				inptshow: false,
 				datashow: true,
@@ -77,10 +72,10 @@
 		computed:{//数据计算
 		},
 		onLoad() {
-
+      
 		},
 		onReady() { //第一次挂时候用 官方建议使用 uni-app 的 onReady代替 vue 的 mounted
-			this.rili();
+		
 		},
 		methods: {
 			//用vuex里面的方法
@@ -90,6 +85,7 @@
 			},
 			//添加备忘录
 			add(e) {
+				     this.getMonthNote(new Date());
 				this.ifLogin(500);//判断是否登录
 				let year = e.getFullYear(); //年
 				let month = e.getMonth() + 1; //月份
