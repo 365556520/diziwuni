@@ -41,21 +41,22 @@
 		</view>
 		<view v-if="datashow">
 			<view v-for="(item,index) in priceList" :key="index">
-				<view class="cu-bar bg-white solid-bottom">
-					<view class="action">
-						<text class="cuIcon-titles text-orange"></text>{{item.price}}
-					</view>
-				</view>
-				<view class="cu-card case no-card" >
-					<view class="cu-item shadow">
-						<view class="text-content">
-							<u-parse :content="item.data" /> <!-- //内容解析 -->
+				<uni-collapse @change="change">
+				    <uni-collapse-item :title=item.price open="true" :show-animation="true" ref="add">
+				        <view style="padding: 30upx;">
+							<view class="cu-card case no-card" >
+								<view class="cu-item shadow">
+									<view class="text-content">
+										<u-parse :content="item.data" /> <!-- //内容解析 -->
+									</view>
+									<view class="text-gray text-sm text-right padding">
+										{{item.time}}
+									</view>
+								</view>
+							</view>
 						</view>
-						<view class="text-gray text-sm text-right padding">
-							{{item.time}}
-						</view>
-					</view>
-				</view>
+				    </uni-collapse-item>
+				</uni-collapse>
 			</view>
 		</view>
 	</view>
@@ -65,9 +66,13 @@
 	import {mapState,mapMutations} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	import yuCalendar from "@/components/yu-calendar/yu-calendar.vue"
 	import uParse from '@/components/gaoyia-parse/parse.vue'; //解析html富文本
+	import uniCollapse from '@/components/uni-collapse/uni-collapse/uni-collapse.vue'  //折叠块
+	import uniCollapseItem from '@/components/uni-collapse/uni-collapse-item/uni-collapse-item.vue'//折叠块
+	//import uniList from '@/components/uni-collapse/uni-list/uni-list.vue' //折叠块列表 这没用到
+	//import uniListItem from '@/components/uni-collapse/uni-list-item/uni-list-item.vue' //折叠块列表
 	export default {
 		components: {
-			yuCalendar,uParse
+			yuCalendar,uParse,uniCollapse,uniCollapseItem
 		},
 		data() {
 			return {

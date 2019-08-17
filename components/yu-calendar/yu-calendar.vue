@@ -2,11 +2,15 @@
 	<view class="yu-calendar">
 		<view class="yu-calendar-header" :style="{background :bgColor,color:color}">
 			<view class="header-left" >
-				<text  @click="prevMonth()">上月</text> 
-				<text class="lg  cuIcon-titles" @click="today()">今天</text>
-				<text class="lg  cuIcon-titles" @click="nextMonth()">下月</text>
+				<text  class="lg  cuIcon-home" @click="today()">回到今天</text>
 			</view> 
-			<view class="header-center">{{year+'年'+selectMonth}}月</view>
+			<view class="header-center">
+				<text class="lg  cuIcon-back" @click="prevMonth()"  ></text>
+				<text class="lg  cuIcon-move" ></text>
+				  {{year+'年'+selectMonth}}月   
+				<text class="lg  cuIcon-move" ></text> 
+				<text class="lg  cuIcon-right" @click="nextMonth()" ></text>
+			</view>
 			<view class="header-right">
 				<text class="lg  cuIcon-write"  @click="add()">添加备忘</text>
 			</view>
