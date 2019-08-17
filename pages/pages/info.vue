@@ -40,19 +40,14 @@
 			</view>
 		</view>
 		<view v-if="datashow">
-		
+			<view v-for="(item,index) in priceList" :key="index">
 				<view class="cu-bar bg-white solid-bottom">
 					<view class="action">
-						<text class="cuIcon-titles text-orange"></text>{{isdate}}备忘录
+						<text class="cuIcon-titles text-orange"></text>{{item.price}}
 					</view>
 				</view>
-				<view class="cu-card case no-card" v-for="(item,index) in priceList" :key="index">
+				<view class="cu-card case no-card" >
 					<view class="cu-item shadow">
-						<view class="cu-list menu-avatar">
-							<view class="content flex-sub">
-								<view>{{item.price}}</view>
-							</view>
-						</view>
 						<view class="text-content">
 							<u-parse :content="item.data" /> <!-- //内容解析 -->
 						</view>
@@ -61,7 +56,7 @@
 						</view>
 					</view>
 				</view>
-			
+			</view>
 		</view>
 	</view>
 </template>
