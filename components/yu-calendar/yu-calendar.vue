@@ -158,7 +158,6 @@
 				} else {
 					this.month -= 1
 				}
-				this.getMonthNote(this.year, this.month);
 				this.initDate(this.year, this.month)
 			},
 			//下一个月
@@ -169,7 +168,6 @@
 				} else {
 					this.month += 1
 				}
-				this.getMonthNote(this.year, this.month);
 			    this.initDate(this.year, this.month)
 			},
 			//输出
@@ -224,28 +222,8 @@
 			today(){
 				this.year = this.date.getFullYear();
 				this.month = this.date.getMonth();
-	            this.getMonthNote(this.year,this.month);
 				this.initDate(this.date.getFullYear(), this.date.getMonth());
-			},
-			//获取数据
-			getMonthNote(year,month){
-				//let months = month + 1; //月份
-				this.$api.test('/api/getNote/' + year+'/'+month).then((res) => {
-					let v = JSON.parse(res.data);
-					this.priceList = []
-					if(v.code == 200){
-						let tabList = v.data;
-						tabList.forEach(item=>{
-							item.date = item.date.substring(0,item.date.indexOf(' ')); //找到空格位置然后从头截取到空格位置
-							this.priceList.push(item);
-						})
-					}
-				   console.log('备忘录',this.priceList);
-				}).catch((err) => {
-				     console.log('数据请求失败', err);
-					 return false;
-				});
-			},
+			}
 		}
 	}
 </script>

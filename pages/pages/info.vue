@@ -40,23 +40,44 @@
 			</view>
 		</view>
 		<view v-if="datashow">
-			{{isdate}}
+		
+				<view class="cu-bar bg-white solid-bottom">
+					<view class="action">
+						<text class="cuIcon-titles text-orange"></text>{{isdate}}备忘录
+					</view>
+				</view>
+				<view class="cu-card case no-card" v-for="(item,index) in priceList" :key="index">
+					<view class="cu-item shadow">
+						<view class="cu-list menu-avatar">
+							<view class="content flex-sub">
+								<view>{{item.price}}</view>
+							</view>
+						</view>
+						<view class="text-content">
+							<u-parse :content="item.data" /> <!-- //内容解析 -->
+						</view>
+						<view class="text-gray text-sm text-right padding">
+							{{item.time}}
+						</view>
+					</view>
+				</view>
+			
 		</view>
-
 	</view>
 </template>
 
 <script>
-	import {mapMutations} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
+	import {mapState,mapMutations} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	import yuCalendar from "@/components/yu-calendar/yu-calendar.vue"
+	import uParse from '@/components/gaoyia-parse/parse.vue'; //解析html富文本
 	export default {
 		components: {
-			yuCalendar
+			yuCalendar,uParse
 		},
 		data() {
 			return {
+				date: new Date(), //获取系统日期
 				priceList: [],
-				isdate: '',
 				inptshow: false,
 				datashow: true,
 				switchA: false,
@@ -66,35 +87,30 @@
 					date: '2018-12-25',
 					title: '',
 					content: ''
-				}
+				},
+				isdate:'',//点击获取当前时间
 			};
 		},
 		computed:{//数据计算
+		  ...mapState(['userToken']),
 		},
 		onLoad() {
       
 		},
 		onReady() { //第一次挂时候用 官方建议使用 uni-app 的 onReady代替 vue 的 mounted
-		
+			this.gettoday();
+			this.getMonthNote(this.inpt.date);
 		},
 		methods: {
 			//用vuex里面的方法
 			...mapMutations(['ifLogin']),
+			//点击某天
 			rili(e) {
-				this.isdate = e;
+				this.getMonthNote(e.date);
 			},
 			//添加备忘录
 			add(e) {
-				     this.getMonthNote(new Date());
 				this.ifLogin(500);//判断是否登录
-				let year = e.getFullYear(); //年
-				let month = e.getMonth() + 1; //月份
-				let day = e.getDate(); //日
-				let hour = e.getHours(); //时
-				let minute = e.getMinutes(); //分
-				let second = e.getDate(); //秒
-				this.inpt.date = year + '-' + month + '-' + day;
-				this.inpt.time = hour + ':' + minute;
 				console.log(e.toUTCString());
 				this.inptshow = this.inptshow ? false : true; //切换显示添加备忘录
 				this.datashow = this.inptshow ? false : true; //显示备忘录不显示内容
@@ -116,7 +132,41 @@
 				this.ifLogin(500);//判断是否登录
 				this.inptshow = false;
 				this.datashow = true;
-			}
+			},
+			gettoday(){
+				let year = this.date.getFullYear(); //年
+				let month = this.date.getMonth() + 1; //月份
+				let day = this.date.getDate(); //日
+				let hour = this.date.getHours(); //时
+				let minute = this.date.getMinutes(); //分
+				let second = this.date.getDate(); //秒
+				this.inpt.date = year + '-' + month + '-' + day;
+				this.inpt.time = hour + ':' + minute;
+			},
+			//获取数据
+			getMonthNote(date){
+				if(this.userToken!=""){
+					this.$api.postToken('/api/getNote/'+date,this.userToken).then((res)=>{
+						let v = JSON.parse(res.data);
+						this.priceList = []
+						if(v.code == 200){
+							let tabList = v.data;
+							tabList.forEach(item=>{
+								item.time = item.date.substring(item.date.indexOf(' '),item.date.length); //先截取时分秒
+								item.date = item.date.substring(0,item.date.indexOf(' ')); //找到空格位置然后从头截取到空格位置
+								this.isdate = item.date;
+								this.priceList.push(item);
+							})
+						}
+						console.log('备忘录',this.priceList);
+					}).catch((err)=>{
+					   console.log('数据请求失败', err);
+					   return false;
+					})
+				}else{
+					this.ifLogin(500);//判断是否登录
+				}
+			},
 			
 		},
 	}
