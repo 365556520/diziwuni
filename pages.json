@@ -75,7 +75,7 @@
 		{
 			"path": "pages/common/commonurl",
 			"style": {
-				"navigationBarTitleText": "公交车查询车辆"
+				"navigationBarTitleText": ""
 			}
 		},
 		{

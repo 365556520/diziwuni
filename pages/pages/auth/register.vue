@@ -45,6 +45,7 @@
 </template>
 
 <script>
+	/* 考虑到安全因素这个页面放弃不用了 */
 	import {mapState,mapMutations,mapGetters} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	import moveVerify from "@/components/helang-moveVerify/helang-moveVerify.vue"//滑动验证插件
 	export default {

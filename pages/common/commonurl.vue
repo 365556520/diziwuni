@@ -9,7 +9,7 @@
 <script>
 	export default {
 		mounted(){
-		
+			
 		},
 		data() {
 			return {
@@ -18,12 +18,18 @@
                         color: '#FF3333'
                     }
                 },
-				url:''
+				url:'',
+				title:''
 			}
 		},
 		onLoad: function (option) { //获取升一个页面传送过来的url
-			if(option.url!=''){
+			if(option.url!=''&&option.title){
 				this.url= option.url;
+				this.title= option.title;
+				/* 动态设置页面标题 */
+				uni.setNavigationBarTitle({
+					title: this.title
+				});
 			}else{
 				uni.navigateBack();
 			}

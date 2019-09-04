@@ -17,7 +17,7 @@
 			</view>
 		</form>
 		<view class="action-row">
-		    <navigator url="/pages/pages/auth/register">注册账号</navigator>
+		    <navigator url="/pages/common/commonurl?url=http://www.diziw.cn/register&title=账号注册">注册账号</navigator>
 		    <text>|</text>
 		    <navigator url="/pages/pages/auth/retrieve">忘记密码</navigator>
 		</view>

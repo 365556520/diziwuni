@@ -55,7 +55,7 @@
 				elements: [{
 						title: '公交站点',
 						name: 'busroute',
-						route: '/pages/common/commonurl?url=http://m.diziw.cn/#/RouteBus',
+						route: '/pages/common/commonurl?url=http://m.diziw.cn/#/RouteBus&title=公交站点',
 						color: 'purple',
 						icon: 'location'
 					},
