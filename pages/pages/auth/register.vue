@@ -1,4 +1,5 @@
 <template>
+	<!-- 过时的已经不用这个 -->
 	<view class="content ">
 		<form>
 			<view class="cu-form-group margin-top">

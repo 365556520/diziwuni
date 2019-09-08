@@ -1,4 +1,5 @@
 <template>
+	<!-- 这个目前不用 -->
 	<view>
 		<view class="VerticalBox">
 			<scroll-view class="VerticalNav nav" scroll-y scroll-with-animation :scroll-top="verticalNavTop" style="height:calc(100vh - 200upx)">
