@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view class="rili">
-			<yu-calendar :priceList="priceList" bgColor="#ec706b" color="#fff" @click="rili" @add="add">
+			<yu-calendar :priceList="prices" bgColor="#ec706b" color="#fff" @click="rili" @add="add">
 			</yu-calendar>
 		</view>
 
@@ -78,6 +78,7 @@
 			return {
 				date: new Date(), //获取系统日期
 				priceList: [],
+				prices: [],
 				inptshow: false,
 				datashow: true,
 				switchA: false,
@@ -89,6 +90,9 @@
 					content: ''
 				},
 				isdate:'',//点击获取当前时间
+				year:'', //年
+				month:''//月
+				
 			};
 		},
 		computed:{//数据计算
@@ -98,15 +102,16 @@
       
 		},
 		onReady() { //第一次挂时候用 官方建议使用 uni-app 的 onReady代替 vue 的 mounted
-			this.gettoday();
-			this.getMonthNote(this.inpt.date);
+			this.gettoday();//获取时间
+			this.getMonthNote(this.year,this.month);
+			this.getDayNote(this.inpt.date);
 		},
 		methods: {
 			//用vuex里面的方法
 			...mapMutations(['ifLogin']),
 			//点击某天
 			rili(e) {
-				this.getMonthNote(e.date);
+				this.getDayNote(e.date);
 			},
 			//添加备忘录
 			add(e) {
@@ -134,17 +139,45 @@
 				this.datashow = true;
 			},
 			gettoday(){
-				let year = this.date.getFullYear(); //年
-				let month = this.date.getMonth() + 1; //月份
+				this.year = this.date.getFullYear(); //年
+				this.month = this.date.getMonth() + 1; //月份
 				let day = this.date.getDate(); //日
 				let hour = this.date.getHours(); //时
 				let minute = this.date.getMinutes(); //分
 				let second = this.date.getDate(); //秒
-				this.inpt.date = year + '-' + month + '-' + day;
+				this.inpt.date = this.year + '-' + this.month + '-' + day;
 				this.inpt.time = hour + ':' + minute;
 			},
-			//获取数据
-			getMonthNote(date){
+			//获取单月有备份的日期
+			getMonthNote(year,month){
+				if(this.userToken!=""){
+					this.$api.postToken('/api/getMonthNote/'+year+'/'+month,this.userToken).then((res)=>{
+						let v = JSON.parse(res.data);
+						this.prices = [];
+						let mon = new Array;
+						if(v.code == 200){
+							let tabList = v.data;
+							tabList.forEach(item=>{
+								item.date = item.date.substring(0,item.date.indexOf(' ')); //找到空格位置然后从头截取到空格位置
+								if(mon.indexOf(item.date) ==-1){
+									mon.push(item.date);
+									item.price = '备忘'; //找到空格位置然后从头截取到空格位置
+									this.prices.push(item); //问题vue这样添加数据视图没有刷新数据 
+								}
+							})
+						}
+		
+						console.log('月备忘录', this.prices);
+					}).catch((err)=>{
+					   console.log('数据请求失败', err);
+					   return false;
+					})
+				}else{
+					this.ifLogin(500);//判断是否登录
+				}
+			},
+			//获取单日数据
+			getDayNote(date){
 				if(this.userToken!=""){
 					this.$api.postToken('/api/getNote/'+date,this.userToken).then((res)=>{
 						let v = JSON.parse(res.data);
