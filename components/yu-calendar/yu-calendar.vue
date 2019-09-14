@@ -23,7 +23,7 @@
 				<view class="list" v-for="(day,idx) in dayArr" :key="idx" @click="onClick(day,idx)">
 					<view class="day" :style="{background :day.bgColor,color : day.color}" v-if="day.date != localDate">{{day.day}}</view>
 					<view class="day" :style="{background :localColor,color:color}" v-else>{{day.day}}</view>
-					<view class="price">{{day.price}}</view>
+					<view class="price" v-text="day.price"></view>
 				</view>
 				<view class="local-month">{{selectMonth}}</view>
 			</view>
@@ -163,6 +163,7 @@
 					this.month -= 1
 				}
 				this.initDate(this.year, this.month)
+				this.$emit('prevmonth',{"year":this.year,"month":this.month});
 			},
 			//下一个月
 			nextMonth() {
@@ -173,6 +174,7 @@
 					this.month += 1
 				}
 			    this.initDate(this.year, this.month)
+					this.$emit('nextmonth',{"year":this.year,"month":this.month});
 			},
 			//输出
 			onClick(obj, index) {

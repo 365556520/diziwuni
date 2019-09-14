@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view class="rili">
-			<yu-calendar :priceList="prices" bgColor="#ec706b" color="#fff" @click="rili" @add="add">
+			<yu-calendar :priceList="prices" bgColor="#ec706b" color="#fff" @click="rili" @add="add" @prevmonth='prevmonth' @nextmonth="nextmonth">
 			</yu-calendar>
 		</view>
 
@@ -153,16 +153,17 @@
 				if(this.userToken!=""){
 					this.$api.postToken('/api/getMonthNote/'+year+'/'+month,this.userToken).then((res)=>{
 						let v = JSON.parse(res.data);
-						this.prices = [];
 						let mon = new Array;
 						if(v.code == 200){
 							let tabList = v.data;
+							let i = 0;
 							tabList.forEach(item=>{
 								item.date = item.date.substring(0,item.date.indexOf(' ')); //找到空格位置然后从头截取到空格位置
 								if(mon.indexOf(item.date) ==-1){
 									mon.push(item.date);
 									item.price = '备忘'; //找到空格位置然后从头截取到空格位置
-									this.prices.push(item); //问题vue这样添加数据视图没有刷新数据 
+									this.$set(this.prices,i,item) //给prices赋值
+									i++;				
 								}
 							})
 						}
@@ -200,7 +201,14 @@
 					this.ifLogin(500);//判断是否登录
 				}
 			},
-			
+			prevmonth(date){
+				console.log('asd',date);
+				this.getMonthNote(date.year,date.month);
+			},
+			nextmonth(date){
+				console.log('asdd',year,month);
+				this.getMonthNote(date.year,date.month);
+			}
 		},
 	}
 </script>
