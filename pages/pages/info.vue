@@ -167,7 +167,6 @@
 								}
 							})
 						}
-		
 						console.log('月备忘录', this.prices);
 					}).catch((err)=>{
 					   console.log('数据请求失败', err);
