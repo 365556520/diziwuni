@@ -33,7 +33,7 @@
 		},
 		data() {
 			return {
-				isFlag:false,//滑动插件
+				isFlag:true,//滑动插件
 				logindata:{
 					'username':'',
 					'password':''

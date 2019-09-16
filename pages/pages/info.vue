@@ -99,12 +99,11 @@
 		  ...mapState(['userToken']),
 		},
 		onLoad() {
-      
 		},
 		onReady() { //第一次挂时候用 官方建议使用 uni-app 的 onReady代替 vue 的 mounted
 			this.gettoday();//获取时间
 			this.getMonthNote(this.year,this.month);
-			this.getDayNote(this.inpt.date);
+			this.getDayNote(this.inpt.date)
 		},
 		methods: {
 			//用vuex里面的方法
@@ -201,11 +200,9 @@
 				}
 			},
 			prevmonth(date){
-				console.log('asd',date);
 				this.getMonthNote(date.year,date.month);
 			},
 			nextmonth(date){
-				console.log('asdd',year,month);
 				this.getMonthNote(date.year,date.month);
 			}
 		},

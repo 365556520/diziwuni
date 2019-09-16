@@ -95,6 +95,7 @@
 					if (i == 1 && weekValue != 0) {
 						this.addBeforeValue(weekValue)
 					}
+					console.log('看下数据',this.priceList+"asgas"+dayDate );
 					let index = this.priceList.findIndex((item) => {
 						return item.date == dayDate
 					})
@@ -114,8 +115,7 @@
 					this.dayArr.push(obj);
 					if (i == totalDay && weekValue != 6) {
 						this.addAfterValue(weekValue)
-					}
-					
+					}	
 				}
 			},
 			//补充前面空白日期
@@ -163,7 +163,7 @@
 					this.month -= 1
 				}
 				this.initDate(this.year, this.month)
-				this.$emit('prevmonth',{"year":this.year,"month":this.month});
+				this.$emit('prevmonth',{"year":this.year,"month":this.selectMonth});
 			},
 			//下一个月
 			nextMonth() {
@@ -174,7 +174,7 @@
 					this.month += 1
 				}
 			    this.initDate(this.year, this.month)
-					this.$emit('nextmonth',{"year":this.year,"month":this.month});
+				this.$emit('nextmonth',{"year":this.year,"month":this.selectMonth});
 			},
 			//输出
 			onClick(obj, index) {
