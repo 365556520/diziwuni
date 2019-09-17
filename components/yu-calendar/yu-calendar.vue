@@ -95,7 +95,6 @@
 					if (i == 1 && weekValue != 0) {
 						this.addBeforeValue(weekValue)
 					}
-					console.log('看下数据',this.priceList+"asgas"+dayDate );
 					let index = this.priceList.findIndex((item) => {
 						return item.date == dayDate
 					})
@@ -230,6 +229,7 @@
 				this.month = this.date.getMonth();
 				this.initDate(this.date.getFullYear(), this.date.getMonth());
 			}
+			
 		}
 	}
 </script>

@@ -1,154 +1,89 @@
 <template>
-	<view class="content">
-		<view class="rili">
-			<yu-calendar :priceList="prices" bgColor="#ec706b" color="#fff" @click="rili" @add="add" @prevmonth='prevmonth' @nextmonth="nextmonth">
-			</yu-calendar>
-		</view>
-
-		<view v-if="inptshow">
-			<view class="cu-form-group margin-top">
-				<view class="title">标题</view>
-				<input placeholder="请输入标题最多10个字" name="title" type="text" maxlength="10" v-model="inpt.title"></input>
-			</view>
-			<view class="cu-form-group align-start">
-				<textarea maxlength="1000" placeholder="请输入备忘内容最多1000个字" name="content" v-model="inpt.content"></textarea>
-			</view>
-			<view class="cu-form-group">
-				<view class="title">是否设置时间(默认现在时间)</view>
-				<switch @change="SwitchA" :class="switchA?'checked':''" :checked="switchA?true:false"></switch>
-			</view>
-			<view v-if="switchA">
-				<view class="cu-form-group">
-					<view class="title">日期选择</view>
-					<picker mode="date" :value="inpt.date" start="1980-01-01" end="2035-01-01" @change="DateChange">
-						<view class="picker">
-							{{inpt.date}}
-						</view>
-					</picker>
-				</view>
-				<view class="cu-form-group">
-					<view class="title">时间选择</view>
-					<picker mode="time" :value="inpt.time" start="00:00" end="23:59" @change="TimeChange">
-						<view class="picker">
-							{{inpt.time}}
-						</view>
-					</picker>
-				</view>
-			</view>
-			<view class="padding flex flex-direction">
-				<button class="cu-btn bg-red margin-tb-sm lg" @click="inout()">添加备忘</button>
-			</view>
-		</view>
-		<view v-if="datashow">
-			<view v-for="(item,index) in priceList" :key="index">
-				<uni-collapse @change="change">
-				    <uni-collapse-item :title=item.price open="true" :show-animation="true" ref="add">
-				        <view style="padding: 30upx;">
-							<view class="cu-card case no-card" >
-								<view class="cu-item shadow">
-									<view class="text-content">
-										<u-parse :content="item.data" /> <!-- //内容解析 -->
-									</view>
-									<view class="text-gray text-sm text-right padding">
-										{{item.time}}
-									</view>
-								</view>
-							</view>
-						</view>
-				    </uni-collapse-item>
-				</uni-collapse>
-			</view>
+	<view class="calendar-content-active" >
+		<view class="example-info">日历组件可以查看日期，选择任意范围内的日期，打点操作。常用场景如：酒店日期预订、火车机票选择购买日期、上下班打卡等。</view>
+		<view class="example-title">日历组件</view>
+		<view>
+			<uni-calendar 
+				:insert="insert"
+				:lunar="lunar" 
+				:selected='selected'
+				@change="change"
+			 />
 		</view>
 	</view>
 </template>
 
 <script>
+	import uniCalendar from '@/components/uni-calendar/uni-calendar.vue'
 	import {mapState,mapMutations} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
-	import yuCalendar from "@/components/yu-calendar/yu-calendar.vue"
-	import uParse from '@/components/gaoyia-parse/parse.vue'; //解析html富文本
-	import uniCollapse from '@/components/uni-collapse/uni-collapse/uni-collapse.vue'  //折叠块
-	import uniCollapseItem from '@/components/uni-collapse/uni-collapse-item/uni-collapse-item.vue'//折叠块
-	//import uniList from '@/components/uni-collapse/uni-list/uni-list.vue' //折叠块列表 这没用到
-	//import uniListItem from '@/components/uni-collapse/uni-list-item/uni-list-item.vue' //折叠块列表
 	export default {
 		components: {
-			yuCalendar,uParse,uniCollapse,uniCollapseItem
+			uniCalendar
 		},
 		data() {
 			return {
-				date: new Date(), //获取系统日期
-				priceList: [],
-				prices: [],
-				inptshow: false,
-				datashow: true,
-				switchA: false,
-				textshow: true,
-				inpt: {
-					time: '12:01',
-					date: '2018-12-25',
-					title: '',
-					content: ''
-				},
-				isdate:'',//点击获取当前时间
-				year:'', //年
-				month:''//月
-				
-			};
+				lunar:false,
+				insert:true,
+				today:'',
+				year:'',
+				month:'',
+				selected:[
+					{
+						date: '2019-9-15',
+						info: '签到',
+						data: {
+							custom: '自定义信息',
+							name: '自定义消息头',
+						},
+						
+					},	
+					{
+						date: '2019-9-17',
+						info: '签到',
+						data: {
+							custom: '自定义信息',
+							name: '自定义消息头',
+						},
+						
+					},	
+				]
+			}
+			/**
+			 * 时间计算
+			 */
+			function getDate(date, AddMonthCount = 0, AddDayCount = 0) {
+				if (typeof date !== 'object') {
+					date = date.replace(/-/g, '/')
+				}
+				let dd = new Date(date)
+				dd.setMonth(dd.getMonth() + AddMonthCount) // 获取AddDayCount天后的日期
+				dd.setDate(dd.getDate() + AddDayCount) // 获取AddDayCount天后的日期
+				let y = dd.getFullYear()
+				//let m = dd.getMonth() + 1 < 10 ? '0' + (dd.getMonth() + 1) : dd.getMonth() + 1 // 获取当前月份的日期，不足10补0
+				let m = dd.getMonth() + 1 < 10 ?  (dd.getMonth() + 1) : dd.getMonth() + 1 // 获取当前月份的日期
+				//let d = dd.getDate() < 10 ? '0' + dd.getDate() : dd.getDate() // 获取当前几号，不足10补0
+				let d = dd.getDate() < 10 ?  dd.getDate() : dd.getDate() // 获取当前几号
+				return y + '-' + m + '-' + d
+			}
 		},
 		computed:{//数据计算
 		  ...mapState(['userToken']),
 		},
-		onLoad() {
+		watch: {
+			month() {
+				this.getMonthNote(this.year,this.month);
+			},
+			year() {
+				this.getMonthNote(this.year,this.month);
+			}
 		},
-		onReady() { //第一次挂时候用 官方建议使用 uni-app 的 onReady代替 vue 的 mounted
-			this.gettoday();//获取时间
-			this.getMonthNote(this.year,this.month);
-			this.getDayNote(this.inpt.date)
+		onLoad() {
+		
 		},
 		methods: {
-			//用vuex里面的方法
-			...mapMutations(['ifLogin']),
-			//点击某天
-			rili(e) {
-				this.getDayNote(e.date);
-			},
-			//添加备忘录
-			add(e) {
-				this.ifLogin(500);//判断是否登录
-				console.log(e.toUTCString());
-				this.inptshow = this.inptshow ? false : true; //切换显示添加备忘录
-				this.datashow = this.inptshow ? false : true; //显示备忘录不显示内容
-			},
-			//是否设置提醒
-			SwitchA(e) {
-				this.switchA = e.detail.value
-			},
-			//选择时间
-			TimeChange(e) {
-				this.inpt.time = e.detail.value
-			},
-			//选择日期
-			DateChange(e) {
-				this.inpt.date = e.detail.value
-			},
-			//提交备忘录
-			inout() {
-				this.ifLogin(500);//判断是否登录
-				this.inptshow = false;
-				this.datashow = true;
-			},
-			gettoday(){
-				this.year = this.date.getFullYear(); //年
-				this.month = this.date.getMonth() + 1; //月份
-				let day = this.date.getDate(); //日
-				let hour = this.date.getHours(); //时
-				let minute = this.date.getMinutes(); //分
-				let second = this.date.getDate(); //秒
-				this.inpt.date = this.year + '-' + this.month + '-' + day;
-				this.inpt.time = hour + ':' + minute;
-			},
 			//获取单月有备份的日期
 			getMonthNote(year,month){
+				console.log(this.today);
 				if(this.userToken!=""){
 					this.$api.postToken('/api/getMonthNote/'+year+'/'+month,this.userToken).then((res)=>{
 						let v = JSON.parse(res.data);
@@ -160,13 +95,14 @@
 								item.date = item.date.substring(0,item.date.indexOf(' ')); //找到空格位置然后从头截取到空格位置
 								if(mon.indexOf(item.date) ==-1){
 									mon.push(item.date);
-									item.price = '备忘'; //找到空格位置然后从头截取到空格位置
-									this.$set(this.prices,i,item) //给prices赋值
+									item.info = '备忘'; //找到空格位置然后从头截取到空格位置
+									this.$set(this.selected,i,item) //给prices赋值
 									i++;				
 								}
 							})
 						}
-						console.log('月备忘录', this.prices);
+					
+						console.log('月备忘录', this.selected);
 					}).catch((err)=>{
 					   console.log('数据请求失败', err);
 					   return false;
@@ -175,47 +111,182 @@
 					this.ifLogin(500);//判断是否登录
 				}
 			},
-			//获取单日数据
-			getDayNote(date){
-				if(this.userToken!=""){
-					this.$api.postToken('/api/getNote/'+date,this.userToken).then((res)=>{
-						let v = JSON.parse(res.data);
-						this.priceList = []
-						if(v.code == 200){
-							let tabList = v.data;
-							tabList.forEach(item=>{
-								item.time = item.date.substring(item.date.indexOf(' '),item.date.length); //先截取时分秒
-								item.date = item.date.substring(0,item.date.indexOf(' ')); //找到空格位置然后从头截取到空格位置
-								this.isdate = item.date;
-								this.priceList.push(item);
-							})
-						}
-						console.log('备忘录',this.priceList);
-					}).catch((err)=>{
-					   console.log('数据请求失败', err);
-					   return false;
-					})
-				}else{
-					this.ifLogin(500);//判断是否登录
-				}
-			},
-			prevmonth(date){
-				this.getMonthNote(date.year,date.month);
-			},
-			nextmonth(date){
-				this.getMonthNote(date.year,date.month);
-			}
-		},
+		    change(e) {
+				this.year=e.year;
+				this.month=e.month;
+		        console.log(e);	
+		    }
+		}
 	}
 </script>
 
 <style>
-	.content {
-		height: 100%;
-		overflow: hidden;
+	page {
+		display: flex;
+		flex-direction: column;
+		box-sizing: border-box;
+		background-color: #efeff4
 	}
 
-	.rili {
+	view {
+		font-size: 28upx;
+		line-height: inherit
+	}
+
+	.example {
+		padding: 0 30upx 30upx
+	}
+
+	.example-title {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		font-size: 32upx;
+		color: #464e52;
+		padding: 30upx;
+		margin-top: 20upx;
+		position: relative;
+		background-color: #fdfdfd
+	}
+
+	.example-title__after {
+		position: relative;
+		color: #031e3c
+	}
+
+	.example-title:after {
+		content: '';
+		position: absolute;
+		left: 0;
+		margin: auto;
+		top: 0;
+		bottom: 0;
+		width: 10upx;
+		height: 40upx;
+		border-top-right-radius: 10upx;
+		border-bottom-right-radius: 10upx;
+		background-color: #031e3c
+	}
+
+	.example .example-title {
+		margin: 40upx 0
+	}
+
+	.example-body {
+		border-top: 1px #f5f5f5 solid;
+		padding: 30upx;
+		background: #fff
+	}
+
+	.example-info {
+		padding: 30upx;
+		color: #3b4144;
+		background: #fff
+	}
+
+	.calendar-content {
+		padding-bottom: 100upx;
+		font-size: 26upx;
+	}
+
+	.calendar-content-active {
+		padding-bottom: 450upx;
+	}
+
+	.calendar-tags-group {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+
+	.calendar-tags {
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.calendar-tags-item {
+		padding: 20upx 20upx;
+		border: 1px rgba(0, 0, 0, 0.2) solid;
+		color: #333;
+		border-radius: 10upx;
 		text-align: center;
+		margin: 10upx;
+		background: #f8f8f8;
+	}
+
+	.calendar-tags-item:active {
+		background: #f8f8f8;
+	}
+
+	.checked .calendar-tags-item {
+		background: rgb(0, 122, 255);
+		color: #fff;
+		border: 1px rgba(0, 0, 0, 0.1) solid;
+	}
+
+	.calendar-button {
+		font-weight: bold;
+		font-size: 32upx;
+	}
+
+	.calendar-button-groups {
+		position: absolute;
+		width: 100%;
+		bottom: 0;
+		display: flex;
+	}
+
+	.calendar-button-confirm {
+		width: 50%;
+		margin: 10upx;
+		border: 1px #eee solid;
+		font-size: 32upx;
+	}
+
+	.calendar-button-confirm:after {
+		border: none;
+	}
+
+	.calendar-box {
+		position: fixed;
+		bottom: 0;
+		background: #fff;
+		color: #444;
+		line-height: 1.5;
+		width: 100%;
+		transition: all 0.3s;
+		transform: translateY(320upx);
+		/* background: #f5f5f5; */
+	}
+
+	.calendar-active {
+		transform: translateY(0);
+	}
+
+	.calendar-info-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 20upx 30upx;
+		padding-left: 0;
+		border-top: 1px #eee solid;
+		border-bottom: 1px #eee solid;
+	}
+
+	.calendar-title {
+		/* height: 80upx; */
+		font-weight: bold;
+		color: #666;
+		font-size: 32upx;
+		border-left: 2px #0d9ebb solid;
+		padding-left: 20upx;
+		margin: 0 20upx;
+	}
+
+	.calendar-info {
+		overflow-y: scroll;
+		height: 260upx;
+		padding: 30upx 30upx;
 	}
 </style>
