@@ -254,7 +254,7 @@
 			 * 返回今天
 			 */
 			backtoday() {
-				this.getMonthAll(0, this.date)
+				this.getMonthAll(0, '') //返回当天时间
 			},
 			/**
 			 * 切换前一月 || 后一月

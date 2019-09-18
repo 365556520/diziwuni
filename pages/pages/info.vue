@@ -1,14 +1,39 @@
 <template>
 	<view class="calendar-content-active" >
-		<view class="example-info">日历组件可以查看日期，选择任意范围内的日期，打点操作。常用场景如：酒店日期预订、火车机票选择购买日期、上下班打卡等。</view>
-		<view class="example-title">日历组件</view>
+		<view class="example-info">日历可以查看日期，选择任意范围内的日期，打点操作。常用场景如：酒店日期预订、火车机票选择购买日期、上下班打卡等。</view>
+		<view class="example-title">备忘录<a>添加备忘录</a> </view>
 		<view>
 			<uni-calendar 
 				:insert="insert"
 				:lunar="lunar" 
+				:date='date'
 				:selected='selected'
 				@change="change"
 			 />
+			 
+			 <view :class="{ 'calendar-active': infoShow }" class="calendar-box">
+			 	<view v-if="timeData.lunar" class="calendar-info-header">
+			 		<text class="calendar-title">已选日期详情</text>
+			 		<text @click="retract">{{ infoShow ? '收起' : '展开' }}</text>
+			 	</view>
+			 	<view v-if="timeData.lunar" class="calendar-info">
+			 		<view>当前选择时间 : {{ timeData.fulldate }}</view>
+			 		<view>农历日期 : {{ timeData.year + '年' + timeData.month + '月' + timeData.date + '日 （' + timeData.lunar.astro + ')' }}</view>
+			 		<view>
+			 			{{ timeData.lunar.gzYear + '年' + timeData.lunar.gzMonth + '月' + timeData.lunar.gzDay + '日 (' + timeData.lunar.Animal + '年)' }}
+			 			{{ timeData.lunar.IMonthCn + timeData.lunar.IDayCn }} {{ timeData.lunar.isTerm ? timeData.lunar.Term : '' }}
+			 		</view>
+					<view>
+						{{priceList}}
+					</view>
+					<view>
+						{{priceList}}
+					</view>
+					<view>
+						{{priceList}}
+					</view>
+			 	</view>
+			 </view>
 		</view>
 	</view>
 </template>
@@ -22,11 +47,14 @@
 		},
 		data() {
 			return {
+				date:'',//今天时间
 				lunar:false,
 				insert:true,
+				infoShow: true, //详细内容显示面板
 				today:'',
 				year:'',
-				month:'',
+				month:'', 
+				onedate:'',//当前日
 				selected:[
 					{
 						date: '2019-9-15',
@@ -35,18 +63,18 @@
 							custom: '自定义信息',
 							name: '自定义消息头',
 						},
-						
-					},	
-					{
-						date: '2019-9-17',
-						info: '签到',
-						data: {
-							custom: '自定义信息',
-							name: '自定义消息头',
-						},
-						
-					},	
-				]
+					},
+				],
+				priceList: [], //当天所有时间
+				timeData: {
+					clockinfo: '',
+					date: '',
+					fulldate: '',
+					lunar: '',
+					month: '',
+					range: '',
+					year: ''
+				},
 			}
 			/**
 			 * 时间计算
@@ -70,15 +98,14 @@
 		  ...mapState(['userToken']),
 		},
 		watch: {
-			month() {
+			date() { //监听日期
 				this.getMonthNote(this.year,this.month);
 			},
-			year() {
-				this.getMonthNote(this.year,this.month);
+			onedate(){ //监听当前日的变化
+				this.getDayNote(this.date);
 			}
 		},
 		onLoad() {
-		
 		},
 		methods: {
 			//获取单月有备份的日期
@@ -101,7 +128,6 @@
 								}
 							})
 						}
-					
 						console.log('月备忘录', this.selected);
 					}).catch((err)=>{
 					   console.log('数据请求失败', err);
@@ -111,9 +137,40 @@
 					this.ifLogin(500);//判断是否登录
 				}
 			},
-		    change(e) {
+		    //获取单日数据
+		    getDayNote(date){
+		    	if(this.userToken!=""){
+		    		this.$api.postToken('/api/getNote/'+date,this.userToken).then((res)=>{
+		    			let v = JSON.parse(res.data);
+		    			this.priceList = []
+		    			if(v.code == 200){
+		    				let tabList = v.data;
+		    				tabList.forEach(item=>{
+		    					item.time = item.date.substring(item.date.indexOf(' '),item.date.length); //先截取时分秒
+		    					item.date = item.date.substring(0,item.date.indexOf(' ')); //找到空格位置然后从头截取到空格位置
+		    					this.isdate = item.date;
+		    					this.priceList.push(item);
+		    				})
+		    			}
+		    			console.log('单日备忘录',this.priceList);
+		    		}).catch((err)=>{
+		    		   console.log('数据请求失败', err);
+		    		   return false;
+		    		})
+		    	}else{
+		    		this.ifLogin(500);//判断是否登录
+		    	}
+		    },
+			//收起面板
+			retract() {
+				this.infoShow = !this.infoShow
+			},
+			change(e) {
 				this.year=e.year;
 				this.month=e.month;
+				this.onedate= e.date; //获取当前点击时间
+				this.date=e.fulldate;  //获取时间
+				this.timeData = e;
 		        console.log(e);	
 		    }
 		}
@@ -250,7 +307,7 @@
 
 	.calendar-box {
 		position: fixed;
-		bottom: 0;
+		bottom: 70upx;
 		background: #fff;
 		color: #444;
 		line-height: 1.5;
@@ -286,7 +343,7 @@
 
 	.calendar-info {
 		overflow-y: scroll;
-		height: 260upx;
+		height: 340upx;
 		padding: 30upx 30upx;
 	}
 </style>
