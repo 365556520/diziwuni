@@ -1,7 +1,7 @@
 <template>
 	<view class="calendar-content-active" >
 		<view class="example-info">日历可以查看日期，选择任意范围内的日期，打点操作。常用场景如：酒店日期预订、火车机票选择购买日期、上下班打卡等。</view>
-		<view class="example-title">备忘录<a>添加备忘录</a> </view>
+		<view class="example-title">备忘录<span @click="add">{{ inptshow ? '添加备忘录' : '显示详细内容' }}</span> </view>
 		<view>
 			<uni-calendar 
 				:insert="insert"
@@ -11,26 +11,58 @@
 				@change="change"
 			 />
 			 
-			 <view :class="{ 'calendar-active': infoShow }" class="calendar-box">
+			 <view :class="{ 'calendar-active': infoShow}" class="calendar-box">
 			 	<view v-if="timeData.lunar" class="calendar-info-header">
-			 		<text class="calendar-title">已选日期详情</text>
+			 		<text class="calendar-title">{{ inptshow ? '显示详细内容' : '添加备忘录' }}</text>
 			 		<text @click="retract">{{ infoShow ? '收起' : '展开' }}</text>
 			 	</view>
 			 	<view v-if="timeData.lunar" class="calendar-info">
-			 		<view>当前选择时间 : {{ timeData.fulldate }}</view>
-			 		<view>农历日期 : {{ timeData.year + '年' + timeData.month + '月' + timeData.date + '日 （' + timeData.lunar.astro + ')' }}</view>
-			 		<view>
-			 			{{ timeData.lunar.gzYear + '年' + timeData.lunar.gzMonth + '月' + timeData.lunar.gzDay + '日 (' + timeData.lunar.Animal + '年)' }}
-			 			{{ timeData.lunar.IMonthCn + timeData.lunar.IDayCn }} {{ timeData.lunar.isTerm ? timeData.lunar.Term : '' }}
-			 		</view>
-					<view>
-						{{priceList}}
+					<view  v-if="inptshow">
+						<view>当前选择时间 : {{ timeData.fulldate }}</view>
+						<view>农历日期 : {{ timeData.year + '年' + timeData.month + '月' + timeData.date + '日 （' + timeData.lunar.astro + ')' }}</view>
+						<view>
+							{{ timeData.lunar.gzYear + '年' + timeData.lunar.gzMonth + '月' + timeData.lunar.gzDay + '日 (' + timeData.lunar.Animal + '年)' }}
+							{{ timeData.lunar.IMonthCn + timeData.lunar.IDayCn }} {{ timeData.lunar.isTerm ? timeData.lunar.Term : '' }}
+						</view>
+						<view>
+							{{priceList}}
+						</view>
 					</view>
-					<view>
-						{{priceList}}
-					</view>
-					<view>
-						{{priceList}}
+					<view v-if="!inptshow">
+						<view class="cu-form-group margin-top">
+							<view class="title">标题</view>
+							<input placeholder="请输入标题最多10个字" name="title" type="text" maxlength="10" v-model="inpt.title"></input>
+						</view>
+						<view class="cu-form-group align-start">
+							<textarea maxlength="1000" placeholder="请输入备忘内容最多1000个字" name="content" v-model="inpt.content"></textarea>
+						</view>
+						
+						<view class="cu-form-group">
+							<view class="title">是否设置时间(默认现在时间)</view>
+							<switch @change="SwitchA" :class="switchA?'checked':''" :checked="switchA?true:false"></switch>
+						</view>
+						<view v-if="switchA">
+							<view class="cu-form-group">
+								<view class="title">日期选择</view>
+								<picker mode="date" :value="inpt.date" start="1980-01-01" end="2035-01-01" @change="DateChange">
+									<view class="picker">
+										{{inpt.date}}
+									</view>
+								</picker>
+							</view>
+							<view class="cu-form-group">
+								<view class="title">时间选择</view>
+								<picker mode="time" :value="inpt.time" start="00:00" end="23:59" @change="TimeChange">
+									<view class="picker">
+										{{inpt.time}}
+									</view>
+								</picker>
+							</view>
+						</view>
+						
+						<view class="padding flex flex-direction">
+							<button class="cu-btn bg-red margin-tb-sm lg" @click="inout()">添加备忘</button>
+						</view>
 					</view>
 			 	</view>
 			 </view>
@@ -39,18 +71,22 @@
 </template>
 
 <script>
+	import uParse from '@/components/gaoyia-parse/parse.vue'; //解析html富文本
 	import uniCalendar from '@/components/uni-calendar/uni-calendar.vue'
+	import uniCollapse from '@/components/uni-collapse/uni-collapse/uni-collapse.vue'  //折叠块
+	import uniCollapseItem from '@/components/uni-collapse/uni-collapse-item/uni-collapse-item.vue'//折叠块
 	import {mapState,mapMutations} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	export default {
 		components: {
-			uniCalendar
+			uniCalendar,uParse,uniCollapse,uniCollapseItem
 		},
 		data() {
 			return {
 				date:'',//今天时间
 				lunar:false,
 				insert:true,
-				infoShow: true, //详细内容显示面板
+				infoShow: false, //详细内容显示面板
+				inptshow:true,//添加和显示内容切换
 				today:'',
 				year:'',
 				month:'', 
@@ -75,6 +111,13 @@
 					range: '',
 					year: ''
 				},
+				inpt: {
+					time: '12:01',
+					date: '2018-12-25',
+					title: '',
+					content: ''
+				},
+				switchA: false,
 			}
 			/**
 			 * 时间计算
@@ -99,6 +142,8 @@
 		},
 		watch: {
 			date() { //监听日期
+				this.infoShow = true;//详细内容显示面板
+				this.inptshow = true;//切换显示详细内容
 				this.getMonthNote(this.year,this.month);
 			},
 			onedate(){ //监听当前日的变化
@@ -106,8 +151,29 @@
 			}
 		},
 		onLoad() {
+			this.ifLogin(500);//判断是否登录
 		},
 		methods: {
+			//用vuex里面的方法
+			...mapMutations(['ifLogin']),
+			//是否设置提醒
+			SwitchA(e) {
+				this.switchA = e.detail.value
+			},
+			//选择时间
+			TimeChange(e) {
+				this.inpt.time = e.detail.value
+			},
+			//选择日期
+			DateChange(e) {
+				this.inpt.date = e.detail.value
+			},
+			//添加备忘录
+			add() {
+				this.ifLogin(500);//判断是否登录
+				this.infoShow = true;
+				this.inptshow = this.inptshow ? false : true; //切换显示添加备忘录
+			},
 			//获取单月有备份的日期
 			getMonthNote(year,month){
 				console.log(this.today);
@@ -313,10 +379,9 @@
 		line-height: 1.5;
 		width: 100%;
 		transition: all 0.3s;
-		transform: translateY(320upx);
+		transform: translateY(337upx);
 		/* background: #f5f5f5; */
 	}
-
 	.calendar-active {
 		transform: translateY(0);
 	}
@@ -343,7 +408,7 @@
 
 	.calendar-info {
 		overflow-y: scroll;
-		height: 340upx;
+		height: 360upx;
 		padding: 30upx 30upx;
 	}
 </style>
