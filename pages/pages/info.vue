@@ -151,7 +151,6 @@
 			}
 		},
 		onLoad() {
-			this.ifLogin(500);//判断是否登录
 		},
 		methods: {
 			//用vuex里面的方法
@@ -373,13 +372,13 @@
 
 	.calendar-box {
 		position: fixed;
-		bottom: 70upx;
+		bottom: 0;
 		background: #fff;
 		color: #444;
 		line-height: 1.5;
 		width: 100%;
 		transition: all 0.3s;
-		transform: translateY(337upx);
+		transform: translateY(360upx);
 		/* background: #f5f5f5; */
 	}
 	.calendar-active {
