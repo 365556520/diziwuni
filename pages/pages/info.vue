@@ -11,7 +11,7 @@
 				@change="change"
 			 />
 			 
-			 <view :class="{ 'calendar-active': infoShow}" class="calendar-box">
+			<view :class="{ 'calendar-active': infoShow}" class="calendar-box">
 			 	<view v-if="timeData.lunar" class="calendar-info-header">
 			 		<text class="calendar-title">{{ inptshow ? '显示详细内容' : '添加备忘录' }}</text>
 			 		<text @click="retract">{{ infoShow ? '收起' : '展开' }}</text>
@@ -24,10 +24,30 @@
 							{{ timeData.lunar.gzYear + '年' + timeData.lunar.gzMonth + '月' + timeData.lunar.gzDay + '日 (' + timeData.lunar.Animal + '年)' }}
 							{{ timeData.lunar.IMonthCn + timeData.lunar.IDayCn }} {{ timeData.lunar.isTerm ? timeData.lunar.Term : '' }}
 						</view>
+						<!-- 备忘录start -->
 						<view>
-							{{priceList}}
+							<view v-for="(item,index) in priceList" :key="index">
+									<uni-collapse >
+									    <uni-collapse-item :title=item.price open="true" :show-animation="true" ref="add">
+									        <view style="padding: 30upx;">
+												<view class="cu-card case no-card" >
+													<view class="cu-item shadow">
+														<view class="text-content">
+															<u-parse :content="item.data" /> <!-- //内容解析 -->
+														</view>
+														<view class="text-gray text-sm text-right padding">
+															{{item.time}}
+														</view>
+													</view>
+												</view>
+											</view>
+									    </uni-collapse-item>
+									</uni-collapse>
+							</view>
 						</view>
+						<!-- 备忘录end -->
 					</view>
+					<!-- 添加备忘录 -->
 					<view v-if="!inptshow">
 						<view class="cu-form-group margin-top">
 							<view class="title">标题</view>
@@ -64,8 +84,9 @@
 							<button class="cu-btn bg-red margin-tb-sm lg" @click="inout()">添加备忘</button>
 						</view>
 					</view>
-			 	</view>
-			 </view>
+					<!-- 添加备忘录end -->
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -151,6 +172,7 @@
 			}
 		},
 		onLoad() {
+	
 		},
 		methods: {
 			//用vuex里面的方法
@@ -176,7 +198,7 @@
 			//获取单月有备份的日期
 			getMonthNote(year,month){
 				console.log(this.today);
-				if(this.userToken!=""){
+				if(this.userToken!=""){ //判断是否登录
 					this.$api.postToken('/api/getMonthNote/'+year+'/'+month,this.userToken).then((res)=>{
 						let v = JSON.parse(res.data);
 						let mon = new Array;
@@ -198,13 +220,11 @@
 					   console.log('数据请求失败', err);
 					   return false;
 					})
-				}else{
-					this.ifLogin(500);//判断是否登录
 				}
 			},
 		    //获取单日数据
 		    getDayNote(date){
-		    	if(this.userToken!=""){
+		    	if(this.userToken!=""){//判断是否登录
 		    		this.$api.postToken('/api/getNote/'+date,this.userToken).then((res)=>{
 		    			let v = JSON.parse(res.data);
 		    			this.priceList = []
@@ -222,8 +242,6 @@
 		    		   console.log('数据请求失败', err);
 		    		   return false;
 		    		})
-		    	}else{
-		    		this.ifLogin(500);//判断是否登录
 		    	}
 		    },
 			//收起面板
@@ -378,7 +396,7 @@
 		line-height: 1.5;
 		width: 100%;
 		transition: all 0.3s;
-		transform: translateY(360upx);
+		transform: translateY(600upx);
 		/* background: #f5f5f5; */
 	}
 	.calendar-active {
@@ -407,7 +425,7 @@
 
 	.calendar-info {
 		overflow-y: scroll;
-		height: 360upx;
+		height: 600upx;
 		padding: 30upx 30upx;
 	}
 </style>
