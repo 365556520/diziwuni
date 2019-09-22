@@ -1,7 +1,7 @@
 <template>
 	<view class="calendar-content-active" >
 		<view class="example-info">日历可以查看日期，选择任意范围内的日期，打点操作。常用场景如：酒店日期预订、火车机票选择购买日期、上下班打卡等。</view>
-		<view class="example-title">备忘录<span @click="add">{{ inptshow ? '添加备忘录' : '显示详细内容' }}</span> </view>
+		<view class="example-title"><span @click="add">{{ inptshow ? '添加日记' : '详细内容' }}</span><span>打卡</span></view>
 		<view>
 			<uni-calendar 
 				:insert="insert"
@@ -12,7 +12,7 @@
 			 />
 			<view :class="{ 'calendar-active': infoShow}" class="calendar-box">
 			 	<view v-if="timeData.lunar" class="calendar-info-header">
-			 		<text class="calendar-title">{{ inptshow ? '显示详细内容' : '添加备忘录' }}</text>
+			 		<text class="calendar-title">{{ inptshow ? '详细内容' : '添加日记' }}</text>
 			 		<text @click="retract">{{ infoShow ? '收起' : '展开' }}</text>
 			 	</view>
 			 	<view v-if="timeData.lunar" class="calendar-info">
@@ -45,7 +45,7 @@
 						</view>
 						<!-- 备忘录end -->
 					</view>
-					<!-- 添加备忘录 -->
+					<!-- 添加日记 -->
 					<view v-if="!inptshow">
 						<view class="cu-form-group margin-top">
 							<view class="title">标题</view>
@@ -82,7 +82,7 @@
 							<button class="cu-btn bg-red margin-tb-sm lg" @click="inout()">添加备忘</button>
 						</view>
 					</view>
-					<!-- 添加备忘录end -->
+					<!-- 添加日记end -->
 				</view>
 			</view>
 		</view>
@@ -162,7 +162,7 @@
 		watch: {
 			date() { //监听日期
 				this.infoShow = true;//详细内容显示面板
-				this.inptshow = true;//切换显示详细内容
+				this.inptshow = true;//切换详细内容
 				this.getMonthNote(this.year,this.month);
 			},
 			onedate(){ //监听当前日的变化
@@ -187,11 +187,11 @@
 			DateChange(e) {
 				this.inpt.date = e.detail.value
 			},
-			//添加备忘录
+			//添加日记
 			add() {
 				this.ifLogin(500);//判断是否登录
 				this.infoShow = true;
-				this.inptshow = this.inptshow ? false : true; //切换显示添加备忘录
+				this.inptshow = this.inptshow ? false : true; //切换显示添加日记
 			},
 			//获取单月有备份的日期
 			getMonthNote(year,month){
