@@ -10,7 +10,6 @@
 				:selected='selected'
 				@change="change"
 			 />
-			 
 			<view :class="{ 'calendar-active': infoShow}" class="calendar-box">
 			 	<view v-if="timeData.lunar" class="calendar-info-header">
 			 		<text class="calendar-title">{{ inptshow ? '显示详细内容' : '添加备忘录' }}</text>
@@ -18,7 +17,6 @@
 			 	</view>
 			 	<view v-if="timeData.lunar" class="calendar-info">
 					<view  v-if="inptshow">
-						<view>当前选择时间 : {{ timeData.fulldate }}</view>
 						<view>农历日期 : {{ timeData.year + '年' + timeData.month + '月' + timeData.date + '日 （' + timeData.lunar.astro + ')' }}</view>
 						<view>
 							{{ timeData.lunar.gzYear + '年' + timeData.lunar.gzMonth + '月' + timeData.lunar.gzDay + '日 (' + timeData.lunar.Animal + '年)' }}
