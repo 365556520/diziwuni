@@ -1,7 +1,14 @@
 <template>
 	<view class="calendar-content-active" >
-		<view class="example-info">日历可以查看日期，选择任意范围内的日期，打点操作。常用场景如：酒店日期预订、火车机票选择购买日期、上下班打卡等。</view>
-		<view class="example-title"><span @click="add">{{ inptshow ? '添加日记' : '详细内容' }}</span><span>打卡</span></view>
+		<view class="example-info">
+			<view>日期 : {{ timeData.year + '年' + timeData.month + '月' + timeData.date + '日 （' + timeData.lunar.astro + ')' }}</view>
+			<view>
+				农历 :{{ timeData.lunar.gzYear + '年' + timeData.lunar.gzMonth + '月' + timeData.lunar.gzDay + '日 (' + timeData.lunar.Animal + '年)' }}
+				{{ timeData.lunar.IMonthCn + timeData.lunar.IDayCn }} {{ timeData.lunar.isTerm ? timeData.lunar.Term : '' }}
+			</view>
+			
+		</view>
+		<view class="example-title"><span @click="add">{{ inptshow ? '写日记' : '日记内容' }}</span></view>
 		<view>
 			<uni-calendar 
 				:insert="insert"
@@ -12,40 +19,33 @@
 			 />
 			<view :class="{ 'calendar-active': infoShow}" class="calendar-box">
 			 	<view v-if="timeData.lunar" class="calendar-info-header">
-			 		<text class="calendar-title">{{ inptshow ? '详细内容' : '添加日记' }}</text>
+			 		<text class="calendar-title">{{ inptshow ? '日记内容' : '写日记' }}</text>
 			 		<text @click="retract">{{ infoShow ? '收起' : '展开' }}</text>
 			 	</view>
 			 	<view v-if="timeData.lunar" class="calendar-info">
+					<!-- 备忘录start -->
 					<view  v-if="inptshow">
-						<view>农历日期 : {{ timeData.year + '年' + timeData.month + '月' + timeData.date + '日 （' + timeData.lunar.astro + ')' }}</view>
-						<view>
-							{{ timeData.lunar.gzYear + '年' + timeData.lunar.gzMonth + '月' + timeData.lunar.gzDay + '日 (' + timeData.lunar.Animal + '年)' }}
-							{{ timeData.lunar.IMonthCn + timeData.lunar.IDayCn }} {{ timeData.lunar.isTerm ? timeData.lunar.Term : '' }}
-						</view>
-						<!-- 备忘录start -->
-						<view>
-							<view v-for="(item,index) in priceList" :key="index">
-									<uni-collapse >
-									    <uni-collapse-item :title=item.price open="true" :show-animation="true" ref="add">
-									        <view style="padding: 30upx;">
-												<view class="cu-card case no-card" >
-													<view class="cu-item shadow">
-														<view class="text-content">
-															<u-parse :content="item.data" /> <!-- //内容解析 -->
-														</view>
-														<view class="text-gray text-sm text-right padding">
-															{{item.time}}
-														</view>
-													</view>
-												</view>
-											</view>
-									    </uni-collapse-item>
-									</uni-collapse>
+						<view class="cu-timeline" v-if="priceList.length != 0">
+							<view class="cu-time">{{timeData.month + '月' + timeData.date + '日'}}</view>
+							<view class="cu-item"  v-for="(item,index) in priceList" :key="index">
+								<view class="content">
+									<view class="cu-capsule radius">
+										<view class="cu-tag bg-cyan">时间</view>
+										<view class="cu-tag line-cyan">{{item.time}}</view>
+									</view>
+									<view class="margin-top">
+										<view>{{item.price}}</view>
+										<u-parse :content="item.data" /> <!-- //内容解析 -->
+									</view>
+								</view>
 							</view>
 						</view>
-						<!-- 备忘录end -->
+						<view v-else>
+							日记帮助我们珍藏那些美好的回忆，岁月流逝，当我们翻开日记的时候，往日就会重现。那些美好的事物与岁月总是能让我们欣然一笑。
+						</view>
 					</view>
-					<!-- 添加日记 -->
+						<!-- 备忘录end -->
+					<!-- 写日记 -->
 					<view v-if="!inptshow">
 						<view class="cu-form-group margin-top">
 							<view class="title">标题</view>
@@ -82,7 +82,7 @@
 							<button class="cu-btn bg-red margin-tb-sm lg" @click="inout()">添加备忘</button>
 						</view>
 					</view>
-					<!-- 添加日记end -->
+					<!-- 写日记end -->
 				</view>
 			</view>
 		</view>
@@ -92,19 +92,18 @@
 <script>
 	import uParse from '@/components/gaoyia-parse/parse.vue'; //解析html富文本
 	import uniCalendar from '@/components/uni-calendar/uni-calendar.vue'
-	import uniCollapse from '@/components/uni-collapse/uni-collapse/uni-collapse.vue'  //折叠块
-	import uniCollapseItem from '@/components/uni-collapse/uni-collapse-item/uni-collapse-item.vue'//折叠块
+	
 	import {mapState,mapMutations} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	export default {
 		components: {
-			uniCalendar,uParse,uniCollapse,uniCollapseItem
+			uniCalendar,uParse
 		},
 		data() {
 			return {
 				date:'',//今天时间
 				lunar:false,
 				insert:true,
-				infoShow: false, //详细内容显示面板
+				infoShow: false, //日记内容显示面板
 				inptshow:true,//添加和显示内容切换
 				today:'',
 				year:'',
@@ -161,8 +160,8 @@
 		},
 		watch: {
 			date() { //监听日期
-				this.infoShow = true;//详细内容显示面板
-				this.inptshow = true;//切换详细内容
+				this.infoShow = true;//日记内容显示面板
+				this.inptshow = true;//切换日记内容
 				this.getMonthNote(this.year,this.month);
 			},
 			onedate(){ //监听当前日的变化
@@ -187,11 +186,11 @@
 			DateChange(e) {
 				this.inpt.date = e.detail.value
 			},
-			//添加日记
+			//写日记
 			add() {
 				this.ifLogin(500);//判断是否登录
 				this.infoShow = true;
-				this.inptshow = this.inptshow ? false : true; //切换显示添加日记
+				this.inptshow = this.inptshow ? false : true; //切换显示写日记
 			},
 			//获取单月有备份的日期
 			getMonthNote(year,month){
@@ -394,7 +393,7 @@
 		line-height: 1.5;
 		width: 100%;
 		transition: all 0.3s;
-		transform: translateY(600upx);
+		transform: translateY(500upx);
 		/* background: #f5f5f5; */
 	}
 	.calendar-active {
@@ -423,7 +422,7 @@
 
 	.calendar-info {
 		overflow-y: scroll;
-		height: 600upx;
+		height: 500upx;
 		padding: 30upx 30upx;
 	}
 </style>
