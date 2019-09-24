@@ -84,8 +84,8 @@
 				switchA: false,
 				textshow: true,
 				inpt: {
-					time: '12:01',
-					date: '2018-12-25',
+					time: '',
+					date: '',
 					title: '',
 					content: ''
 				},

@@ -99,6 +99,23 @@
 			uniCalendar,uParse
 		},
 		data() {
+			/**
+			 * 时间计算
+			 */
+			function getDate(date, AddMonthCount = 0, AddDayCount = 0) {
+				if (typeof date !== 'object') {
+					date = date.replace(/-/g, '/')
+				}
+				let dd = new Date(date)
+				dd.setMonth(dd.getMonth() + AddMonthCount) // 获取AddDayCount天后的日期
+				dd.setDate(dd.getDate() + AddDayCount) // 获取AddDayCount天后的日期
+				let y = dd.getFullYear()
+				//let m = dd.getMonth() + 1 < 10 ? '0' + (dd.getMonth() + 1) : dd.getMonth() + 1 // 获取当前月份的日期，不足10补0
+				let m = dd.getMonth() + 1 < 10 ?  (dd.getMonth() + 1) : dd.getMonth() + 1 // 获取当前月份的日期
+				//let d = dd.getDate() < 10 ? '0' + dd.getDate() : dd.getDate() // 获取当前几号，不足10补0
+				let d = dd.getDate() < 10 ?  dd.getDate() : dd.getDate() // 获取当前几号
+				return y + '-' + m + '-' + d
+			}
 			return {
 				date:'',//今天时间
 				lunar:false,
@@ -130,29 +147,12 @@
 					year: ''
 				},
 				inpt: {
-					time: '12:01',
-					date: '2018-12-25',
+					time: '12:00:00',
+					date: getDate(new Date(), 0),
 					title: '',
 					content: ''
 				},
 				switchA: false,
-			}
-			/**
-			 * 时间计算
-			 */
-			function getDate(date, AddMonthCount = 0, AddDayCount = 0) {
-				if (typeof date !== 'object') {
-					date = date.replace(/-/g, '/')
-				}
-				let dd = new Date(date)
-				dd.setMonth(dd.getMonth() + AddMonthCount) // 获取AddDayCount天后的日期
-				dd.setDate(dd.getDate() + AddDayCount) // 获取AddDayCount天后的日期
-				let y = dd.getFullYear()
-				//let m = dd.getMonth() + 1 < 10 ? '0' + (dd.getMonth() + 1) : dd.getMonth() + 1 // 获取当前月份的日期，不足10补0
-				let m = dd.getMonth() + 1 < 10 ?  (dd.getMonth() + 1) : dd.getMonth() + 1 // 获取当前月份的日期
-				//let d = dd.getDate() < 10 ? '0' + dd.getDate() : dd.getDate() // 获取当前几号，不足10补0
-				let d = dd.getDate() < 10 ?  dd.getDate() : dd.getDate() // 获取当前几号
-				return y + '-' + m + '-' + d
 			}
 		},
 		computed:{//数据计算
