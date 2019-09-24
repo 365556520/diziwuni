@@ -17,16 +17,16 @@
 				:selected='selected'
 				@change="change"
 			 />
-			<view :class="{ 'calendar-active': infoShow}" class="calendar-box">
+			<view :class="{'calendar-active': infoShow}" class="calendar-box">
 			 	<view v-if="timeData.lunar" class="calendar-info-header">
 			 		<text class="calendar-title">{{ inptshow ? '日记内容' : '写日记' }}</text>
 			 		<text @click="retract">{{ infoShow ? '收起' : '展开' }}</text>
-			 	</view>
+				</view>
 			 	<view v-if="timeData.lunar" class="calendar-info">
 					<!-- 备忘录start -->
 					<view  v-if="inptshow">
 						<view class="cu-timeline" v-if="priceList.length != 0">
-							<view class="cu-time">{{timeData.month + '月' + timeData.date + '日'}}</view>
+							<!-- <view class="cu-time">{{timeData.month + '月' + timeData.date + '日'}}</view> -->
 							<view class="cu-item"  v-for="(item,index) in priceList" :key="index">
 								<view class="content">
 									<view class="cu-capsule radius">
@@ -34,7 +34,7 @@
 										<view class="cu-tag line-cyan">{{item.time}}</view>
 									</view>
 									<view class="margin-top">
-										<view>{{item.price}}</view>
+										<!-- <view>{{item.price}}</view> -->
 										<u-parse :content="item.data" /> <!-- //内容解析 -->
 									</view>
 								</view>
@@ -206,7 +206,7 @@
 								item.date = item.date.substring(0,item.date.indexOf(' ')); //找到空格位置然后从头截取到空格位置
 								if(mon.indexOf(item.date) ==-1){
 									mon.push(item.date);
-									item.info = '备忘'; //找到空格位置然后从头截取到空格位置
+									item.info = '日记'; //找到空格位置然后从头截取到空格位置
 									this.$set(this.selected,i,item) //给prices赋值
 									i++;				
 								}
@@ -244,6 +244,10 @@
 			//收起面板
 			retract() {
 				this.infoShow = !this.infoShow
+			},
+			//收起最大化
+			remaxShow() {
+				this.maxShow = !this.maxShow
 			},
 			change(e) {
 				this.year=e.year;
@@ -399,7 +403,6 @@
 	.calendar-active {
 		transform: translateY(0);
 	}
-
 	.calendar-info-header {
 		display: flex;
 		justify-content: space-between;
