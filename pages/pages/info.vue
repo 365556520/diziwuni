@@ -70,7 +70,7 @@
 							</view>
 							<view class="cu-form-group">
 								<view class="title">时间选择</view>
-								<picker mode="time" :value="inpt.time" start="00:00" end="23:59" @change="TimeChange">
+								<picker mode="time" :value="inpt.time" start="00:00:00" end="23:59:59" @change="TimeChange">
 									<view class="picker">
 										{{inpt.time}}
 									</view>
@@ -79,7 +79,7 @@
 						</view>
 						
 						<view class="padding flex flex-direction">
-							<button class="cu-btn bg-red margin-tb-sm lg" @click="inout()">添加备忘</button>
+							<button class="cu-btn bg-red margin-tb-sm lg" @click="addnote()">上传日记</button>
 						</view>
 					</view>
 					<!-- 写日记end -->
@@ -149,7 +149,7 @@
 				inpt: {
 					time: '12:00:00',
 					date: getDate(new Date(), 0),
-					title: '',
+					title: '今天的日记',
 					content: ''
 				},
 				switchA: false,
@@ -180,17 +180,60 @@
 			},
 			//选择时间
 			TimeChange(e) {
-				this.inpt.time = e.detail.value
+				this.inpt.time = e.detail.value+':00'
 			},
 			//选择日期
 			DateChange(e) {
 				this.inpt.date = e.detail.value
 			},
-			//写日记
-			add() {
+			add(){
 				this.ifLogin(500);//判断是否登录
 				this.infoShow = true;
 				this.inptshow = this.inptshow ? false : true; //切换显示写日记
+			},
+			//写日记
+			addnote() {
+				this.ifLogin(500);//判断是否登录
+				if(this.userToken!=""){
+					if(this.inpt.content!=''){
+						 let data =  {
+							 data:{
+								'title':this.inpt.title,//日记标题
+								'content':this.inpt.content, //内容
+							}
+						 };
+						 if(this.switchA){ //如果不自定义时间就不加时间
+							  data.data.created_at = this.inpt.date+' '+this.inpt.time;
+						 }
+						this.$api.postToken('/api/addNote',this.userToken,data).then((response) => {
+							 let data = JSON.parse(response.data);
+							 if(data.code == '200'){
+								 this.inpt.content = ''; //清空输入框
+								 uni.showToast({
+									 title: data.msg,
+									 icon: 'none',
+									 mask: true
+								 });
+							 }else{
+								 uni.showToast({
+									 title: data.msg,
+									 icon: 'none',
+									 mask: true
+								 });
+							 }
+							 console.log(data);
+						 }).catch((error) =>{
+							 console.log(error);
+						 });
+					}else {
+						  uni.showToast({
+							 title: "日记不能为空",
+							 icon: 'none',
+							 mask: true
+						 });
+					}
+				}
+				
 			},
 			//获取单月有备份的日期
 			getMonthNote(year,month){
@@ -203,12 +246,14 @@
 							let tabList = v.data;
 							let i = 0;
 							tabList.forEach(item=>{
-								item.date = item.date.substring(0,item.date.indexOf(' ')); //找到空格位置然后从头截取到空格位置
-								if(mon.indexOf(item.date) ==-1){
-									mon.push(item.date);
-									item.info = '日记'; //找到空格位置然后从头截取到空格位置
-									this.$set(this.selected,i,item) //给prices赋值
-									i++;				
+								if(item){
+									item.date = item.date.substring(0,item.date.indexOf(' ')); //找到空格位置然后从头截取到空格位置
+									if(mon.indexOf(item.date) ==-1){
+										mon.push(item.date);
+										item.info = '日记'; //找到空格位置然后从头截取到空格位置
+										this.$set(this.selected,i,item) //给prices赋值
+										i++;				
+									}
 								}
 							})
 						}
@@ -228,10 +273,12 @@
 		    			if(v.code == 200){
 		    				let tabList = v.data;
 		    				tabList.forEach(item=>{
-		    					item.time = item.date.substring(item.date.indexOf(' '),item.date.length); //先截取时分秒
-		    					item.date = item.date.substring(0,item.date.indexOf(' ')); //找到空格位置然后从头截取到空格位置
-		    					this.isdate = item.date;
-		    					this.priceList.push(item);
+								if(item){
+									item.time = item.date.substring(item.date.indexOf(' '),item.date.length); //先截取时分秒
+									item.date = item.date.substring(0,item.date.indexOf(' ')); //找到空格位置然后从头截取到空格位置
+									this.isdate = item.date;
+									this.priceList.push(item);
+								}
 		    				})
 		    			}
 		    			console.log('单日备忘录',this.priceList);
