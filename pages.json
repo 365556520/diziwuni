@@ -31,7 +31,7 @@
 		{
 			"path": "pages/pages/info",
 			"style": {
-				"navigationBarTitleText": "日历"
+				"navigationBarTitleText": "日记"
 			}
 		},
 		{
