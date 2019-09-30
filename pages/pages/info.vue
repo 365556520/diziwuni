@@ -1,12 +1,11 @@
 <template>
 	<view class="calendar-content-active" >
 		<view class="example-info">
-			<view>日期 : {{ timeData.year + '年' + timeData.month + '月' + timeData.date + '日 （' + timeData.lunar.astro + ')' }}</view>
+			<view>{{ timeData.year + '年' + timeData.month + '月' + timeData.date + '日 （' + timeData.lunar.astro + ')' }}</view>
 			<view>
 				农历 :{{ timeData.lunar.gzYear + '年' + timeData.lunar.gzMonth + '月' + timeData.lunar.gzDay + '日 (' + timeData.lunar.Animal + '年)' }}
 				{{ timeData.lunar.IMonthCn + timeData.lunar.IDayCn }} {{ timeData.lunar.isTerm ? timeData.lunar.Term : '' }}
 			</view>
-			
 		</view>
 		<view class="example-title"><span @click="add">{{ inptshow ? '写日记' : '日记内容' }}</span></view>
 		<view>
