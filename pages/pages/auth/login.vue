@@ -1,5 +1,5 @@
 <template>
-	<view class="content ">
+	<view class="content">
 		<form>
 			<view class="cu-form-group margin-top">
 				<view class="title">账 号 </view>
@@ -9,31 +9,38 @@
 				<view class="title">密 码 </view>
 				<input placeholder="请输入密码" name="password" maxlength=20 type="password" v-model="logindata.password"></input>
 			</view>
-			<view class="cu-form-group">
-				<move-verify @result='verifyResult'></move-verify>
-			</view>
+			
 			<view class="padding flex flex-direction">
 				<button class="cu-btn bg-red margin-tb-sm lg" @click="login()">登 录</button>
 			</view>
+			<view class="action-row">
+			    <navigator url="/pages/common/commonurl?url=http://www.diziw.cn/register&title=账号注册">注册账号</navigator>
+			    <text>|</text>
+			    <navigator url="/pages/pages/auth/retrieve">忘记密码</navigator>
+			</view>
+	
+			<view class="oauth-row">
+				<view class="oauth-image">
+					<image src="../../../static/qq.png" @click="qqlogin()"></image>
+				</view>
+				<view class="oauth-image">
+					<image src="../../../static/sinaweibo.png" ></image>
+				</view>
+			</view>
+		
 		</form>
-		<view class="action-row">
-		    <navigator url="/pages/common/commonurl?url=http://www.diziw.cn/register&title=账号注册">注册账号</navigator>
-		    <text>|</text>
-		    <navigator url="/pages/pages/auth/retrieve">忘记密码</navigator>
-		</view>
+		
 	</view>
 </template>
 
 <script>
 	import {mapState,mapMutations,mapGetters} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
-	import moveVerify from "@/components/helang-moveVerify/helang-moveVerify.vue"//滑动验证插件
 	export default {
 		components: {
-			"move-verify":moveVerify
+			
 		},
 		data() {
 			return {
-				isFlag:true,//滑动插件
 				logindata:{
 					'username':'',
 					'password':''
@@ -54,55 +61,44 @@
 			    'setName'
 				
 			]),
-			/* 校验成功的回调函数 */
-			verifyResult(){
-				this.isFlag=true;
-			},
+		
 			login(){
 				/*  if (/^[a-zA-Z0-9]{2,15}$/.test(value))
 				*  if (/^[a-zA-Z0-9]{6,15}$/.test(value))
 				*  */
-				if(this.isFlag){ //滑动验证成功后开始登陆
-					let data = {
-					    username:this.logindata.username,
-					    password:this.logindata.password,
-					}
-					//用户登录
-					this.$api.post('/api/login',data).then((res)=>{
-						let userData=JSON.parse(res.data);//把json转换数组
-						if(res.statusCode=='200'){
-							 this.setToken(userData.token);//把token保存到vuex里面
-							 //获取用户信息
-							 this.getuserdata(this.userToken);
-							 uni.showToast({
-							     title: userData.message,
-							     icon: 'success',
-							     mask: true
-							 });
-							 uni.navigateBack({
-								delta: 1, //返回上一页
-								animationType: 'pop-out', //动画
-								animationDuration: 300 //动画时间
-							});
-							// console.log('打印token', uni.getStorageSync('userToken'));
-						}
-					  //  this.res = '请求结果 : ' + JSON.stringify(res);
-					}).catch((err)=>{
-						let data = JSON.parse(err.data);
-						uni.showToast({
-						    title: '用户不存在',
-							icon:'none',
-						    mask: true
+				let data = {
+					username:this.logindata.username,
+					password:this.logindata.password,
+				}
+				//用户登录
+				this.$api.post('/api/login',data).then((res)=>{
+					let userData=JSON.parse(res.data);//把json转换数组
+					if(res.statusCode=='200'){
+						 this.setToken(userData.token);//把token保存到vuex里面
+						 //获取用户信息
+						 this.getuserdata(this.userToken);
+						 uni.showToast({
+							 title: userData.message,
+							 icon: 'success',
+							 mask: true
+						 });
+						 uni.navigateBack({
+							delta: 1, //返回上一页
+							animationType: 'pop-out', //动画
+							animationDuration: 300 //动画时间
 						});
-					    console.log('数据请求失败', data);
-					})
-				}else{
+						// console.log('打印token', uni.getStorageSync('userToken'));
+					}
+				  //  this.res = '请求结果 : ' + JSON.stringify(res);
+				}).catch((err)=>{
+					let data = JSON.parse(err.data);
 					uni.showToast({
-					    title: '请滑动验证',
+						title: '用户不存在',
 						icon:'none',
 						mask: true
 					});
-				}
+					console.log('数据请求失败', data);
+				})
 			},
 			//获取用户信息
 			getuserdata(token){
@@ -117,16 +113,34 @@
 					    console.log('数据请求失败', err);
 					})
 				}
+			},
+			qqlogin(){
+				uni.login({
+					provider: "qq",
+					success: (resp) => {
+						var access_token=resp.authResult.access_token;
+						uni.getUserInfo({
+						    provider: 'qq',
+						    success: function (infoRes) {
+								var formdata={
+									nickName:infoRes.userInfo.nickname,
+									gender:infoRes.userInfo.gender=='男'?0:1,
+									openId:infoRes.userInfo.openid,
+									access_token:access_token,
+								};
+								//self.$go.post("/qqlogin",formdata).then(res=>{});
+							}
+						})
+					},
+					fail: (err) => {}
+				});
 			}
-		
+
 		}
 	}
 </script>
 
 <style>
-	.content{
-
-	}
 	.action-row {
 	    display: flex;
 	    flex-direction: row;
@@ -136,11 +150,29 @@
 	    color: #007aff;
 	    padding: 0 20upx;
 	}
-	view,button, textarea, input{
-		box-sizing: border-box;
+	
+	.oauth-row {
+		padding-top: 50upx;
+	    display: flex;
+	    flex-direction: row;
+	    justify-content: center;
+	    position: absolute;
+	    width: 100%;
 	}
-	button::after {
-		border: none;
+	
+	.oauth-image {
+	    width: 100upx;
+	    height: 100upx;
+	    border: 1upx solid #dddddd;
+	    border-radius: 100upx;
+	    margin: 0 40upx;
+	    background-color: #ffffff;
+	}
+	
+	.oauth-image image {
+	    width: 60upx;
+	    height: 60upx;
+	    margin: 20upx;
 	}
 	
 </style>

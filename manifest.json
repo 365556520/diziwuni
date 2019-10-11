@@ -15,7 +15,8 @@
             "delay" : 0
         },
         "modules" : {
-            "Maps" : {}
+            "Maps" : {},
+            "OAuth" : {}
         },
         /* 模块配置 */
         "distribute" : {
@@ -63,13 +64,13 @@
             },
             "splashscreen" : {
                 "android" : {
-                    "hdpi" : "C:/Users/Administrator/Desktop/360截图20190920113235879.png",
-                    "xhdpi" : "C:/Users/Administrator/Desktop/360截图20190920113235879.png",
-                    "xxhdpi" : "C:/Users/Administrator/Desktop/360截图20190920113235879.png"
+                    "hdpi" : "",
+                    "xhdpi" : "",
+                    "xxhdpi" : ""
                 },
                 "ios" : {
                     "iphone" : {
-                        "portrait-896h@3x" : "C:/Users/Administrator/Desktop/360截图20190920113235879.png"
+                        "portrait-896h@3x" : ""
                     }
                 }
             },
