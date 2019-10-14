@@ -18,16 +18,17 @@
 			    <text>|</text>
 			    <navigator url="/pages/pages/auth/retrieve">忘记密码</navigator>
 			</view>
-	
-			<view class="oauth-row">
-				<view class="oauth-image">
-					<image src="../../../static/qq.png" @click="qqlogin()"></image>
-				</view>
-				<view class="oauth-image">
-					<image src="../../../static/sinaweibo.png" ></image>
+			<view class="padding ">
+				<view class="text-center padding">————第三方登录————</view>
+				<view class="oauth-row">
+					<view class="oauth-image" @click="providerlogin('qq')">
+						<image src="../../../static/qq.png" ></image>
+					</view>
+					<view class="oauth-image"  @click="providerlogin('sinaweibo')">
+						<image src="../../../static/sinaweibo.png"  ></image>
+					</view>
 				</view>
 			</view>
-		
 		</form>
 		
 	</view>
@@ -61,7 +62,6 @@
 			    'setName'
 				
 			]),
-		
 			login(){
 				/*  if (/^[a-zA-Z0-9]{2,15}$/.test(value))
 				*  if (/^[a-zA-Z0-9]{6,15}$/.test(value))
@@ -114,19 +114,25 @@
 					})
 				}
 			},
-			qqlogin(){
+			providerlogin(provider){
 				uni.login({
-					provider: "qq",
+					provider: provider,
 					success: (resp) => {
-						var access_token=resp.authResult.access_token;
+						//var access_token=resp.authResult.access_token;
 						uni.getUserInfo({
-						    provider: 'qq',
+						    provider: provider,
 						    success: function (infoRes) {
+								console.log('测试微博数据昵称'+infoRes.userInfo.nickname)
+								console.log('测试微博数据性别'+infoRes.userInfo.gender)
+								console.log('测试微博数据id'+infoRes.userInfo.openid)
+								console.log('测试微博数据图标地址'+infoRes.userInfo.avatarUrl)
+								//console.log('测试微博数据'+access_token)
 								var formdata={
 									nickName:infoRes.userInfo.nickname,
 									gender:infoRes.userInfo.gender=='男'?0:1,
 									openId:infoRes.userInfo.openid,
-									access_token:access_token,
+									provider:provider,
+									//access_token:access_token,
 								};
 								//self.$go.post("/qqlogin",formdata).then(res=>{});
 							}
@@ -152,11 +158,11 @@
 	}
 	
 	.oauth-row {
-		padding-top: 50upx;
+		padding-top: 20upx;
 	    display: flex;
 	    flex-direction: row;
 	    justify-content: center;
-	    position: absolute;
+	
 	    width: 100%;
 	}
 	
@@ -174,5 +180,4 @@
 	    height: 60upx;
 	    margin: 20upx;
 	}
-	
 </style>

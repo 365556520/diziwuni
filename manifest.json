@@ -60,7 +60,13 @@
                         "appkey_android" : "94bd6d8c7d4206396b63b21e2605c68d"
                     }
                 },
-                "oauth" : {}
+                "oauth" : {
+                    "sina" : {
+                        "appkey" : "28708489",
+                        "appsecret" : "36a8aa0f631e7621ba5b7fc76c930c1f",
+                        "redirect_uri" : "http://www.diziw.cn/auth/weibo/callback"
+                    }
+                }
             },
             "splashscreen" : {
                 "android" : {
