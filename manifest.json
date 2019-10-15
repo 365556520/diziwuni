@@ -61,6 +61,9 @@
                     }
                 },
                 "oauth" : {
+                    "qq" : {
+                        "appid" : "101809222"
+                    },
                     "sina" : {
                         "appkey" : "28708489",
                         "appsecret" : "36a8aa0f631e7621ba5b7fc76c930c1f",
