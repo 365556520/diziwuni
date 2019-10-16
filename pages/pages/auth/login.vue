@@ -11,15 +11,15 @@
 			</view>
 			
 			<view class="padding flex flex-direction">
-				<button v-show="!correlationShow" class="cu-btn bg-red margin-tb-sm lg" @click="login()">登 录</button>
-				<button v-show="correlationShow" class="cu-btn bg-red margin-tb-sm lg" @click="correlation()">绑定此账号</button>
+				<button v-if="!correlationShow" class="cu-btn bg-red margin-tb-sm lg" @click="login">登 录</button>
+				<button v-if="correlationShow" class="cu-btn bg-red margin-tb-sm lg" @click="correlation">绑定此账号</button>
 			</view>
 			<view class="action-row">
 			    <navigator url="/pages/common/commonurl?url=http://www.diziw.cn/register&title=账号注册">注册账号</navigator>
 			    <text>|</text>
 			    <navigator url="/pages/pages/auth/retrieve">忘记密码</navigator>
 			</view>
-			<view class="padding " v-show="correlationShow">
+			<view class="padding " v-show="!correlationShow">
 				<view class="text-center padding">其他登录方式</view>
 				<view class="oauth-row">
 					<view class="oauth-image" @click="providerlogin('qq')">
@@ -47,10 +47,17 @@
 					'password':''
 				},
 				correlationShow:false,//第三方登录关联显示
+				correlationData:{
+					'nickName':'',
+					'gender':'',
+					'provider_id':'',
+					'provider':'',
+					'avatarUrl':''
+				}
+				
 			}
 		},
 		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
-			
 		},
 		computed:{//数据计算
 		    ...mapState(['userToken','userdata']),
@@ -119,7 +126,7 @@
 								if(provider=='sinaweibo'){
 									gender = infoRes.userInfo.gender=='m'?'男':'女';
 								}
-								var data={
+								this_.correlationData={
 									nickName:infoRes.userInfo.nickname,
 									gender:gender,	
 									provider_id:infoRes.userInfo.openId,
@@ -128,7 +135,7 @@
 									//access_token:access_token,
 								};
 								//第三方后台登录
-								this_.$api.post('/api/social/login',data).then((res)=>{
+								this_.$api.post('/api/social/login',this_.correlationData).then((res)=>{
 									let userData=JSON.parse(res.data);//把json转换数组
 									if(res.statusCode=='200'){
 										 this_.successLogin(userData);
@@ -136,16 +143,43 @@
 									}
 								}).catch((err)=>{
 									let data = JSON.parse(err.data);
+									uni.showToast({
+										title: '',
+										icon:'none',
+										mask: true
+									});
 									//显示绑定此账号
 									this_.correlationShow = true;
 								    //改变登录框内容
-									console.log('绑定已有账号', data);
+									console.log('数据请求失败', data);
 								})
 							}
 						})
 					},
 					fail: (err) => {}
 				});
+			},
+			correlation(){
+				//绑定已有账号逻辑
+				let data = {
+					username:this.logindata.username,
+					password:this.logindata.password,
+					correlationData:this.correlationData,
+				}
+				//第三方绑定并登陆
+				this.$api.post('/api/social/correlation',data).then((res)=>{
+					let userData=JSON.parse(res.data);//把json转换数组
+					if(res.statusCode=='200'){
+						 this.successLogin(userData);
+						// console.log('打印token', uni.getStorageSync('userToken'));
+					}
+				}).catch((err)=>{
+					let data = JSON.parse(err.data);
+					//显示绑定此账号
+					this.correlationShow = true;
+				    //改变登录框内容
+					console.log('绑定已有账号', data.statusCode);
+				})
 			},
 			//登录成功后方法
 			successLogin(userData){
@@ -163,9 +197,6 @@
 					animationDuration: 300 //动画时间
 				});
 			},
-			correlation(){
-				//绑定已有账号逻辑
-			}
 		}
 	}
 </script>
@@ -180,7 +211,6 @@
 	    color: #007aff;
 	    padding: 0 20upx;
 	}
-	
 	.oauth-row {
 		padding-top: 20upx;
 	    display: flex;
@@ -189,7 +219,6 @@
 	
 	    width: 100%;
 	}
-	
 	.oauth-image {
 	    width: 100upx;
 	    height: 100upx;
