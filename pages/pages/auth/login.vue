@@ -144,7 +144,7 @@
 								}).catch((err)=>{
 									let data = JSON.parse(err.data);
 									uni.showToast({
-										title: '',
+										title: '请绑定账号',
 										icon:'none',
 										mask: true
 									});
@@ -164,7 +164,7 @@
 				let data = {
 					username:this.logindata.username,
 					password:this.logindata.password,
-					correlationData:this.correlationData,
+					correlationData:JSON.stringify(this.correlationData), //问题出在这里传送过去的数据没有转换json
 				}
 				//第三方绑定并登陆
 				this.$api.post('/api/social/correlation',data).then((res)=>{
@@ -177,7 +177,12 @@
 					let data = JSON.parse(err.data);
 					//显示绑定此账号
 					this.correlationShow = true;
-				    //改变登录框内容
+				    //改变登录框内容 
+					uni.showToast({
+						title: '账号密码不正确！',
+						icon:'none',
+						mask: true
+					});
 					console.log('绑定已有账号', data.statusCode);
 				})
 			},

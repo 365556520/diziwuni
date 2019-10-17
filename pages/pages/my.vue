@@ -63,7 +63,7 @@
 			userImgUrl:function(){
 				let url = '';
 				if(this.userdata.user[0].get_user_data.headimg!=null){
-					url = 'http://www.diziw.cn/'+ this.userdata.user[0].get_user_data.headimg;
+					url = this.userdata.user[0].get_user_data.headimg;
 				}else{
 					url = this.avatarUrl;
 				}
