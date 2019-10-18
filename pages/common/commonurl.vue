@@ -1,8 +1,6 @@
 <template>
 	<view class="content ">
-		<view>
-			<web-view :webview-styles="webviewStyles" :src="url"></web-view>
-		</view>
+		<web-view :webview-styles="webviewStyles" :src="url"></web-view>
 	</view>
 </template>
 
@@ -19,17 +17,30 @@
                     }
                 },
 				url:'',
-				title:''
+				title:'',
+				backnav:1,
 			}
 		},
 		onLoad: function (option) { //获取升一个页面传送过来的url
 			if(option.url!=''&&option.title){
 				this.url= option.url;
 				this.title= option.title;
+				this.backnav=option.backnav;
 				/* 动态设置页面标题 */
 				uni.setNavigationBarTitle({
 					title: this.title
 				});
+			}else{
+				uni.navigateBack();
+			}
+		},
+		onBackPress(options) { //原生态导航返回按钮监听
+			if(this.backnav!=1){
+				console.log(this.backnav);
+				//let url = '../../'+this.backnav;
+				uni.redirectTo({
+				    url:'../../pages/index/index',
+				})
 			}else{
 				uni.navigateBack();
 			}
@@ -55,4 +66,5 @@
 		font-size: 20upx;
 		color: #8f8f94;
 	}
+	
 </style>
