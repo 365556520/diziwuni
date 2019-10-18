@@ -33,13 +33,13 @@
 			}else{
 				uni.navigateBack();
 			}
-		},
+		}, 
 		onBackPress(options) { //原生态导航返回按钮监听
 			if(this.backnav!=1){
 				console.log(this.backnav);
 				//let url = '../../'+this.backnav;
 				uni.redirectTo({
-				    url:'../../pages/index/index',
+				    url:'../../'.this.backnav,
 				})
 			}else{
 				uni.navigateBack();
