@@ -166,6 +166,7 @@
 					password:this.logindata.password,
 					correlationData:JSON.stringify(this.correlationData), //问题出在这里传送过去的数据没有转换json
 				}
+				console.log('打印data',data);
 				//第三方绑定并登陆
 				this.$api.post('/api/social/correlation',data).then((res)=>{
 					let userData=JSON.parse(res.data);//把json转换数组
