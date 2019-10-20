@@ -219,6 +219,7 @@
 </script>
 
 <style>
+/*  #ifdef  APP-PLUS-NVUE  */
 	/* 字体图标 */
 	.yticon {
 		font-family: yticon;
@@ -231,7 +232,6 @@
 	 * 
 	 * 注：我对weex也是一知半解，有说错的麻烦指出
 	 */
-
 	.content{
 		flex: 1;
 		background-color: #fff;
@@ -408,4 +408,5 @@
 		height: 240px;
 		margin-right: 0px;
 	}
+	/*  #endif  */
 </style>

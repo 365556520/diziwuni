@@ -19,6 +19,7 @@
 			    <text>|</text>
 			    <navigator url="/pages/pages/auth/retrieve">忘记密码</navigator>
 			</view> 
+			<!-- #ifdef APP-PLUS || MP-WEIXIN -->
 			<view class="padding " v-show="!correlationShow">
 				<view class="text-center padding">其他登录方式</view>
 				<view class="oauth-row">
@@ -30,6 +31,7 @@
 					</view>
 				</view>
 			</view>
+			<!-- #endif -->
 		</form>
 	</view>
 </template>

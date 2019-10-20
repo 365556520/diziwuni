@@ -4,12 +4,28 @@
 	export default {
 		mounted(){ //这个挂在第一次进入页面后运行一次
 		    this.getToken(); //获取token
+			this.getwifi();//检查网络
 		},
 		methods: {
 			//用vuex里面的方法
 			...mapMutations([
 			    'getToken'
 			]), 
+			getwifi(){
+				uni.getNetworkType({
+				    success: function (res) {
+						if(res.networkType=='none'){
+							uni.showToast({
+								title: '迪子网:连接网络失败，请检查网络！',
+								icon:'none',
+								mask: true,
+								 duration: 5000
+							});
+						}
+				        console.log(res.networkType);
+				    }
+				});
+			}
 		},
 		onLaunch: function() {
 			console.log('App Launch')
