@@ -19,9 +19,9 @@
 			    <text>|</text>
 			    <navigator url="/pages/pages/auth/retrieve">忘记密码</navigator>
 			</view> 
-			<!-- #ifdef APP-PLUS || MP-WEIXIN -->
-			<view class="padding " v-show="!correlationShow">
-				<view class="text-center padding">其他登录方式</view>
+			<!-- #ifdef APP-PLUS || MP-WEIXIN-->
+			<view class="padding correlation" v-show="!correlationShow">
+				<view class="text-center padding correlation-title">——————— 其他登录方式 ———————</view>
 				<view class="oauth-row">
 					<view class="oauth-image" @click="providerlogin('qq')">
 						<image src="../../../static/qq.png" ></image>
@@ -240,5 +240,12 @@
 	    width: 60upx;
 	    height: 60upx;
 	    margin: 20upx;
+	}
+	.correlation {
+		margin-top: 180upx;
+	}
+	.correlation-title{
+		font-size: 26upx;
+		color: #666666;
 	}
 </style>
