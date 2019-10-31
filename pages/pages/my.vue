@@ -4,7 +4,6 @@
 			<image class="logo-img" :src="userdata.hasEnter ? userImgUrl:avatarUrl"></image>
 			<view class="logo-title">
 				<text class="uer-name">Hi，{{userdata.hasEnter ? userdata.user[0].name : '您未登录!'}}</text>
-				
 			</view>
 		</view>
 		<view class="cu-list menu sm-border  margin-top">
@@ -25,8 +24,8 @@
 			</view>
 			<view class="cu-item ">
 				<button class="cu-btn content" open-type="contact">
-					<text class="cuIcon-circlefill text-grey"></text>
-					<text class="text-grey">帮助与反馈</text>
+					<text class="cuIcon-settings text-grey"></text>
+					<text class="text-grey">设置</text>
 				</button>
 			</view>
 			<view class="cu-item ">
