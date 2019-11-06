@@ -29,6 +29,18 @@
 			}
 		},
 		{
+			"path": "pages/pages/chat/chat",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/pages/chat/friend",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
 			"path": "pages/pages/info",
 			"style": {
 				"navigationBarTitleText": "日记"
@@ -130,7 +142,7 @@
             },
             //#endif
             {
-                "pagePath": "pages/pages/info",
+                "pagePath": "pages/pages/chat/friend",
                 "iconPath": "static/img/tabbar/news.png",
                 "selectedIconPath": "static/img/tabbar/newsactive.png",
                 "text": "消息"

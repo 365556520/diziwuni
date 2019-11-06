@@ -8,7 +8,6 @@
 					<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false" objectFit="cover" v-if="item.type=='video'"></video>
 				</swiper-item>
 			</swiper>
-			
 			<!-- #ifndef H5 -->
 			<view class="padding">
 				<view class="text-left padding flex">
@@ -74,16 +73,17 @@
 						icon: 'list'
 					},
 					{
+						title: '日记本',
+						name:  'diary',
+						route: '/pages/pages/info',
+						color: 'cyan',
+						icon: 'formfill'
+					},
+					{
 						title: '关于我们',
 						name: 'card',
 						color: 'brown',
 						icon: 'newsfill'
-					},
-					{
-						title: '未开发',
-						name: 'form',
-						color: 'red',
-						icon: 'formfill'
 					},
 					{
 						title: '未开发',
