@@ -35,9 +35,9 @@
 			}
 		},
 		{
-			"path": "pages/pages/chat/friend",
+			"path": "pages/pages/chat/news",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "消息"
 			}
 		},
 		{
@@ -142,7 +142,7 @@
             },
             //#endif
             {
-                "pagePath": "pages/pages/chat/friend",
+                "pagePath": "pages/pages/chat/news",
                 "iconPath": "static/img/tabbar/news.png",
                 "selectedIconPath": "static/img/tabbar/newsactive.png",
                 "text": "消息"

@@ -1,14 +1,14 @@
 <template>
 	<view>
-		<scroll-view :scroll-y="modalName==null" class="page" :class="modalName!=null?'show':''">
-			<view class="cu-bar bg-white solid-bottom margin-top">
+		<scroll-view :scroll-y="modalName==null" class="page" >
+			<view class="cu-bar bg-white solid-bottom ">
 				<view class="action">
 					<text class="cuIcon-title text-orange "></text> 列表左滑
 				</view>
 			</view>
 			<view class="cu-list menu-avatar">
 				<view class="cu-item" :class="modalName=='move-box-'+ index?'move-cur':''" v-for="(item,index) in 4" :key="index"
-				 @touchstart="ListTouchStart" @touchmove="ListTouchMove" @touchend="ListTouchEnd" :data-target="'move-box-' + index">
+				 @touchstart="ListTouchStart" @touchmove="ListTouchMove" @touchend="ListTouchEnd" :data-target="'move-box-' + index" @click="tochat(id)">
 					<view class="cu-avatar round lg" :style="[{backgroundImage:'url(https://ossweb-img.qq.com/images/lol/web201310/skin/big2100'+ (index+2) +'.jpg)'}]"></view>
 					<view class="content">
 						<view class="text-grey">文晓港</view>
@@ -25,7 +25,6 @@
 					</view>
 				</view>
 			</view>
-
 		</scroll-view>
 	</view>
 </template>
@@ -34,92 +33,23 @@
 	export default {
 		data() {
 			return {
-				cuIconList: [{
-					cuIcon: 'cardboardfill',
-					color: 'red',
-					badge: 120,
-					name: 'VR'
-				}, {
-					cuIcon: 'recordfill',
-					color: 'orange',
-					badge: 1,
-					name: '录像'
-				}, {
-					cuIcon: 'picfill',
-					color: 'yellow',
-					badge: 0,
-					name: '图像'
-				}, {
-					cuIcon: 'noticefill',
-					color: 'olive',
-					badge: 22,
-					name: '通知'
-				}, {
-					cuIcon: 'upstagefill',
-					color: 'cyan',
-					badge: 0,
-					name: '排行榜'
-				}, {
-					cuIcon: 'clothesfill',
-					color: 'blue',
-					badge: 0,
-					name: '皮肤'
-				}, {
-					cuIcon: 'discoverfill',
-					color: 'purple',
-					badge: 0,
-					name: '发现'
-				}, {
-					cuIcon: 'questionfill',
-					color: 'mauve',
-					badge: 0,
-					name: '帮助'
-				}, {
-					cuIcon: 'commandfill',
-					color: 'purple',
-					badge: 0,
-					name: '问答'
-				}, {
-					cuIcon: 'brandfill',
-					color: 'mauve',
-					badge: 0,
-					name: '版权'
-				}],
-				modalName: null,
-				gridCol: 3,
+				modalName: null, //左右华东效果
 				gridBorder: false,
-				menuBorder: false,
-				menuArrow: false,
-				menuCard: false,
-				skin: false,
 				listTouchStart: 0,
 				listTouchDirection: null,
 			};
 		},
 		methods: {
-			showModal(e) {
+			tochat(id){
+				uni.navigateTo({
+					url: '/pages/pages/chat/chat'
+				});	
+			},
+			showModal(e) {//打开滑动后效果
 				this.modalName = e.currentTarget.dataset.target
 			},
-			hideModal(e) {
+			hideModal(e) {//关闭滑动效果
 				this.modalName = null
-			},
-			Gridchange(e) {
-				this.gridCol = e.detail.value
-			},
-			Gridswitch(e) {
-				this.gridBorder = e.detail.value
-			},
-			MenuBorder(e) {
-				this.menuBorder = e.detail.value
-			},
-			MenuArrow(e) {
-				this.menuArrow = e.detail.value
-			},
-			MenuCard(e) {
-				this.menuCard = e.detail.value
-			},
-			SwitchSex(e) {
-				this.skin = e.detail.value
 			},
 
 			// ListTouch触摸开始
@@ -141,6 +71,7 @@
 				}
 				this.listTouchDirection = null
 			}
+			
 		}
 	}
 </script>
@@ -149,10 +80,6 @@
 	.page {
 		height: 100Vh;
 		width: 100vw;
-	}
-
-	.page.show {
-		overflow: hidden;
 	}
 
 	.switch-sex::after {

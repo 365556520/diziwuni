@@ -245,6 +245,23 @@
 			};
 		},
 		onLoad(option) {
+			uni.connectSocket({
+			    url:'ws://server.diziw.cn/ws',
+				success:function (res) {
+				  console.log(JSON.stringify(res));
+				}
+			});
+			uni.onSocketOpen(function (res) {
+			  console.log('WebSocket连接打开');
+			});
+			uni.onSocketError(function (res) {
+			  console.log('WebSocket连接打开失败，请检查！');
+			});
+			uni.onSocketMessage(function (res) {
+			  console.log('收到服务器内容：' + res.data);
+		
+			});
+
 			this.getMsgList();
 			//语音自然播放结束
 			this.AUDIO.onEnded((res)=>{
@@ -282,12 +299,13 @@
 		methods:{
 			// 接受消息(筛选处理)
 			screenMsg(msg){
+		
 				//从长连接处转发给这个方法，进行筛选处理
 				if(msg.type=='system'){
 					// 系统消息
 					switch (msg.msg.type){
 						case 'text':
-							this.addSystemTextMsg(msg);
+							this.addSystemTextMsg(msgs);
 							break;
 						case 'redEnvelope':
 							this.addSystemRedEnvelopeMsg(msg);
@@ -530,7 +548,16 @@
 				lastid++;
 				let msg = {type:'user',msg:{id:lastid,time:nowDate.getHours()+":"+nowDate.getMinutes(),type:type,userinfo:{uid:0,username:"大黑哥",face:"/static/img/face.jpg"},content:content}}
 				// 发送消息
-				this.screenMsg(msg);
+				//this.screenMsg(msg);
+				uni.sendSocketMessage({
+				      data:'aasass',
+					  success:function (res) {
+					    console.log('发送成功');
+					  }
+				});
+				uni.onSocketMessage(function (res) {
+				  console.log('收到服务器内容：' + res.data);
+				});
 				// 定时器模拟对方回复,三秒
 				setTimeout(()=>{
 					lastid = this.msgList[this.msgList.length-1].msg.id;
