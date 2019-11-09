@@ -514,7 +514,13 @@
 					return;
 				}
 				let content = this.replaceEmoji(this.textMsg);
-				let msg = {text:content}
+				let msg = {text:content};
+				uni.sendSocketMessage({
+				      data: this.textMsg,
+					  success:function (res) {
+					    console.log('发送成功');
+					  }
+				});
 				this.sendMsg(msg,'text');
 				this.textMsg = '';//清空输入框
 			},
@@ -542,6 +548,11 @@
 			
 			// 发送消息
 			sendMsg(content,type){
+				console.log('看看发送得到信息',content);
+				uni.onSocketMessage(function (res) {
+					content = res.data;
+				  console.log('收到服务器内容：' + res.data);
+				});
 				//实际应用中，此处应该提交长连接，模板仅做本地处理。
 				var nowDate = new Date();
 				let lastid = this.msgList[this.msgList.length-1].msg.id;
@@ -549,21 +560,12 @@
 				let msg = {type:'user',msg:{id:lastid,time:nowDate.getHours()+":"+nowDate.getMinutes(),type:type,userinfo:{uid:0,username:"大黑哥",face:"/static/img/face.jpg"},content:content}}
 				// 发送消息
 				//this.screenMsg(msg);
-				uni.sendSocketMessage({
-				      data:'aasass',
-					  success:function (res) {
-					    console.log('发送成功');
-					  }
-				});
-				uni.onSocketMessage(function (res) {
-				  console.log('收到服务器内容：' + res.data);
-				});
+				
 				// 定时器模拟对方回复,三秒
 				setTimeout(()=>{
 					lastid = this.msgList[this.msgList.length-1].msg.id;
 					lastid++;
 					msg = {type:'user',msg:{id:lastid,time:nowDate.getHours()+":"+nowDate.getMinutes(),type:type,userinfo:{uid:1,username:"售后客服008",face:"/static/img/im/face/face_2.jpg"},content:content}}
-					// 本地模拟发送消息
 					this.screenMsg(msg);
 				},3000)
 			},
