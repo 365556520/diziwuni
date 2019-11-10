@@ -245,23 +245,6 @@
 			};
 		},
 		onLoad(option) {
-			uni.connectSocket({
-			    url:'ws://server.diziw.cn/ws',
-				success:function (res) {
-				  console.log(JSON.stringify(res));
-				}
-			});
-			uni.onSocketOpen(function (res) {
-			  console.log('WebSocket连接打开');
-			});
-			uni.onSocketError(function (res) {
-			  console.log('WebSocket连接打开失败，请检查！');
-			});
-			uni.onSocketMessage(function (res) {
-			  console.log('收到服务器内容：' + res.data);
-		
-			});
-
 			this.getMsgList();
 			//语音自然播放结束
 			this.AUDIO.onEnded((res)=>{
@@ -278,11 +261,35 @@
 			})
 			// #endif
 		},
-		onShow(){
-			this.scrollTop = 9999999;
+		onShow(){//页面显示
+			let this_=this;
+			uni.connectSocket({
+			    url:'ws://server.diziw.cn/ws',
+				success:function (res) {
+				  console.log(JSON.stringify(res));
+				}
+			});
+			uni.onSocketOpen(function (res) {
+			  console.log('WebSocket连接打开');
+			});
+			uni.onSocketError(function (res) {
+			  console.log('WebSocket连接打开失败，请检查！');
+			});
+			uni.onSocketMessage(function (res) {  //接受服务器消息
+				let content = {text:res.data};
+				let type = 'text';
+				let nowDate = new Date();
+				let lastid = this_.msgList[this_.msgList.length-1].msg.id;
+				lastid++;
+				let msg = {type:'user',msg:{id:lastid,time:nowDate.getHours()+":"+nowDate.getMinutes(),type:type,userinfo:{uid:1,username:"售后客服008",face:"/static/img/im/face/face_2.jpg"},content:content}}
+				this_.screenMsg(msg);
+				console.log('根据用户id发送消息');
 			
+			  //console.log('收到服务器内容：' + res.data);
+	
+			});
+			this.scrollTop = 9999999;	
 			//模板借由本地缓存实现发红包效果，实际应用中请不要使用此方法。
-			//
 			uni.getStorage({
 				key: 'redEnvelopeData',
 				success:  (res)=>{
@@ -296,10 +303,14 @@
 				}
 			});
 		},
+		onHide(){//页面隐藏时候
+			uni.onSocketClose(function (res) {
+			  console.log('WebSocket 已关闭！');
+			});
+		},
 		methods:{
 			// 接受消息(筛选处理)
 			screenMsg(msg){
-		
 				//从长连接处转发给这个方法，进行筛选处理
 				if(msg.type=='system'){
 					// 系统消息
@@ -515,13 +526,14 @@
 				}
 				let content = this.replaceEmoji(this.textMsg);
 				let msg = {text:content};
+				let this_ =this;
 				uni.sendSocketMessage({
 				      data: this.textMsg,
 					  success:function (res) {
+						this_.sendMsg(msg,'text');//显示发送消息
 					    console.log('发送成功');
 					  }
 				});
-				this.sendMsg(msg,'text');
 				this.textMsg = '';//清空输入框
 			},
 			//替换表情符号为图片
@@ -546,28 +558,16 @@
 				return '<div style="display: flex;align-items: center;word-wrap:break-word;">'+replacedStr+'</div>';
 			},
 			
-			// 发送消息
+			// 发送消息.msg
 			sendMsg(content,type){
-				console.log('看看发送得到信息',content);
-				uni.onSocketMessage(function (res) {
-					content = res.data;
-				  console.log('收到服务器内容：' + res.data);
-				});
+				
 				//实际应用中，此处应该提交长连接，模板仅做本地处理。
 				var nowDate = new Date();
 				let lastid = this.msgList[this.msgList.length-1].msg.id;
 				lastid++;
 				let msg = {type:'user',msg:{id:lastid,time:nowDate.getHours()+":"+nowDate.getMinutes(),type:type,userinfo:{uid:0,username:"大黑哥",face:"/static/img/face.jpg"},content:content}}
 				// 发送消息
-				//this.screenMsg(msg);
-				
-				// 定时器模拟对方回复,三秒
-				setTimeout(()=>{
-					lastid = this.msgList[this.msgList.length-1].msg.id;
-					lastid++;
-					msg = {type:'user',msg:{id:lastid,time:nowDate.getHours()+":"+nowDate.getMinutes(),type:type,userinfo:{uid:1,username:"售后客服008",face:"/static/img/im/face/face_2.jpg"},content:content}}
-					this.screenMsg(msg);
-				},3000)
+				this.screenMsg(msg);
 			},
 			
 			// 添加文字消息到列表
