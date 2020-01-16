@@ -5,10 +5,10 @@ import http from './interface'
  * 如果项目很大可以将 url 独立成文件，接口分成不同的模块
  * 
  */
-
+let headUrl = 'http://www.diziw.cn';  //自己服务器地址 http://server.diziw.cn http://www.diziw.cn
 // 单独导出(测试接口) import {test} from '@/common/vmeitime-http/'
 export const test = (url,data) => {
-	//http.config.baseUrl = "http://www.diziw.cn"
+	//http.config.baseUrl = "http://server.diziw.cn"
 	//设置请求前拦截器
 	/* http.interceptor.request = (config) => {
 		config.header = {
@@ -22,7 +22,7 @@ export const test = (url,data) => {
 		return response;
 	}
     return http.request({
-		baseUrl: 'http://www.diziw.cn',
+		baseUrl: headUrl,
         url: url,
 		dataType: 'text',
         data,
@@ -30,7 +30,7 @@ export const test = (url,data) => {
 }
 // 天气预报
 export const baiduapi = (url,data) => {
-	//http.config.baseUrl = "http://www.diziw.cn"
+	//http.config.baseUrl = "http://server.diziw.cn"
 	//设置请求前拦截器
 	/* http.interceptor.request = (config) => {
 		config.header = {
@@ -52,7 +52,7 @@ export const baiduapi = (url,data) => {
 }
 //post
 export const post = (url,data) => {
-	//http.config.baseUrl = "http://www.diziw.cn"
+	//http.config.baseUrl = "http://server.diziw.cn"
 	//设置请求前拦截器
 	/* http.interceptor.request = (config) => {
 		config.header = {
@@ -66,7 +66,7 @@ export const post = (url,data) => {
 		return response;
 	}
     return http.request({
-		baseUrl: 'http://www.diziw.cn',
+		baseUrl: headUrl,
 		method: 'POST', 
         url: url,
 		dataType: 'text',
@@ -75,7 +75,7 @@ export const post = (url,data) => {
 }
 //带token的请求
 export const postToken = (url,token,data='') => {
-	//http.config.baseUrl = "http://www.diziw.cn"
+	//http.config.baseUrl = "http://server.diziw.cn"
 	//设置请求前拦截器
 	http.interceptor.request = (config) => {
 		config.header = {
@@ -90,7 +90,7 @@ export const postToken = (url,token,data='') => {
 		return response;
 	}
     return http.request({
-		baseUrl: 'http://www.diziw.cn',
+		baseUrl: headUrl,
 		method: 'POST', 
         url: url,
 		dataType: 'text',
