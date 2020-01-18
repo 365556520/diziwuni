@@ -35,8 +35,8 @@
 				
 				<!-- 新闻列表 -->
 				<cell v-for="(item, index) in tabItem.newsList" :key="index" class="news-item" @click="navToDetails(item)">
-					<text :class="['title', item.thumb[0]==''?'':item.thumb.length==1?'title1':'title2' ]">{{item.title}}</text>
-					<div v-if="item.thumb['0']!=''" :class="['img-list', 'img-list'+item.thumb.length]">
+					<text :class="['title', item.thumb=='null'?'':item.thumb.length==1?'title1':'title2' ]">{{item.title}}</text>
+					<div v-if="item.thumb!='null'" :class="['img-list', 'img-list'+item.thumb.length]">
 						<div 
 							v-for="(imgItem, imgIndex) in item.thumb" :key="imgIndex"
 							:class="['img-wrapper','img-wrapper'+item.thumb.length]"
@@ -45,7 +45,7 @@
 						</div>
 					</div>
 					<div v-else class="img-empty"></div>
-					<div :class="['bot', item.thumb[0]==''?'':item.thumb.length==1?'bot1':'bot2']">
+					<div :class="['bot', item.thumb=='null'?'':item.thumb.length==1?'bot1':'bot2']">
 						<text class="author">{{item.get_user.name}}</text>
 						<text class="time">{{item.created_at}}</text>
 					</div>
@@ -83,7 +83,6 @@
 				enableScroll: true,
 				statusBarHeight: '0wx', //状态栏占位高度
 				tabBars: [], //文章分类数据
-				urlpath:''//图片路径
 			}
 		},
 		beforeCreate(){
@@ -162,8 +161,12 @@
 					let data = JSON.parse(res.data);
 					if(data.code == "200"){
 						console.log('数据请求成功', data.msg)
-						this.urlpath = 'http://www.diziw.cn/'+data.msg
 						let list = data.data.data //获取数据
+						for (var i in list){    //把文章中的图片json格式转换成数组
+							if(list[i].thumb!='null'){
+							    list[i].thumb = JSON.parse(list[i].thumb);
+							}
+						}
 				/* 		list.sort((a,b)=>{
 							return Math.random() > .5 ? -1 : 1; //静态数据打乱顺序
 						}) */

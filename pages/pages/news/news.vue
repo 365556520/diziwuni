@@ -49,17 +49,17 @@
 							-->
 							<view v-for="(item, index) in tabItem.newsList" :key="index" class="news-item" @click="navToDetails(item)">
 								<!-- 根据图片是否存在和个数设置标题 <!-- 'img-list-single' 设置图片列 'img-wrapper-single'设置打图片- ->-->
-								<text :class="['title',item.thumb[0]==''?'':item.thumb.length==1?'title1':'title2' ]">{{item.title}}</text> 
-								<view v-if="item.thumb['0']!=''" :class="['img-list', 'img-list'+item.thumb.length]">
+								<text :class="['title',item.thumb=='null'?'':item.thumb.length==1?'title1':'title2' ]">{{item.title}}</text> 
+								<view v-if="item.thumb!='null'" :class="['img-list', 'img-list'+item.thumb.length]">
 									<view 
 										v-for="(imgItem, imgIndex) in item.thumb" :key="imgIndex"
 										:class="['img-wrapper', 'img-wrapper'+item.thumb.length]"
 									>
-										<image class="img"  :src="urlpath + imgItem"></image>
+										<image class="img"  :src="imgItem"></image>
 									</view>
 								</view>
 								<!-- 空图片占位 --><!-- 根据图片是否存在和个数设置底部内容 -->
-								<view :class="['bot',item.thumb[0]==''?'':item.thumb.length==1?'bot1':'bot2']">
+								<view :class="['bot',item.thumb=='null'?'':item.thumb.length==1?'bot1':'bot2']">
 									<text class="author">{{item.get_user.name}}</text>
 									<text class="time">{{item.created_at}}</text>
 								</view>
@@ -88,7 +88,6 @@
 				scrollLeft: 0, //顶部选项卡左滑距离
 				enableScroll: true,
 				tabBars: [], //文章分类数据
-				urlpath:''//图片路径
 			}
 		},
 		computed: {
@@ -182,8 +181,13 @@
 					let data = JSON.parse(res.data);
 					if(data.code == "200"){
 						console.log('数据请求成功', data.msg)
-						this.urlpath = 'http://www.diziw.cn/'+data.msg
 						let list = data.data.data //获取数据
+						for (var i in list){    //把文章中的图片json格式转换成数组
+							if(list[i].thumb!='null'){
+							    list[i].thumb = JSON.parse(list[i].thumb);
+							}
+						}
+						
 				/* 		list.sort((a,b)=>{
 							return Math.random() > .5 ? -1 : 1; //静态数据打乱顺序
 						}) */
