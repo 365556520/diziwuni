@@ -82,9 +82,10 @@
 				//用户登录
 				this.$api.post('/api/login',data).then((res)=>{
 					let userData=JSON.parse(res.data);//把json转换数组
+					//console.log('打印token', userData);
 					if(res.statusCode=='200'){
 						this.successLogin(userData);
-						// console.log('打印token', uni.getStorageSync('userToken'));
+						console.log('打印token', uni.getStorageSync('userToken'));
 					}
 				  //  this.res = '请求结果 : ' + JSON.stringify(res);
 				}).catch((err)=>{
@@ -94,7 +95,7 @@
 						icon:'none',
 						mask: true
 					});
-					console.log('数据请求失败', data);
+					console.log('数据请求失败', err.data);
 				})
 			},
 			//获取用户信息
