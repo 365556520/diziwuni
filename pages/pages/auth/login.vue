@@ -15,7 +15,7 @@
 				<button v-if="correlationShow" class="cu-btn bg-red margin-tb-sm lg" @click="correlation">绑定此账号</button>
 			</view>
 			<view class="action-row">
-			    <navigator url="/pages/common/commonurl?url=http://www.diziw.cn/register&title=账号注册&backnav=pages/index/index">注册账号</navigator>
+			    <navigator url="/pages/common/commonurl?url=http://server.diziw.cn/register&title=账号注册&backnav=pages/index/index">注册账号</navigator>
 			    <text>|</text>
 			    <navigator url="/pages/pages/auth/retrieve">忘记密码</navigator>
 			</view> 
