@@ -84,7 +84,7 @@
 					let userData=JSON.parse(res.data);//把json转换数组
 					//console.log('打印token', userData);
 					if(res.statusCode=='200'){
-						this.successLogin(userData);
+						this.successLogin(userData); //登陆成功
 						console.log('打印token', uni.getStorageSync('userToken'));
 					}
 				  //  this.res = '请求结果 : ' + JSON.stringify(res);

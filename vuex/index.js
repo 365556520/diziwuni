@@ -9,6 +9,7 @@ const state={
         user:{
 			id:'',
 			name:'',
+			headimg:'',
 			getUserData:{}
 		},//用户信息
         hasEnter:false,//用户登录状态

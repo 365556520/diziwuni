@@ -61,8 +61,8 @@
 			...mapState(['userToken','userdata']),
 			userImgUrl:function(){
 				let url = '';
-				if(this.userdata.user[0].get_user_data.headimg!=null){
-					url = this.userdata.user[0].get_user_data.headimg;
+				if(this.userdata.user[0].headimg!=null){
+					url = this.userdata.user[0].headimg;
 				}else{
 					url = this.avatarUrl;
 				}

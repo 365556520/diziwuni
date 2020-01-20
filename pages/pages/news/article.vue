@@ -38,7 +38,7 @@
 					</view>
 					<view class="evalution">
 						<view  v-for="(item, index) in evaList" :key="index" class="eva-item" >
-							<image :src="'http://www.diziw.cn/'+item.get_from_uid.get_user_data.headimg" mode="aspectFill"></image>
+							<image :src="item.get_from_uid.headimg" mode="aspectFill"></image>
 							<view class="eva-right">
 								<text>{{item.get_from_uid.name}}</text>
 								<text>{{item.created_at}}</text>
@@ -49,7 +49,7 @@
 								<!--回复内容 -->
 								<view v-if=" item.children.length!=0" v-for="(hui, index) in item.children" :key="index" >
 									<view  class="eva-item">
-										<image :src="'http://www.diziw.cn/'+hui.get_from_uid.get_user_data.headimg" mode="aspectFill"></image>
+										<image :src="hui.get_from_uid.headimg" mode="aspectFill"></image>
 										<view class="eva-right">
 											<text>{{hui.get_from_uid.name}}</text>
 											<text>{{hui.created_at}}</text>
