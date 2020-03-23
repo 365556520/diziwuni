@@ -88,7 +88,6 @@
 			},
 			 //退出用户
 			quitUser(){
-				console.log('chakan',this.userToken);
 				//用户登录
 			    if(this.userToken!=""){
 					let token = this.userToken;

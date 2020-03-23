@@ -5,7 +5,7 @@ import http from './interface'
  * 如果项目很大可以将 url 独立成文件，接口分成不同的模块
  * 
  */
-let headUrl = 'http://server.diziw.cn';  //自己服务器地址 http://server.diziw.cn http://www.diziw.cn
+let headUrl = 'http://www.diziw.cn';  //自己服务器地址 http://server.diziw.cn http://www.diziw.cn
 // 单独导出(测试接口) import {test} from '@/common/vmeitime-http/'
 export const test = (url,data) => {
 	//http.config.baseUrl = "http://server.diziw.cn"
