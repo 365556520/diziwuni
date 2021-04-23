@@ -16,7 +16,7 @@
 				    success: function (res) {
 						if(res.networkType=='none'){
 							uni.showToast({
-								title: '迪子网:连接网络失败，请检查网络！',
+								title: '迪子网:连接网络失败，请检查网络！请联系管理员',
 								icon:'none',
 								mask: true,
 								 duration: 5000
