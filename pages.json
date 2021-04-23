@@ -12,13 +12,13 @@
 			"path": "pages/pages/my",
 			"style": {
 				"navigationBarTextStyle": "white",
-				"navigationBarTitleText": "我的"
+				"navigationBarTitleText": ""
 			}
 		},
 		{
 			"path": "pages/pages/news/news",
 			"style": {
-				"navigationBarTitleText": "关注",
+				"navigationBarTitleText": "动态",
 				"app-plus": {
 					// #ifdef APP-PLUS
 					"titleNView": false,
@@ -97,6 +97,12 @@
 			}
 		},
 		{
+			"path": "pages/index/bus/cuncuntong",
+			"style": {
+				"navigationBarTitleText": "村村通"
+			}
+		},
+		{
 			"path": "pages/index/tkiqrcode",
 			"style": {
 				"navigationBarTitleText": "我的运动"
@@ -109,9 +115,10 @@
 			}
 		}	
 	],
+
 	"tabBar": {
         "borderStyle": "black",
-        "backgroundColor": "#FFFFFF",
+        "backgroundColor": "#ffffff",
         "color": "#C0C4CC",
         "selectedColor": "#fa436a",
         "list": [{
@@ -124,37 +131,24 @@
                 "pagePath": "pages/pages/news/news",
                 "iconPath": "static/img/tabbar/guanzhu.png",
                 "selectedIconPath": "static/img/tabbar/guanzhuactive.png",
-                "text": "关注"
+                "text": "动态"
             },
-            //#ifdef MP-WEIXIN
-            {
-                "pagePath": "pages/pages/menu/tabbar",
-                "iconPath": "static/img/tabbar/add.png",
-                "selectedIconPath": "static/img/tabbar/addactive.png",
-                "text": "发布"
-            },
-            //#endif
-            //#ifndef MP-WEIXIN
-            {
-                "pagePath": "pages/pages/menu/tabbar",
-                "iconPath": "static/img/tabbar/add.png",
-                "selectedIconPath": "static/img/tabbar/addactive.png"
-            },
-            //#endif
-            {
+
+       /*     {
                 "pagePath": "pages/pages/chat/news",
                 "iconPath": "static/img/tabbar/news.png",
                 "selectedIconPath": "static/img/tabbar/newsactive.png",
                 "text": "消息"
-            },
+            }, */
             {
                 "pagePath": "pages/pages/my",
                 "iconPath": "static/img/tabbar/me.png",
                 "selectedIconPath": "static/img/tabbar/meactive.png",
-                "text": "我"
+                "text": "我的"
             }
         ]
     },
+
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "uni-app",

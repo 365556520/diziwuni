@@ -66,6 +66,13 @@
 						icon: 'search'
 					},
 					{
+						title: '村村通',
+						name: 'cuncuntong',
+						route: '/pages/index/bus/cuncuntong',
+						color: 'orange',
+						icon: 'timefill'
+					},
+					{
 						title: '生成二维码',
 						name: 'QRcode',
 						route: '/pages/index/tkiqrcode',
@@ -84,12 +91,6 @@
 						name: 'card',
 						color: 'brown',
 						icon: 'newsfill'
-					},
-					{
-						title: '未开发',
-						name: 'timeline',
-						color: 'orange',
-						icon: 'timefill'
 					},
 				
 				],
