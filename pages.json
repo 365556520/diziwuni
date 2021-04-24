@@ -4,27 +4,27 @@
 			"path": "pages/index/index",
 			"style": {
 				"titleNView":false, //app和5+app取消导航
-				"navigationStyle":"custom",//微信小程序百度小程序取消导航
+				"navigationStyle":"custom",//微信小程序百度小程序取消导航 white是显示custom是不显示
 				"navigationBarTitleText": "主页"
 			}
 		},
 		{
 			"path": "pages/pages/my",
 			"style": {
-				"navigationBarTextStyle": "white",
+				"titleNView": false,
+				"navigationBarTextStyle": "custom",
 				"navigationBarTitleText": ""
 			}
 		},
 		{
 			"path": "pages/pages/news/news",
 			"style": {
-				"navigationBarTitleText": "动态",
+				"navigationBarTitleText": "详细动态",
 				"app-plus": {
-					// #ifdef APP-PLUS
-					"titleNView": false,
-					"navigationBarTextStyle": "white",
-					// #endif
-					"bounce": "none"
+				// #ifdef APP-PLUS
+				"navigationBarTextStyle": "white",
+				// #endif
+				"bounce": "none"
 				}
 			}
 		},
@@ -120,7 +120,7 @@
         "borderStyle": "black",
         "backgroundColor": "#ffffff",
         "color": "#C0C4CC",
-        "selectedColor": "#fa436a",
+        "selectedColor": "#aaaaff",
         "list": [{
                 "pagePath": "pages/index/index",
                 "iconPath": "static/img/tabbar/home.png",
@@ -152,7 +152,7 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#ec706b",
+		"navigationBarBackgroundColor": "#aaaaff",
 		"backgroundColor": "#f8f8f8"
 	},
 	"condition" : { //模式配置，仅开发期间生效

@@ -13,7 +13,7 @@
 			return {
 				webviewStyles: {
                     progress: {
-                        color: '#FF3333'
+                        color: '#aaaaff'
                     }
                 },
 				url:'',

@@ -138,7 +138,7 @@
 		height: 240upx;
 		padding: 20upx;
 		box-sizing: border-box;
-		background-color: #ec706b;
+		background-color: #aaaaff;
 		flex-direction: row;
 		align-items: center;
 	}
