@@ -29,7 +29,7 @@
 			<!-- #endif -->
 			
 			<view class="nav-list">
-				<navigator hover-class='none' :url="item.route" class="nav-li" navigateTo :class="'bg-'+item.color"
+				<navigator  hover-class='none'  :url="item.route" class="nav-li" navigateTo :class="'bg-'+item.color"
 				 :style="[{animation: 'show ' + ((index+1)*0.2+1) + 's 1'}]" v-for="(item,index) in elements" :key="index">
 					<view class="nav-title">{{item.title}}</view>
 					<view class="nav-name">{{item.name}}</view>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-	import {mapState} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
+	import {mapState,mapMutations} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	export default {
 		mounted(){ //这个挂在第一次进入页面后运行一次
 			//#ifndef H5
@@ -137,9 +137,16 @@
 			};
 		},
 		computed: {//数据计算
-		    ...mapState(['userbaidumap']),
+		    ...mapState(['userbaidumap','userToken','userdata']),
 		},
 		methods: {
+			//用vuex里面的方法
+			...mapMutations([
+			    'setToken',
+			    'setName',
+				'getToken',
+				'ifLoginTips'
+			]),
 			  //获天气预报
 			getWeatherForecast(){
 				let this_ = this;
@@ -191,7 +198,7 @@
 						console.log('经度：' + res.longitude);
 					}
 				});
-			}
+			}		
 		}
 }
 </script>

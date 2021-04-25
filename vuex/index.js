@@ -92,7 +92,7 @@ const mutations={
 		}
         return state;
     },
-	//判断用户是否登录
+	//判断用户是否登录 判断用户登录登录返回登录页面
 	ifLogin(state,m){
 		if (state.userToken == "") {
 			uni.showToast({
@@ -105,6 +105,30 @@ const mutations={
 					url: '/pages/pages/auth/login'
 				});
 			}, m);
+		}
+	},
+	//判断用户是否登录 判断用户登录登录返回上一页
+	ifLoginReturn(state,m){
+		if (state.userToken == "") {
+			uni.showToast({
+				title: "请登录账号",
+				icon: 'none',
+				mask: true
+			});
+			setTimeout(function() {
+				uni.navigateBack();
+			}, m);
+			
+		}
+	},
+	//判断用户是否登录 判断用户登录登录值提示 
+	ifLoginTips(state,m){
+		if (state.userToken == "") {
+			uni.showToast({
+				title: "请登录账号",
+				icon: 'none',
+				mask: true
+			});
 		}
 	},
     //下面是测试

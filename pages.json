@@ -12,8 +12,8 @@
 			"path": "pages/pages/my",
 			"style": {
 				"titleNView": false,
-				"navigationBarTextStyle": "custom",
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "我的"
 			}
 		},
 		{
