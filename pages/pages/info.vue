@@ -152,10 +152,11 @@
 					content: ''
 				},
 				switchA: false,
+				islogin: false
 			}
 		},
 		computed:{//数据计算
-		  ...mapState(['userToken']),
+		  ...mapState(['userToken','userdata']),
 		},
 		watch: {
 			date() { //监听日期
@@ -171,8 +172,7 @@
 	
 		},
 		methods: {
-			//用vuex里面的方法
-			...mapMutations(['ifLogin']),
+
 			//是否设置提醒
 			SwitchA(e) {
 				this.switchA = e.detail.value
@@ -186,53 +186,69 @@
 				this.inpt.date = e.detail.value
 			},
 			add(){
-				this.ifLogin(500);//判断是否登录
-				this.infoShow = true;
-				this.inptshow = this.inptshow ? false : true; //切换显示写日记
+				this.ifLogin();//判断是否登录
+				if(this.islogin){
+					this.infoShow = true;
+					this.inptshow = this.inptshow ? false : true; //切换显示写日记
+				}
 			},
 			//写日记
 			addnote() {
-				this.ifLogin(500);//判断是否登录
-				if(this.userToken!=""){
-					if(this.inpt.content!=''){
-						 let data =  {
-							 data:{
-								'title':this.inpt.title,//日记标题
-								'content':this.inpt.content, //内容
-							}
-						 };
-						 if(this.switchA){ //如果不自定义时间就不加时间
-							  data.data.created_at = this.inpt.date+' '+this.inpt.time;
-						 }
-						this.$api.postToken('/api/addNote',this.userToken,data).then((response) => {
-							 let data = JSON.parse(response.data);
-							 if(data.code == '200'){
-								 this.inpt.content = ''; //清空输入框
-								 uni.showToast({
-									 title: data.msg,
-									 icon: 'none',
-									 mask: true
-								 });
-							 }else{
-								 uni.showToast({
-									 title: data.msg,
-									 icon: 'none',
-									 mask: true
-								 });
+				this.ifLogin();//判断是否登录
+				if(this.islogin){
+					if(this.userToken!=""){
+						if(this.inpt.content!=''){
+							 let data =  {
+								 data:{
+									'title':this.inpt.title,//日记标题
+									'content':this.inpt.content, //内容
+								}
+							 };
+							 if(this.switchA){ //如果不自定义时间就不加时间
+								  data.data.created_at = this.inpt.date+' '+this.inpt.time;
 							 }
-							 console.log(data);
-						 }).catch((error) =>{
-							 console.log(error);
-						 });
-					}else {
-						  uni.showToast({
-							 title: "日记不能为空",
-							 icon: 'none',
-							 mask: true
-						 });
-					}
+							this.$api.postToken('/api/addNote',this.userToken,data).then((response) => {
+								 let data = JSON.parse(response.data);
+								 if(data.code == '200'){
+									 this.inpt.content = ''; //清空输入框
+									 uni.showToast({
+										 title: data.msg,
+										 icon: 'none',
+										 mask: true
+									 });
+								 }else{
+									 uni.showToast({
+										 title: data.msg,
+										 icon: 'none',
+										 mask: true
+									 });
+								 }
+								 console.log(data);
+							 }).catch((error) =>{
+								 console.log(error);
+							 });
+						}else {
+							  uni.showToast({
+								 title: "日记不能为空",
+								 icon: 'none',
+								 mask: true
+							 });
+						}
 				}
-				
+				}
+			},
+			ifLogin(){
+				if(this.userdata.hasEnter){
+					this.islogin =true;
+				}else{
+					console.log('未登录');
+					uni.showToast({
+						 title: "未登录",
+						 icon: 'none',
+						 mask: true
+					}); 
+					this.islogin =false;
+				}
 			},
 			//获取单月有备份的日期
 			getMonthNote(year,month){

@@ -29,12 +29,12 @@
 			<!-- #endif -->
 			
 			<view class="nav-list">
-				<navigator  hover-class='none'  :url="item.route" class="nav-li" navigateTo :class="'bg-'+item.color"
+				<view  hover-class='none' @click="isLogin(item)"   class="nav-li" navigateTo :class="'bg-'+item.color"
 				 :style="[{animation: 'show ' + ((index+1)*0.2+1) + 's 1'}]" v-for="(item,index) in elements" :key="index">
 					<view class="nav-title">{{item.title}}</view>
 					<view class="nav-name">{{item.name}}</view>
 					<text :class="'cuIcon-' + item.icon"></text>
-				</navigator>
+				</view>
 			</view>
 			<view class="cu-tabbar-height"></view>
 		</scroll-view>
@@ -56,41 +56,47 @@
 						name: 'busroute',
 						route: '/pages/common/commonurl?url=http://m.diziw.cn/#/RouteBus&title=公交站点&backnav=pages/index/index',
 						color: 'purple',
-						icon: 'location'
+						icon: 'location',
+						isLogin : false
 					},
 					{
 						title: '班线查询 ',
 						name: 'bus',
 						route: '/pages/index/bus/bus',
 						color: 'mauve',
-						icon: 'search'
+						icon: 'search',
+						isLogin : false
 					},
 					{
 						title: '村村通',
 						name: 'cuncuntong',
 						route: '/pages/index/bus/cuncuntong',
 						color: 'orange',
-						icon: 'timefill'
+						icon: 'timefill',
+						isLogin : true
 					},
 					{
 						title: '生成二维码',
 						name: 'QRcode',
 						route: '/pages/index/tkiqrcode',
 						color: 'pink',
-						icon: 'list'
+						icon: 'list',
+						isLogin : false
 					},
 					{
 						title: '日记本',
 						name:  'diary',
 						route: '/pages/pages/info',
 						color: 'cyan',
-						icon: 'formfill'
+						icon: 'formfill',
+						isLogin : false
 					},
 					{
 						title: '关于我们',
 						name: 'card',
 						color: 'brown',
-						icon: 'newsfill'
+						icon: 'newsfill',
+						isLogin : false
 					},
 				
 				],
@@ -133,19 +139,19 @@
 				location:{
 					'longitude':111.47658599066436,
 					'latitude':33.293153982273935
-				}
+				},
 			};
 		},
 		computed: {//数据计算
 		    ...mapState(['userbaidumap','userToken','userdata']),
 		},
 		methods: {
+			
 			//用vuex里面的方法
 			...mapMutations([
 			    'setToken',
 			    'setName',
-				'getToken',
-				'ifLoginTips'
+				'getToken'
 			]),
 			  //获天气预报
 			getWeatherForecast(){
@@ -198,7 +204,27 @@
 						console.log('经度：' + res.longitude);
 					}
 				});
-			}		
+			},
+			//判断菜单是否需要登录才能进入
+			isLogin(datas){
+				if(datas.isLogin){ //判断是否需要登录
+					if(this.userdata.hasEnter){ //判断是否登录
+					  uni.navigateTo({
+					    	url: datas.route
+					    });
+					}else{
+						uni.showToast({
+							title: "未登录，请登录账号！",
+							icon: 'none',
+							mask: true
+						});
+					};
+				}else{
+					uni.navigateTo({
+					    url: datas.route
+					});
+				}
+			}
 		}
 }
 </script>

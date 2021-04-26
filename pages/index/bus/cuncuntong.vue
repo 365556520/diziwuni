@@ -39,7 +39,7 @@
 	export default {
 		mounted(){ //这个挂在第一次进入页面后运行一次
 			this.getToken();  //从缓存中获取token和数据
-			this.ifLoginReturn();
+			this.islogin();
 		},
 		components: {
 			
@@ -71,8 +71,7 @@
 			...mapMutations([
 			    'setToken',
 			    'setName',
-				'getToken',
-				'ifLoginReturn'
+				'getToken'
 			]),
 			//获取用户信息
 			getuserdata(token){
@@ -88,8 +87,14 @@
 					})
 				}
 			},
-			
-		
+			islogin(){
+				if(!this.userdata.hasEnter){
+					uni.redirectTo({
+						url: '/pages/pages/auth/login'
+					});
+					 console.log('未登录');
+				}
+			}
 		}
 	}
 </script>

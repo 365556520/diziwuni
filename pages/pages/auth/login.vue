@@ -14,11 +14,12 @@
 				<button v-if="!correlationShow" class="cu-btn bg-red margin-tb-sm lg" @click="login">登 录</button>
 				<button v-if="correlationShow" class="cu-btn bg-red margin-tb-sm lg" @click="correlation">绑定此账号</button>
 			</view>
-			<view class="action-row">
+		<!-- 	<view class="action-row">
 			    <navigator url="/pages/common/commonurl?url=http://server.diziw.cn/register&title=账号注册&backnav=pages/index/index">注册账号</navigator>
 			    <text>|</text>
 			    <navigator url="/pages/pages/auth/retrieve">忘记密码</navigator>
-			</view> 
+			</view> -->
+
 			<!-- #ifdef APP-PLUS || MP-WEIXIN-->
 			<view class="padding correlation" v-show="!correlationShow">
 				<view class="text-center padding correlation-title">——————— 其他登录方式 ———————</view>
@@ -32,6 +33,9 @@
 				</view>
 			</view>
 			<!-- #endif -->
+			<view>
+				<p class="text-center  correlation-title" style="color: red;">暂未对外开放注册，如果需要账号请联系管理员！</p>
+			</view>
 		</form>
 	</view>
 </template>
@@ -85,7 +89,7 @@
 					//console.log('打印token', userData);
 					if(res.statusCode=='200'){
 						this.successLogin(userData); //登陆成功
-						console.log('打印token', uni.getStorageSync('userToken'));
+						//console.log('打印token', uni.getStorageSync('userToken'));
 					}
 				  //  this.res = '请求结果 : ' + JSON.stringify(res);
 				}).catch((err)=>{
@@ -200,10 +204,8 @@
 					 icon: 'success',
 					 mask: true
 				 });
-				 uni.navigateBack({
-					delta: 1, //返回上一页
-					animationType: 'pop-out', //动画
-					animationDuration: 300 //动画时间
+				 uni.reLaunch({
+					url:'/pages/pages/my',
 				});
 			},
 		}
