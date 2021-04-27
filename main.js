@@ -11,7 +11,7 @@ import store from './vuex'
 // vuex全局挂载后使用
 Vue.prototype.$store = store  
 import cuCustom from '@/components/colorui/components/cu-custom.vue'
-Vue.component('cu-custom',cuCustom)
+Vue.component('cu-custom',cuCustom) 
 const app = new Vue({
 	store,
     ...App

@@ -1,36 +1,6 @@
 <template>
 	<view class="content">
-		<form>
-			<view class="cu-form-group margin-top">
-				<view class="title">村村通账号:</view>
-				<input placeholder="请输入用户名" maxlength=20 name="username" v-model="cuncuntonglogindata.username"></input>
-			</view>
-			<view class="cu-form-group">
-				<view class="title">村村通密码:</view>
-				<input placeholder="请输入密码" name="password" maxlength=20 type="password" v-model="cuncuntonglogindata.password"></input>
-			</view>
-			
-			<view class="padding flex flex-direction">
-				<button v-if="!correlationShow" class="cu-btn bg-red margin-tb-sm lg" @click="login">登 录</button>
-				<button v-if="correlationShow" class="cu-btn bg-red margin-tb-sm lg" @click="correlation">绑定此账号</button>
-			</view>
-			<view class="action-row">
-				<text style="color: #E03997;">请使用GPS村村通账号登录</text>
-			</view> 
-			<!-- #ifdef APP-PLUS || MP-WEIXIN-->
-			<view class="padding correlation" v-show="!correlationShow">
-				<view class="text-center padding correlation-title">——————— 其他登录方式 ———————</view>
-				<view class="oauth-row">
-					<view class="oauth-image" @click="providerlogin('qq')">
-						<image src="../../../static/qq.png" ></image>
-					</view>
-					<view class="oauth-image"  @click="providerlogin('sinaweibo')">
-						<image src="../../../static/sinaweibo.png"  ></image>
-					</view>
-				</view>
-			</view>
-			<!-- #endif -->
-		</form>
+		
 	</view>
 </template>
 
@@ -46,18 +16,6 @@
 		},
 		data() {
 			return {
-				cuncuntonglogindata:{
-					'username':'',
-					'password':''
-				},
-				correlationShow:false,//第三方登录关联显示
-				correlationData:{
-					'nickName':'',
-					'gender':'',
-					'provider_id':'',
-					'provider':'',
-					'avatarUrl':''
-				}
 				
 			}
 		},
@@ -87,6 +45,7 @@
 					})
 				}
 			},
+			//判断用户是否登录
 			islogin(){
 				if(!this.userdata.hasEnter){
 					uni.redirectTo({
