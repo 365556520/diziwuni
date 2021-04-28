@@ -1,6 +1,14 @@
 <template>
 	<view class="content">
-		
+		<view class="charts-box">
+		  <qiun-data-charts
+		    type="column"
+		    :chartData="chartData"
+		    background="none"
+		    :animation="false"
+		    :ontouch="true"
+		  />
+		</view>
 	</view>
 </template>
 
@@ -16,7 +24,41 @@
 		},
 		data() {
 			return {
-				
+				chartData:{
+					"categories": [
+						"1月",
+						"2月",
+						"3月",
+						"4月",
+						"5月",
+						"6月",
+						"7月",
+						"8月",
+						"9月",
+						"10月",
+						"11月",
+						"12月"
+					],
+					"series": [
+						{
+							"name": "总里程",
+							"data": [
+								18,
+								27,
+								21,
+								24,
+								6,
+								128,
+								18,
+								27,
+								21,
+								24,
+								6,
+								128
+							]
+						}
+    ]
+				},
 			}
 		},
 		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
@@ -96,5 +138,10 @@
 	.correlation-title{
 		font-size: 26upx;
 		color: #666666;
+	}
+	
+	.charts-box{
+	  width: 100%;
+	  height:300px;
 	}
 </style>
