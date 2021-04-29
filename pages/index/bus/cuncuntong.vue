@@ -1,14 +1,35 @@
 <template>
 	<view class="content">
-		<view class="charts-box">
-		  <qiun-data-charts
-		    type="column"
-		    :chartData="chartData"
-		    background="none"
-		    :animation="false"
-		    :ontouch="true"
-		  />
+		<view class="cu-bar bg-white solid-bottom margin-top">
+			<view class="action">
+				<text class="cuIcon-titles text-orange "></text> 文章类卡片
+			</view>
+		
 		</view>
+		<view class="cu-card article no-card">
+			<view class="cu-item shadow">
+				<view class="title"><view class="text-cut">2021年全年行驶历程</view></view>
+				<view class="content">
+					
+					<!-- 开启滚动条，需要开启拖动功能，即:ontouch="true" ，微信小程序需要开启canvas2d，否则会很卡，开启2d需要指定canvasId -->
+					
+					<view class="charts-box">
+					  <qiun-data-charts 
+					    type="column"
+					    canvasId="scrollcolumnid"
+						:opts="{enableScroll:true,xAxis:{scrollShow:true,itemCount:8,disableGrid:true}}" 
+						:ontouch="true" :canvas2d="true" 
+						:chartData="chartData"
+						/>
+					</view>
+					
+				</view>
+			</view>
+		</view>
+		
+		
+		
+	
 	</view>
 </template>
 
@@ -41,20 +62,20 @@
 					],
 					"series": [
 						{
-							"name": "总里程",
+							"name": "里程",
 							"data": [
-								18,
-								27,
-								21,
-								24,
-								6,
-								128,
-								18,
-								27,
-								21,
-								24,
-								6,
-								128
+								118,
+								217,
+								211,
+								214,
+								61,
+								7990.25,
+								181,
+								217,
+								121,
+								214,
+								61,
+								1128
 							]
 						}
     ]
@@ -101,47 +122,15 @@
 </script>
 
 <style>
-	.action-row {
-	    display: flex;
-	    flex-direction: row;
-	    justify-content: center;
-	}
-	.action-row navigator {
-	    color: #007aff;
-	    padding: 0 20upx;
-	}
-	.oauth-row {
-		padding-top: 20upx;
-	    display: flex;
-	    flex-direction: row;
-	    justify-content: center;
-	
-	    width: 100%;
-	}
-	.oauth-image {
-	    width: 100upx;
-	    height: 100upx;
-	    border: 1upx solid #dddddd;
-	    border-radius: 100upx;
-	    margin: 0 40upx;
-	    background-color: #ffffff;
+	.content {
+	  background-color: #FFFFFF;
+	  display: flex;
+	  flex-direction: column;
+	  flex: 1;
 	}
 	
-	.oauth-image image {
-	    width: 60upx;
-	    height: 60upx;
-	    margin: 20upx;
-	}
-	.correlation {
-		margin-top: 180upx;
-	}
-	.correlation-title{
-		font-size: 26upx;
-		color: #666666;
-	}
-	
-	.charts-box{
+	.charts-box {
 	  width: 100%;
-	  height:300px;
+	  height: 300px;
 	}
 </style>
