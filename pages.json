@@ -99,6 +99,7 @@
 		{
 			"path": "pages/index/bus/cuncuntong",
 			"style": {
+				"titleNView":false, //app和5+app取消导航
 				"navigationBarTitleText": "村村通"
 			}
 		},
