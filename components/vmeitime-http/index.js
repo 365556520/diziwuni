@@ -6,6 +6,7 @@ import http from './interface'
  * 
  */
 let headUrl = 'http://server.diziw.cn';  //自己服务器地址 http://server.diziw.cn http://www.diziw.cn
+let dayiUrl = "http://123.162.189.21/gps-web/api"; //大一平台服务地址
 // 单独导出(测试接口) import {test} from '@/common/vmeitime-http/'
 export const test = (url,data) => {
 	//http.config.baseUrl = "http://server.diziw.cn"
@@ -98,6 +99,24 @@ export const postToken = (url,token,data='') => {
     })
 }
 
+//大一平台链接
+export const dayinPOst = (url,data='') =>{
+	//设置请求结束后拦截器
+	http.interceptor.response = (response) => {
+		console.log('个性化response....')
+		//判断返回状态 执行相应操作
+		return response;
+	}
+	return http.request({
+		baseUrl: dayiUrl,
+		method: 'POST', 
+	    url: url,
+		dataType: 'text',
+	    data,
+	})
+}
+
+
 // 轮播图
 export const banner = (data) => {
     return http.request({
@@ -114,5 +133,6 @@ export default {
     banner,
 	post,
 	baiduapi,
-	postToken
+	postToken,
+	dayinPOst
 }

@@ -26,7 +26,7 @@
 					<view class="title"><view class="text-cut">2021年行驶历程</view></view>
 					<view class="cu-form-group">
 						<view class="title">日期选择</view>
-						<picker mode="date" :value="date" start="2020-01-01" end="2021-05-01" @change="DateChange">
+						<picker mode="date" :value="date" start="2020" end="2021" @change="DateChange">
 							<view class="picker">
 								{{date}}
 							</view>
@@ -83,7 +83,7 @@
 			return {
 				TabCur: 0,
 				scrollLeft: 0,
-				date: '2020-01-01',
+				date: '2020',
 				chartData:{
 					"categories": [
 						"1月",
@@ -184,6 +184,7 @@
 					 console.log('未登录');
 				}
 			},
+			
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60

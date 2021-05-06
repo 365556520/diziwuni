@@ -72,7 +72,8 @@
 			 //用vuex里面的方法
 			...mapMutations([
 			    'setToken',
-			    'setName'
+			    'setName',
+				'setdayikey'
 				
 			]),
 			/*  if (/^[a-zA-Z0-9]{2,15}$/.test(value))
@@ -89,7 +90,7 @@
 					//console.log('打印token', userData);
 					if(res.statusCode=='200'){
 						this.successLogin(userData); //登陆成功
-						//console.log('打印token', uni.getStorageSync('userToken'));
+						//console.log('打印token', uni.getStorageSync('userToken'))
 					}
 				  //  this.res = '请求结果 : ' + JSON.stringify(res);
 				}).catch((err)=>{
@@ -109,8 +110,26 @@
 						if(res.statusCode=='200'){
 							let user=JSON.parse(res.data);
 							this.setName(user);
+							if(this.userdata.user[0].get_user_data.nickname === "cuncuntong"){ //判断是否是村村通账号
+								this.getdayikey();//获取平台key
+							//	console.log('用户数据信息',this.userdata.user[0].get_user_data);	
+							}
 						}
-						console.log('用户数据信息', res.data);
+					}).catch((err)=>{
+					    console.log('数据请求失败', err);
+					})
+				}
+			},
+			//
+			//获取大一平台的key
+			getdayikey(token){
+				if(this.userToken!=""){
+					this.$api.postToken('/api/getDayiKey',token).then((res)=>{
+						if(res.statusCode=='200'){
+							let dayikey=JSON.parse(res.data);
+							this.setdayikey(dayikey);
+						}
+						//console.log('大一数据信息', res.data);
 					}).catch((err)=>{
 					    console.log('数据请求失败', err);
 					})

@@ -13,7 +13,9 @@ const state={
 			getUserData:{}
 		},//用户信息
         hasEnter:false,//用户登录状态
+		
     },
+	dayikey:{},
     userbaidumap:{
         ak:'LQjsPOAqD3uooTTVrIUePWUm',//百度地图秘钥
         center:{lng: 0, lat: 0},//经纬度
@@ -40,6 +42,16 @@ const mutations={
 			console.log('用户数据信息2',state.userdata);
 		try {
 			uni.setStorageSync('userdata', state.userdata);//存到缓存中
+		} catch (e) {
+			// error
+		}
+    },
+	//设置大一key
+	setdayikey(state,data){
+        state.dayikey = data.data;
+			console.log('大一信息',state.dayikey);
+		try {
+			uni.setStorageSync('dayikey', state.dayikey);//存到缓存中
 		} catch (e) {
 			// error
 		}
