@@ -1,0 +1,11 @@
+登录账号获取sessionId
+http://123.162.189.21/gps-web/api/login.jsp?password=ae38996dc4d1e2a1fdf605cf86613677&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN
+
+
+
+发送信息
+http://123.162.189.21/gps-web/api/send_cmd.jsp?userId=xxfhgj&carId=97420&cmdId=501&cmd=CmdSendText&params={"signBit":"00010000","textMsg":"请系好安全带！"} &userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&appId=android&sessionId=NzM2ZjkzMDQ2OTAxJXh4ZmhnaiVpbnRlcmZhY2UldXNlciV6aF9DTg%3D%3D
+
+获取信息
+http://123.162.189.21/gps-web/api/get_car_list.jsp?teamId=&detail=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&sessionId=NzM2ZjkzMDQ2OTAxJXh4ZmhnaiVpbnRlcmZhY2UldXNlciV6aF9DTg%3D%3D
+
