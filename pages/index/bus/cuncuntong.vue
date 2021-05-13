@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="backText"></block><block slot="content">导航栏</block></cu-custom>
+		<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="backText"></block><block slot="content">村村通</block></cu-custom>
 	
 	
 	
@@ -75,6 +75,7 @@
 		mounted(){ //这个挂在第一次进入页面后运行一次
 			this.getToken();  //从缓存中获取token和数据
 			this.islogin();
+			this.getxinxi();
 		},
 		components: {
 			
@@ -152,7 +153,7 @@
 		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
 		},
 		computed:{//数据计算
-		    ...mapState(['userToken','userdata']),
+		    ...mapState(['userToken','userdata','dayikey']),
 		},
 		methods: {
 			 //用vuex里面的方法
@@ -182,6 +183,22 @@
 						url: '/pages/pages/auth/login'
 					});
 					 console.log('未登录');
+				}
+			},
+			//获取信息
+			getxinxi(){
+				let data = "/get_car_list.jsp?teamId=&detail=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&sessionId="+this.dayikey.sessionId;
+				console.log('cesjoxoa', this.dayikey.sessionId);
+				if(this.userToken!=""){
+					this.$api.dayinGet(data).then((res)=>{
+						if(res.statusCode=='200'){
+							let user=JSON.parse(res.data);
+					
+						}
+						console.log('ceshi', res.data);
+					}).catch((err)=>{
+					    console.log('数据请求失败', err);
+					})
 				}
 			},
 			

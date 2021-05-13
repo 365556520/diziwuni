@@ -77,6 +77,7 @@ const mutations={
 		try {
 			state.userToken = uni.getStorageSync('userToken');//获取本地缓存中的token
 			state.userdata = uni.getStorageSync('userdata');//获取本地缓存中的数据
+			state.dayikey = uni.getStorageSync('dayikey');//获取本地缓存中的大一的数据
 		} catch (e) {
 			// error
 		}

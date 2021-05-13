@@ -100,16 +100,10 @@ export const postToken = (url,token,data='') => {
 }
 
 //大一平台链接
-export const dayinPOst = (url,data='') =>{
-	//设置请求结束后拦截器
-	http.interceptor.response = (response) => {
-		console.log('个性化response....')
-		//判断返回状态 执行相应操作
-		return response;
-	}
+export const dayinGet = (url,data) =>{
+
 	return http.request({
 		baseUrl: dayiUrl,
-		method: 'POST', 
 	    url: url,
 		dataType: 'text',
 	    data,
@@ -134,5 +128,5 @@ export default {
 	post,
 	baiduapi,
 	postToken,
-	dayinPOst
+	dayinGet
 }
