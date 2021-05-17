@@ -187,21 +187,26 @@
 			},
 			//获取信息
 			getxinxi(){
-				let data = "/get_car_list.jsp?teamId=&detail=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&sessionId="+this.dayikey.sessionId;
+				// 查询所有车辆信息  "/get_car_list.jsp?teamId=&detail=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&sessionId="+this.dayikey.sessionId;
+			//	let data = "/get_gps_mile_day.jsp?carId=12716&startDate=20200805&endDate=20200805&userId=xxfhgj&loginType=user&loginWay=android&loginLang=zh_CN&appDevId=&sessionId="+this.dayikey.sessionId
+				let data =  "/search_car.jsp?plate=豫R037TB&video=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&appId=android&sessionId="+this.dayikey.sessionId
 				console.log('cesjoxoa', this.dayikey.sessionId);
 				if(this.userToken!=""){
 					this.$api.dayinGet(data).then((res)=>{
 						if(res.statusCode=='200'){
 							let user=JSON.parse(res.data);
-					
 						}
-						console.log('ceshi', res.data);
+						alert('ceshi',JSON.parse(res.data));
 					}).catch((err)=>{
 					    console.log('数据请求失败', err);
 					})
 				}
 			},
+			//获取当前车辆信息
+			getCarData(){
+				let data =  "/search_car.jsp?plate=豫R037TB&video=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&appId=android&sessionId="+this.dayikey.sessionId
 			
+			},
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
