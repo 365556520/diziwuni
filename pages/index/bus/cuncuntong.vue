@@ -74,7 +74,8 @@
 	export default {
 		mounted(){ //这个挂在第一次进入页面后运行一次
 			this.getToken();  //从缓存中获取token和数据
-			this.islogin();
+			this.islogin();//判断用户登录
+			this.getCarData();//获取车辆数据
 			this.getxinxi();
 		},
 		components: {
@@ -85,6 +86,7 @@
 				TabCur: 0,
 				scrollLeft: 0,
 				date: '2020',
+				carDate:{},
 				chartData:{
 					"categories": [
 						"1月",
@@ -185,27 +187,47 @@
 					 console.log('未登录');
 				}
 			},
-			//获取信息
-			getxinxi(){
-				// 查询所有车辆信息  "/get_car_list.jsp?teamId=&detail=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&sessionId="+this.dayikey.sessionId;
-			//	let data = "/get_gps_mile_day.jsp?carId=12716&startDate=20200805&endDate=20200805&userId=xxfhgj&loginType=user&loginWay=android&loginLang=zh_CN&appDevId=&sessionId="+this.dayikey.sessionId
-				let data =  "/search_car.jsp?plate=豫R037TB&video=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&appId=android&sessionId="+this.dayikey.sessionId
-				console.log('cesjoxoa', this.dayikey.sessionId);
+			//获取当前车辆信息
+			getCarData(){
+				let url =  "/search_car.jsp?plate=豫RD29256&video=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&appId=android&sessionId="+this.dayikey.sessionId
 				if(this.userToken!=""){
-					this.$api.dayinGet(data).then((res)=>{
+					this.$api.dayinGet(url).then((res)=>{
 						if(res.statusCode=='200'){
-							let user=JSON.parse(res.data);
+							let data=JSON.parse(res.data);
+							this.carDate  = data.list[0]; //获取当前车辆数据
+							 console.log('获取当前车辆信息',this.carDate);
 						}
-						alert('ceshi',JSON.parse(res.data));
 					}).catch((err)=>{
 					    console.log('数据请求失败', err);
 					})
 				}
 			},
-			//获取当前车辆信息
-			getCarData(){
-				let data =  "/search_car.jsp?plate=豫R037TB&video=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&appId=android&sessionId="+this.dayikey.sessionId
-			
+			//获取信息
+			getxinxi(){
+				//获取当天时间
+				 let nowDate = new Date()
+				  let date = {
+				    year: nowDate.getFullYear(),
+				    month: nowDate.getMonth() + 1,
+				    date: nowDate.getDate()
+				  }
+				  const newmonth = date.month>10?date.month:'0'+date.month;
+				  const day = date.date>10?date.date:'0'+date.date;
+				 let systemTime = date.year + '' + newmonth + '' + day-1;
+				 console.log('车辆2222',this.carDate);
+				// 查询所有车辆信息  "/get_car_list.jsp?teamId=&detail=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&sessionId="+this.dayikey.sessionId;
+				let url = "/get_gps_mile_day.jsp?carId="+this.carDate['carId']+"&startDate="+ systemTime+"&endDate="+ systemTime+"&userId=xxfhgj&loginType=user&loginWay=android&loginLang=zh_CN&appDevId=&sessionId="+this.dayikey.sessionId
+				if(this.userToken!=""){
+					this.$api.dayinGet(url).then((res)=>{
+						if(res.statusCode=='200'){
+							let data=JSON.parse(res.data);
+						  console.log('获取当天当前车辆信息',res.data);
+						}
+				
+					}).catch((err)=>{
+					    console.log('数据请求失败', err);
+					})
+				}
 			},
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
