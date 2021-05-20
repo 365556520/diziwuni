@@ -16,6 +16,7 @@ const state={
 		
     },
 	dayikey:{},
+	carUserDara:{},
     userbaidumap:{
         ak:'LQjsPOAqD3uooTTVrIUePWUm',//百度地图秘钥
         center:{lng: 0, lat: 0},//经纬度
@@ -49,13 +50,23 @@ const mutations={
 	//设置大一key
 	setdayikey(state,data){
         state.dayikey = data.data;
-			console.log('大一信息',state.dayikey);
+			//console.log('大一信息',state.dayikey);
 		try {
 			uni.setStorageSync('dayikey', state.dayikey);//存到缓存中
 		} catch (e) {
 			// error
 		}
     },
+	//设置大一key
+	setcarUserDara(state,data){
+	    state.carUserDara = data;
+			console.log('车辆信息',state.carUserDara);
+		try {
+			uni.setStorageSync('carUserDara', state.carUserDara);//存到缓存中
+		} catch (e) {
+			// error
+		}
+	},
     //设置当前位置的经纬度
     setMapCenter(state,center){
         state.userbaidumap.center=center;
@@ -78,6 +89,7 @@ const mutations={
 			state.userToken = uni.getStorageSync('userToken');//获取本地缓存中的token
 			state.userdata = uni.getStorageSync('userdata');//获取本地缓存中的数据
 			state.dayikey = uni.getStorageSync('dayikey');//获取本地缓存中的大一的数据
+			state.carUserDara = uni.getStorageSync('carUserDara');//获取本地缓存中车辆数据
 		} catch (e) {
 			// error
 		}
@@ -86,20 +98,21 @@ const mutations={
     //删除用户状态
     deleteUser(state){
 		try {
-			if (state.userToken != ''){
-			    //清空tiken和用户信息
-			    state.userToken = '';
-			    state.userdata = {
-			        user:{
-						id:'',
-						name:'',
-						getUserData:{}
-					},//用户信息
-			        hasEnter:false,//用户登录状态
-			     };
-			}
+			//清空tiken和用户信息
+			state.userToken = '';
+			state.userdata = {
+				user:{
+					id:'',
+					name:'',
+					getUserData:{}
+				},//用户信息
+				hasEnter:false,//用户登录状态
+			 };
+			state.dayikey = {};
 			uni.removeStorageSync('userToken'); //清除本地缓存中的token
 			uni.removeStorageSync('userdata'); //清除本地缓存中的token
+				uni.removeStorageSync('dayikey'); //清除本地缓存中的token
+					uni.removeStorageSync('carUserDara'); //清除本地缓存中的token
 		} catch (e) {
 			// error
 		}

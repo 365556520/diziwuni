@@ -75,7 +75,8 @@
 		mounted(){ //这个挂在第一次进入页面后运行一次
 			this.getToken();  //从缓存中获取token和数据
 			this.islogin();//判断用户登录
-			this.getCarData();//获取车辆数据
+		//	this.getCarData("豫RD29256");//获取车辆数据
+			this.getxinxi(this.carUserDara.carId); //获取当前车辆状态的信息
 		},
 		components: {
 			"carId":''
@@ -154,13 +155,11 @@
 		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
 		},
 		computed:{//数据计算
-		    ...mapState(['userToken','userdata','dayikey']),
+		    ...mapState(['userToken','userdata','dayikey','carUserDara']),
 		},
 		methods: {
 			 //用vuex里面的方法
 			...mapMutations([
-			    'setToken',
-			    'setName',
 				'getToken'
 			]),
 			//判断用户是否登录
@@ -172,23 +171,25 @@
 					 console.log('未登录');
 				}
 			},
-			//获取当前车辆信息
-			getCarData(){
-				let url =  "/search_car.jsp?plate=豫RD29256&video=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&appId=android&sessionId="+this.dayikey.sessionId
-				if(this.userToken!=""){
-					this.$api.dayinGet(url).then((res)=>{
-						if(res.statusCode=='200'){
-							let data=JSON.parse(res.data);
-							this.carDate  = data.list[0]; //获取当前车辆数据	 
-							this.getxinxi(this.carDate.carId); //获取当前车辆状态的信息
-						}
-						console.log('获取当前车辆信息',res.data);
-					}).catch((err)=>{
-					    console.log('数据请求失败', err);
-					})
-					
+	/* 		//获取当前车辆信息
+			getCarData(carName){
+				if(this.dayikey.sessionId!=""){
+					let url =  "/search_car.jsp?plate="+carName+"&video=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&appId=android&sessionId="+this.dayikey.sessionId
+					if(this.userToken!=""){
+						this.$api.dayinGet(url).then((res)=>{
+							if(res.statusCode=='200'){
+								let data=JSON.parse(res.data);
+								this.carDate  = data.list[0]; //获取当前车辆数据	 
+								this.getxinxi(this.carDate.carId); //获取当前车辆状态的信息
+							}
+							console.log('获取当前车辆信息',res.data);
+						}).catch((err)=>{
+						    console.log('数据请求失败', err);
+						})
+						
+					}
 				}
-			},
+			}, */
 			//获取信息当天里程carId 车辆id startTime开始时间，endTime结束时间
 			getxinxi(carId,startTime,endTime){
 				//获取当天时间
@@ -202,21 +203,22 @@
 				  const day = date.date>10?date.date:'0'+date.date;
 				 let systemTime = date.year + '' + newmonth + '' + day;
 				 
-				// 查询所有车辆信息  "/get_car_list.jsp?teamId=&detail=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&sessionId="+this.dayikey.sessionId;
-				let url = "/get_gps_mile_day.jsp?carId="+carId+
-				"&startDate="+ systemTime+
-				"&endDate="+ systemTime+
-				"&userId=xxfhgj&loginType=user&loginWay=android&loginLang=zh_CN&appDevId=&sessionId="+this.dayikey.sessionId
-				if(this.userToken!=""){
-					this.$api.dayinGet(url).then((res)=>{
-						if(res.statusCode=='200'){
-							let data=JSON.parse(res.data);
-						  console.log('获取当天当前车辆信息',res.data);
-						}
-				
-					}).catch((err)=>{
-					    console.log('数据请求失败', err);
-					})
+				if(this.dayikey.sessionId!=""){
+					// 查询所有车辆信息  "/get_car_list.jsp?teamId=&detail=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&sessionId="+this.dayikey.sessionId;
+					let url = "/get_gps_mile_day.jsp?carId="+carId+
+					"&startDate="+ systemTime+
+					"&endDate="+ systemTime+
+					"&userId=xxfhgj&loginType=user&loginWay=android&loginLang=zh_CN&appDevId=&sessionId="+this.dayikey.sessionId
+					if(this.userToken!=""){
+						this.$api.dayinGet(url).then((res)=>{
+							if(res.statusCode=='200'){
+								let data=JSON.parse(res.data);
+							  console.log('获取当天当前车辆信息',res.data);
+							}
+						}).catch((err)=>{
+						    console.log('数据请求失败', err);
+						})
+					}
 				}
 			},
 			tabSelect(e) {

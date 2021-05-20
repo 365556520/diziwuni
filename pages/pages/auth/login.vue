@@ -73,7 +73,8 @@
 			...mapMutations([
 			    'setToken',
 			    'setName',
-				'setdayikey'
+				'setdayikey',
+				'setcarUserDara'
 				
 			]),
 			/*  if (/^[a-zA-Z0-9]{2,15}$/.test(value))
@@ -90,7 +91,7 @@
 					//console.log('打印token', userData);
 					if(res.statusCode=='200'){
 						this.successLogin(userData); //登陆成功
-						//console.log('打印token', uni.getStorageSync('userToken'))
+						console.log('打印tokenssss', res.data)
 					}
 				  //  this.res = '请求结果 : ' + JSON.stringify(res);
 				}).catch((err)=>{
@@ -110,6 +111,7 @@
 						if(res.statusCode=='200'){
 							let user=JSON.parse(res.data);
 							this.setName(user);
+							//console.log('用户数据信息ssssssss',res.data);	
 							if(this.userdata.user[0].get_user_data.nickname === "cuncuntong"){ //判断是否是村村通账号
 								this.getdayikey();//获取平台key
 							//	console.log('用户数据信息',this.userdata.user[0].get_user_data);	
@@ -122,16 +124,32 @@
 			},
 			//
 			//获取大一平台的key
-			getdayikey(token){
+			getdayikey(){
 				if(this.userToken!=""){
-					this.$api.postToken('/api/getDayiKey',token).then((res)=>{
+					this.$api.postToken('/api/getDayiKey',this.userToken).then((res)=>{
 						if(res.statusCode=='200'){
 							let dayikey=JSON.parse(res.data);
-							this.setdayikey(dayikey);
+							this.setdayikey(dayikey); //设置大一登录信息
+							this.getCarData(this.userdata.user[0].name,dayikey.data.sessionId);//如果是驾驶员用户就获取车龄id
 						}
-						//console.log('大一数据信息', res.data);
 					}).catch((err)=>{
 					    console.log('数据请求失败', err);
+					})
+				}
+			},
+			//获取当前车辆信息
+			getCarData(carName,sessionId){
+				let url =  "/search_car.jsp?plate="+carName+"&video=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&appId=android&sessionId="+sessionId
+				if(this.userToken!=""){
+					this.$api.dayinGet(url).then((res)=>{
+						if(res.statusCode=='200'){
+							let data=JSON.parse(res.data);
+							let carDate  = data.list[0]; //获取当前车辆数据	 
+							this.setcarUserDara(carDate);//把车辆信息保存到缓存
+						}
+						console.log('获取当前车辆信息',res.data);
+					}).catch((err)=>{
+						console.log('数据请求失败', err);
 					})
 				}
 			},
@@ -217,7 +235,8 @@
 			successLogin(userData){
 				this.setToken(userData.token);//把token保存到vuex里面
 				 //获取用户信息
-				 this.getuserdata(this.userToken);
+				 //this.getuserdata(this.userToken);
+				 this.getuserdata(userData.token);
 				 uni.showToast({
 					 title: userData.message,
 					 icon: 'success',
