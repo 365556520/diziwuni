@@ -5,13 +5,28 @@
 	
 	
 	<!-- 行驶历程图 -->
-		<view class="cu-bar bg-white solid-bottom margin-top">
+		<view class="cu-bar bg-white solid-bottom margin-top bianju">
 			<view class="action">
-				<text class="cuIcon-titles text-orange "></text> 豫R037TB车辆行驶历程
+				<text class="cuIcon-titles text-orange "></text>{{daycarData.list[0].name}}
+				
 			</view>
 		</view>
 		<view class="cu-card article no-card" >
-		
+			<view class="solids-bottom padding-xs flex align-center">
+				
+				<view class="flex-sub text-center">
+					<view class="solid-bottom text-xl padding">
+						<text class="text-blue text-bold ">{{carUserDara.carName}}</text>
+					</view>
+					<view class="solid-bottom text-xsl ">
+						<text :class="daycarData.list[0].mile>=mileage?'text-green':'text-red'">{{daycarData.list[0].mile}}km</text>
+					</view>
+					<view class="solid-bottom text-xsl ">
+							<text  :class="daycarData.list[0].mile>=mileage?'cuIcon-appreciatefill text-green':'cuIcon-warnfill text-red'"></text>
+					</view>
+					<view >{{daycarData.list[0].mile>=mileage?'今天的里程目标完成。':'今天的里程还没有完成,请继续加油!'}}</view>
+				</view>
+			</view>
 			<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
 				<view class="flex text-center">
 					<view class="cu-item flex-sub" :class="index==TabCur?'text-green cur':''" v-for="(item,index) in 2" :key="index" @tap="tabSelect" :data-id="index">
@@ -86,7 +101,8 @@
 				TabCur: 0,
 				scrollLeft: 0,
 				date: '2020',
-				carDate:{},
+				mileage:80, //默认每天形式里程里程
+				daycarData:{},
 				chartData:{
 					"categories": [
 						"1月",
@@ -171,25 +187,6 @@
 					 console.log('未登录');
 				}
 			},
-	/* 		//获取当前车辆信息
-			getCarData(carName){
-				if(this.dayikey.sessionId!=""){
-					let url =  "/search_car.jsp?plate="+carName+"&video=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&appId=android&sessionId="+this.dayikey.sessionId
-					if(this.userToken!=""){
-						this.$api.dayinGet(url).then((res)=>{
-							if(res.statusCode=='200'){
-								let data=JSON.parse(res.data);
-								this.carDate  = data.list[0]; //获取当前车辆数据	 
-								this.getxinxi(this.carDate.carId); //获取当前车辆状态的信息
-							}
-							console.log('获取当前车辆信息',res.data);
-						}).catch((err)=>{
-						    console.log('数据请求失败', err);
-						})
-						
-					}
-				}
-			}, */
 			//获取信息当天里程carId 车辆id startTime开始时间，endTime结束时间
 			getxinxi(carId,startTime,endTime){
 				//获取当天时间
@@ -212,7 +209,7 @@
 					if(this.userToken!=""){
 						this.$api.dayinGet(url).then((res)=>{
 							if(res.statusCode=='200'){
-								let data=JSON.parse(res.data);
+							 this.daycarData=JSON.parse(res.data);
 							  console.log('获取当天当前车辆信息',res.data);
 							}
 						}).catch((err)=>{
@@ -243,5 +240,8 @@
 	.charts-box {
 	  width: 100%;
 	  height: 300px;
+	}
+	.bianju {
+		margin: 5px;
 	}
 </style>

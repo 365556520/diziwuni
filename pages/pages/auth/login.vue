@@ -139,7 +139,8 @@
 			},
 			//获取当前车辆信息
 			getCarData(carName,sessionId){
-				let url =  "/search_car.jsp?plate="+carName+"&video=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&appId=android&sessionId="+sessionId
+				let url="/search_car.jsp?plate="+carName+
+				"&video=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&appId=&sessionId="+sessionId;
 				if(this.userToken!=""){
 					this.$api.dayinGet(url).then((res)=>{
 						if(res.statusCode=='200'){

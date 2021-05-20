@@ -51,7 +51,7 @@ export const baiduapi = (url,data) => {
         data,
     })
 }
-//post
+//diziw的post
 export const post = (url,data) => {
 	//http.config.baseUrl = "http://server.diziw.cn"
 	//设置请求前拦截器
@@ -74,7 +74,7 @@ export const post = (url,data) => {
         data,
     })
 }
-//带token的请求
+//zidiw带token的请求
 export const postToken = (url,token,data='') => {
 	//http.config.baseUrl = "http://server.diziw.cn"
 	//设置请求前拦截器
@@ -99,11 +99,22 @@ export const postToken = (url,token,data='') => {
     })
 }
 
-//大一平台链接
+//大一平台链接GET链接
 export const dayinGet = (url,data) =>{
-
+	http.interceptor.request = (config) => {
+			config.header = {
+				'Accept':'application/json'
+			}
+		} 
+//设置请求结束后拦截器
+	http.interceptor.response = (response) => {
+		console.log('个性化response....')
+		//判断返回状态 执行相应操作
+		return response;
+	}
 	return http.request({
 		baseUrl: dayiUrl,
+		method: 'GET', 
 	    url: url,
 		dataType: 'text',
 	    data,
