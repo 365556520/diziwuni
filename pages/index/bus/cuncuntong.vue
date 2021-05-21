@@ -6,17 +6,17 @@
 	
 	<!-- 行驶历程图 -->
 		<view class="cu-bar bg-white solid-bottom margin-top bianju">
-			<view class="action">
-				<text class="cuIcon-titles text-orange "></text>{{daycarData.list[0].name}}
-				
+			<view class="action text-xsl"  v-if="daycarData.list">
+				<text class="cuIcon-titles text-orange "></text>
+				<text v-text="carUserDara.carName+'车辆'+daycarData.list['0'].name+'的行驶里程'"> </text>
 			</view>
 		</view>
 		<view class="cu-card article no-card" >
 			<view class="solids-bottom padding-xs flex align-center">
 				
-				<view class="flex-sub text-center">
+			 	<view class="flex-sub text-center"  v-if="daycarData.list"> <!-- 这里判断下daycarData.list就会不会报不存在的错误-->
 					<view class="solid-bottom text-xl padding">
-						<text class="text-blue text-bold ">{{carUserDara.carName}}</text>
+						<text class="text-blue text-bold "></text>
 					</view>
 					<view class="solid-bottom text-xsl ">
 						<text :class="daycarData.list[0].mile>=mileage?'text-green':'text-red'">{{daycarData.list[0].mile}}km</text>
@@ -25,58 +25,41 @@
 							<text  :class="daycarData.list[0].mile>=mileage?'cuIcon-appreciatefill text-green':'cuIcon-warnfill text-red'"></text>
 					</view>
 					<view >{{daycarData.list[0].mile>=mileage?'今天的里程目标完成。':'今天的里程还没有完成,请继续加油!'}}</view>
+				</view> 
+			</view>
+			
+			<view class="cu-bar bg-white solid-bottom margin-top bianju">
+				<view class="action text-xsl" >
+					<text class="cuIcon-titles text-orange "></text>
+					<text >里程查询</text>
 				</view>
 			</view>
-			<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
-				<view class="flex text-center">
-					<view class="cu-item flex-sub" :class="index==TabCur?'text-green cur':''" v-for="(item,index) in 2" :key="index" @tap="tabSelect" :data-id="index">
-						<view v-show="index===0">年总历程</view>
-						<view v-show="index===1">月总历程</view>
-					</view>
-				</view>
-			</scroll-view>
+			<view class=" margin-top ">
 				
-			<view v-for="(item,index) in 2" :key="index" v-if="index==TabCur">
-				<view class="cu-item shadow"  v-show="index===0">
-					<view class="title"><view class="text-cut">2021年行驶历程</view></view>
-					<view class="cu-form-group">
-						<view class="title">日期选择</view>
-						<picker mode="date" :value="date" start="2020" end="2021" @change="DateChange">
-							<view class="picker">
-								{{date}}
-							</view>
-						</picker>
-					</view>
-					<view class="content">
-						<!-- 开启滚动条，需要开启拖动功能，即:ontouch="true" ，微信小程序需要开启canvas2d，否则会很卡，开启2d需要指定canvasId -->
-						<view class="charts-box">
-						  <qiun-data-charts 
-							type="column"
-							canvasId="scrollcolumnid"
-							:opts="{enableScroll:true,xAxis:{scrollShow:true,itemCount:6,disableGrid:true}}" 
-							:ontouch="true" :canvas2d="true" 
-							:chartData="chartData"
-							/>
+				<view class="cu-form-group">
+					<view class="title">选择月份</view>
+					<picker mode="date" :value="startDate" fields="month" start="2021-01" end="2023-10" @change="startDateChange">
+						<view class="picker">
+							{{startDate}}
 						</view>
+					</picker>
+				</view>
+			
+			
+				<view class="content margin-top" >
+					<!-- 开启滚动条，需要开启拖动功能，即:ontouch="true" ，微信小程序需要开启canvas2d，否则会很卡，开启2d需要指定canvasId -->
+					<view class="charts-box">
+					  <qiun-data-charts 
+						type="column"
+						canvasId="scrollcolumnid"
+						:opts="{enableScroll:true,xAxis:{scrollShow:true,itemCount:6,disableGrid:true}}" 
+						:ontouch="true" :canvas2d="true" 
+						:chartData="chartDatayue"
+						/>
 					</view>
 				</view>
-				
-				<view class="cu-item shadow"  v-show="index===1">
-					<view class="title"><view class="text-cut">2021年4月行驶历程</view></view>
-					<view class="content">
-						<!-- 开启滚动条，需要开启拖动功能，即:ontouch="true"，微信小程序需要开启canvas2d，否则会很卡，开启2d需要指定canvasId -->
-						<view class="charts-box">
-						  <qiun-data-charts 
-							  type="line" 
-							  canvasId="scrolllineid" 
-							  :opts="{enableScroll:true,xAxis:{scrollShow:true,itemCount:8,disableGrid:true}}" 
-							  :chartData="chartDatayue" 
-							  :ontouch="true" 
-							  :canvas2d="true"/>
-						</view>
-					</view>
-				</view>
-
+			
+			
 			</view>
 			
 		</view>
@@ -90,8 +73,9 @@
 		mounted(){ //这个挂在第一次进入页面后运行一次
 			this.getToken();  //从缓存中获取token和数据
 			this.islogin();//判断用户登录
+			this.getTime();//获取时间
 		//	this.getCarData("豫RD29256");//获取车辆数据
-			this.getxinxi(this.carUserDara.carId); //获取当前车辆状态的信息
+			this.getxinxi(this.carUserDara.carId,'today',this.today,this.today); //获取当前车辆状态的信息
 		},
 		components: {
 			"carId":''
@@ -100,9 +84,13 @@
 			return {
 				TabCur: 0,
 				scrollLeft: 0,
-				date: '2020',
+				Date: '',
+				today:'',//今天时间
+				startDate:'', //开始查询是按
 				mileage:80, //默认每天形式里程里程
 				daycarData:{},
+				showdangyue:false,
+				showdangnian:false,
 				chartData:{
 					"categories": [
 						"1月",
@@ -187,29 +175,38 @@
 					 console.log('未登录');
 				}
 			},
-			//获取信息当天里程carId 车辆id startTime开始时间，endTime结束时间
-			getxinxi(carId,startTime,endTime){
+			//获取今天日期
+			getTime(){
 				//获取当天时间
 				 let nowDate = new Date()
-				  let date = {
+				  this.date = {
 				    year: nowDate.getFullYear(),
 				    month: nowDate.getMonth() + 1,
 				    date: nowDate.getDate()
 				  }
-				  const newmonth = date.month>10?date.month:'0'+date.month;
-				  const day = date.date>10?date.date:'0'+date.date;
-				 let systemTime = date.year + '' + newmonth + '' + day;
-				 
+				  const newmonth = this.date.month>10?this.date.month:'0'+this.date.month;
+				  const day = this.date.date>10?this.date.date:'0'+this.date.date;
+				this.today = this.date.year + '' + newmonth + '' + day;
+				 this.startDate = this.date.year + '-' + newmonth; //获取当前时间默认开始时间
+			},
+			//获取信息当天里程carId 车辆id startTime开始时间，endTime结束时间
+			getxinxi(carId,type,startTime,endTime){
 				if(this.dayikey.sessionId!=""){
 					// 查询所有车辆信息  "/get_car_list.jsp?teamId=&detail=false&userId=xxfhgj&loginType=user&loginWay=interface&loginLang=zh_CN&appDevId=&sessionId="+this.dayikey.sessionId;
 					let url = "/get_gps_mile_day.jsp?carId="+carId+
-					"&startDate="+ systemTime+
-					"&endDate="+ systemTime+
+					"&startDate="+ startTime+
+					"&endDate="+ endTime+
 					"&userId=xxfhgj&loginType=user&loginWay=android&loginLang=zh_CN&appDevId=&sessionId="+this.dayikey.sessionId
 					if(this.userToken!=""){
 						this.$api.dayinGet(url).then((res)=>{
 							if(res.statusCode=='200'){
-							 this.daycarData=JSON.parse(res.data);
+								if(type === "today"){ //当天
+									 this.daycarData = JSON.parse(res.data);
+								}else if(type == "month"){
+									
+								}else if(type == "year"){
+									
+								}
 							  console.log('获取当天当前车辆信息',res.data);
 							}
 						}).catch((err)=>{
@@ -218,12 +215,9 @@
 					}
 				}
 			},
-			tabSelect(e) {
-				this.TabCur = e.currentTarget.dataset.id;
-				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
-			},
-			DateChange(e) {
-				this.date = e.detail.value
+			startDateChange(e) { //月份选择
+				this.startDate = e.detail.value
+		
 			},
 		}
 	}
