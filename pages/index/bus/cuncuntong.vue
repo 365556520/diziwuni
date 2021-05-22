@@ -11,17 +11,18 @@
 				<text v-text="carUserDara.carName+'车辆'+daycarData.list['0'].name+'的行驶里程'"> </text>
 			</view>
 		</view>
+		
 		<view class="cu-card article no-card" >
-			<view class="solids-bottom padding-xs flex align-center">
+			<view class="padding-xs flex align-center">
 				
 			 	<view class="flex-sub text-center"  v-if="daycarData.list"> <!-- 这里判断下daycarData.list就会不会报不存在的错误-->
-					<view class="solid-bottom text-xl padding">
+					<view class=" text-xl padding">
 						<text class="text-blue text-bold "></text>
 					</view>
-					<view class="solid-bottom text-xsl ">
+					<view class=" text-xsl ">
 						<text :class="daycarData.list[0].mile>=mileage?'text-green':'text-red'">{{daycarData.list[0].mile}}km</text>
 					</view>
-					<view class="solid-bottom text-xsl ">
+					<view class=" text-xsl ">
 							<text  :class="daycarData.list[0].mile>=mileage?'cuIcon-appreciatefill text-green':'cuIcon-warnfill text-red'"></text>
 					</view>
 					<view >{{daycarData.list[0].mile>=mileage?'今天的里程目标完成。':'今天的里程还没有完成,请继续加油!'}}</view>
@@ -35,18 +36,24 @@
 				</view>
 			</view>
 			<view class=" margin-top ">
-				
-				<view class="cu-form-group">
+				<view class="cu-form-group ">
 					<view class="title">选择月份</view>
-					<picker mode="date" :value="startDate" fields="month" start="2021-01" end="2023-10" @change="startDateChange">
+					<picker mode="date" :value="startDate" fields="month" start="2021-01" end="2023-10" @change="startDateChange" :disabled="isdisabled">
 						<view class="picker">
 							{{startDate}}
 						</view>
 					</picker>
+					
 				</view>
-			
-			
-				<view class="content margin-top" >
+		
+			<view class="content margin-top" v-if="showdangyue">
+					<view class="cu-bar bg-white solid-bottom">
+						<view class="action">
+							<text class="cuIcon-title text-red"></text>
+							<text  class="text-blue text-bold ">{{showStartDate[0]+'年'+showStartDate[1]+"日"}}的总里程:{{monthcarData.mile}}</text>
+						</view>
+					</view>
+					
 					<!-- 开启滚动条，需要开启拖动功能，即:ontouch="true" ，微信小程序需要开启canvas2d，否则会很卡，开启2d需要指定canvasId -->
 					<view class="charts-box">
 					  <qiun-data-charts 
@@ -57,11 +64,12 @@
 						:chartData="chartDatayue"
 						/>
 					</view>
-				</view>
-			
-			
 			</view>
-			
+				<view class="text-box" scroll-y="true">
+					<text space="emsp" class="text-orange">{{texts}}</text>
+				</view>
+						
+			</view>
 		</view>
 	<!-- 行驶历程图end -->
 	</view>
@@ -86,46 +94,14 @@
 				scrollLeft: 0,
 				Date: '',
 				today:'',//今天时间
-				startDate:'', //开始查询是按
+				startDate:'', //开始查询月份
+				showStartDate:'', //格式显示日期数组
 				mileage:80, //默认每天形式里程里程
-				daycarData:{},
-				showdangyue:false,
-				showdangnian:false,
-				chartData:{
-					"categories": [
-						"1月",
-						"2月",
-						"3月",
-						"4月",
-						"5月",
-						"6月",
-						"7月",
-						"8月",
-						"9月",
-						"10月",
-						"11月",
-						"12月"
-					],
-					"series": [
-						{
-							"name": "里程",
-							"data": [
-								118,
-								217,
-								211,
-								214,
-								61,
-								7990.25,
-								181,
-								217,
-								121,
-								214,
-								61,
-								1128
-							]
-						}
-					]
-				},
+				daycarData:{},//当天车辆里程信息
+				monthcarData:{},//当月车辆里程信息
+				showdangyue:false,//显示当月面板
+				isdisabled:false,//日期选择开关
+				texts:'   请选择月份可以查询整月的里程信息！',
 				chartDatayue:{
 					"categories": [
 						"1日","2日","3日","4日","5日","6日","7日","8日","9日","10日",
@@ -200,14 +176,15 @@
 					if(this.userToken!=""){
 						this.$api.dayinGet(url).then((res)=>{
 							if(res.statusCode=='200'){
-								if(type === "today"){ //当天
-									 this.daycarData = JSON.parse(res.data);
-								}else if(type == "month"){
-									
-								}else if(type == "year"){
-									
+								let data = JSON.parse(res.data); //把json数据转换成obj
+								if(data.rspCode == '1'){
+									if(type === "today"){ //当天
+										 this.daycarData = data;
+									}else if(type == "month"){
+										this.monthcarData = data;
+									}
 								}
-							  console.log('获取当天当前车辆信息',res.data);
+								console.log('获取当天当前车辆信息', data);
 							}
 						}).catch((err)=>{
 						    console.log('数据请求失败', err);
@@ -216,9 +193,24 @@
 				}
 			},
 			startDateChange(e) { //月份选择
+				if(!this.isdisabled){
+					this.setIsdisabled(true);
+				//	setInterval(this.setIsdisabled(false), 6000);//延迟后执行
+				}
 				this.startDate = e.detail.value
+				this.showStartDate =this.startDate.split('-'); //字符串切割成数组
+				var lastDay= new Date(this.showStartDate[0],this.showStartDate[1],0).getDate();//获取这个月的最后一天
+				let startTime = this.showStartDate[0]+this.showStartDate[1]+"01"; //开始查询时间
+				let entTime = this.showStartDate[0]+this.showStartDate[1]+lastDay; //最后查询时间
+				this.getxinxi(this.carUserDara.carId,'month',startTime,entTime); //获取当前车辆状态的信息
+				this.showdangyue = true;
 		
 			},
+			//设置选择日期是否禁止   
+			setIsdisabled(isdisabled){	//定时器有问题
+				 console.log('ss');
+				this.isdisabled = isdisabled; 
+			}
 		}
 	}
 </script>
