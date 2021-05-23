@@ -43,9 +43,7 @@
 							{{startDate}}
 						</view>
 					</picker>
-					
 				</view>
-		
 			<view class="content margin-top" v-if="showdangyue">
 					<view class="cu-bar bg-white solid-bottom">
 						<view class="action">
@@ -61,7 +59,7 @@
 						canvasId="scrollcolumnid"
 						:opts="{enableScroll:true,xAxis:{scrollShow:true,itemCount:6,disableGrid:true}}" 
 						:ontouch="true" :canvas2d="true" 
-						:chartData="chartDatayue"
+						:chartData="cartDatayue"
 						/>
 					</view>
 			</view>
@@ -92,7 +90,7 @@
 			return {
 				TabCur: 0,
 				scrollLeft: 0,
-				Date: '',
+				date: '',
 				today:'',//今天时间
 				startDate:'', //开始查询月份
 				showStartDate:'', //格式显示日期数组
@@ -101,31 +99,17 @@
 				monthcarData:{},//当月车辆里程信息
 				showdangyue:false,//显示当月面板
 				isdisabled:false,//日期选择开关
-				texts:'   请选择月份可以查询整月的里程信息！',
-				chartDatayue:{
+				texts:'   请选择月份可以查询整月的里程信息！注意：选择月份后需等10秒',
+				timeoutID:'', //定时器ID
+				cartDatayue:{
 					"categories": [
-						"1日","2日","3日","4日","5日","6日","7日","8日","9日","10日",
-						"11日","12日","13日","14日","15日","16日","17日","18日","19日","20日",
-						"21日","22日","23日","24日","25日","26日","27日","28日","29日","30日","31日"
+						
 					],
 					"series": [
 						{
 							"name": "里程",
 							"data": [
-								118,
-								0,
-								211,
-								214,
-								61,
-								990.25,
-								181,
-								217,
-								121,
-								214,
-								61,
-								112,
-								332,
-								120
+								10,
 							]
 						}
 					]
@@ -180,8 +164,10 @@
 								if(data.rspCode == '1'){
 									if(type === "today"){ //当天
 										 this.daycarData = data;
-									}else if(type == "month"){
+									}else if(type == "month"){//月数据
 										this.monthcarData = data;
+										this.setcartDatayue();//格式化数据
+										this.showdangyue = true; //显示前月图表
 									}
 								}
 								console.log('获取当天当前车辆信息', data);
@@ -192,24 +178,39 @@
 					}
 				}
 			},
+			//选择日期
 			startDateChange(e) { //月份选择
 				if(!this.isdisabled){
 					this.setIsdisabled(true);
-				//	setInterval(this.setIsdisabled(false), 6000);//延迟后执行
+					//定时器
+					this.timeoutID = setInterval(() => {
+						this.setIsdisabled(false);
+					}, 10000);//延迟后执行
 				}
-				this.startDate = e.detail.value
+				this.startDate = e.detail.value //显示日期
 				this.showStartDate =this.startDate.split('-'); //字符串切割成数组
 				var lastDay= new Date(this.showStartDate[0],this.showStartDate[1],0).getDate();//获取这个月的最后一天
 				let startTime = this.showStartDate[0]+this.showStartDate[1]+"01"; //开始查询时间
 				let entTime = this.showStartDate[0]+this.showStartDate[1]+lastDay; //最后查询时间
 				this.getxinxi(this.carUserDara.carId,'month',startTime,entTime); //获取当前车辆状态的信息
-				this.showdangyue = true;
-		
 			},
 			//设置选择日期是否禁止   
 			setIsdisabled(isdisabled){	//定时器有问题
-				 console.log('ss');
 				this.isdisabled = isdisabled; 
+				//关闭定时器
+				clearInterval(this.timeoutID);
+			},
+			//图表数据格式
+			setcartDatayue(){
+				for (var i=0;i<this.monthcarData.list.length;i++) {
+					var day = i+1;
+					//判断日期如果时间超过今天就退出
+					if(day>=this.date.date){
+						break;		
+					}
+					this.cartDatayue.categories.push(day+"天");
+					this.cartDatayue.series[0].data[i] = this.monthcarData.list[i].mile;	
+				}
 			}
 		}
 	}

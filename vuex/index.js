@@ -111,8 +111,8 @@ const mutations={
 			state.dayikey = {};
 			uni.removeStorageSync('userToken'); //清除本地缓存中的token
 			uni.removeStorageSync('userdata'); //清除本地缓存中的token
-				uni.removeStorageSync('dayikey'); //清除本地缓存中的token
-					uni.removeStorageSync('carUserDara'); //清除本地缓存中的token
+			uni.removeStorageSync('dayikey'); //清除本地缓存中的token
+			uni.removeStorageSync('carUserDara'); //清除本地缓存中的token
 		} catch (e) {
 			// error
 		}
