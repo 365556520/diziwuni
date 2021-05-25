@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="backText"></block><block slot="content">村村通</block></cu-custom>
+		<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">村村通</block></cu-custom>
 	
 	
 	
@@ -219,7 +219,7 @@
 				   if(value!=''){
 					  this.cartDatayue = value;
 					  isStorage = false; 
-					   console.log('从缓存读取数据');
+					  console.log('从缓存读取数据');
 				   }
 				} catch (e) {
 					 console.log('读取缓存错误', e);

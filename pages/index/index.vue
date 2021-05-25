@@ -8,7 +8,7 @@
 					<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false" objectFit="cover" v-if="item.type=='video'"></video>
 				</swiper-item>
 			</swiper>
-			<!-- #ifndef H5 -->
+			<!-- #ifndef H5  这里醋获取数据没获取到
 			<view class="padding">
 				<view class="text-left padding flex">
 					<text class="text-black text-lg  flex-treble">{{baiduapidate[0].weather_data[0].date}}</text>
@@ -21,7 +21,7 @@
 				</view>
 				<view class="text-left padding"><text class="text-gray  flex-treble ">{{baiduapidate[0].index[0].des}}</text></view>
 			</view>
-			<!-- #endif -->
+			#endif -->
 			<!-- #ifdef H5 -->
 			<view class="padding">
 				<view class="text-left padding">这是h5空的地方还没想好弄啥</view>

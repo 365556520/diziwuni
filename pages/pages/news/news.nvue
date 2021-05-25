@@ -5,18 +5,8 @@
 			https://weex.apache.org/zh/docs/components/slider.html
 		--> 
 		
-		<!-- 标题栏 -->
-		<div class="page-header">
-			<!-- 状态栏占位 -->
-			<div :style="{ height: statusBarHeight }"></div>
-			<div class="page-header-wrapper">
-				<div class="page-header-left">
-					<!-- <text class="logo">Logo</text> -->
-					<text class="logo yticon">{{titles}}</text>
-				</div>
-				
-			</div>
-		</div>
+		
+
 		<!-- uni 官方顶部选项卡组件 -->
 		<uni-tab-bar :drag="true" :tab-bars="tabBars" :tab-index="tabCurrentIndex" @tabChange="tabChange"></uni-tab-bar>
 		
@@ -77,7 +67,6 @@
 		},
 		data(){
 			return {
-				titles: '关注',
 				tabCurrentIndex: 0, //当前选项卡索引
 				scrollLeft: 0, //顶部选项卡左滑距离
 				enableScroll: true,
