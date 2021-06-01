@@ -111,11 +111,9 @@
 						if(res.statusCode=='200'){
 							let user=JSON.parse(res.data);
 							this.setName(user);
-							//console.log('用户数据信息ssssssss',res.data);	
-							if(this.userdata.user[0].get_user_data.nickname === "cuncuntong"){ //判断是否是村村通账号
-								this.getdayikey();//获取平台key
+							this.getdayikey();//获取平台key
 							//	console.log('用户数据信息',this.userdata.user[0].get_user_data);	
-							}
+							
 						}
 					}).catch((err)=>{
 					    console.log('数据请求失败', err);
@@ -131,6 +129,7 @@
 							let dayikey=JSON.parse(res.data);
 							this.setdayikey(dayikey); //设置大一登录信息
 							this.getCarData(this.userdata.user[0].name,dayikey.data.sessionId);//如果是驾驶员用户就获取车龄id
+							console.log('测试数据返回有问题',res.data);
 						}
 					}).catch((err)=>{
 					    console.log('数据请求失败', err);
@@ -154,6 +153,7 @@
 					})
 				}
 			},
+			//第三方登录
 			providerlogin(provider){
 				let this_ =this;
 				uni.login({
