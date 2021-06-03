@@ -149,7 +149,7 @@
 					uni.redirectTo({
 						url: '/pages/pages/auth/login'
 					});
-					 console.log('未登录');
+					console.log('未登录');
 				}
 			},
 			//获取今天日期
@@ -170,15 +170,26 @@
 			},
 			//首次进入页面
 			getdaycardata(){
+				//判断用户是否是村村通车辆用户
+				if(this.userdata.user.parmission.includes('cuncuntong')&&this.userdata.user.parmission.includes('api.user')){
 					this.loadModal = true; //开启加载
-				//	this.getCarData("豫RD29256");//获取车辆数据
-					this.getxinxi(this.carUserDara.carId,'today',this.today,this.today); //获取当前车辆状态的信息
-					setTimeout(()=>{//延迟2秒显示当车辆数据
-						this.loadModal = false; //关闭加载
-						this.showDaycarData = true;  //显示当车辆数据
-						this.daycarDataButton=true; //禁止刷新按钮
-					},1000);
-					setTimeout(()=>{this.daycarDataButton=false},10000);
+					//	this.getCarData("豫RD29256");//获取车辆数据
+						this.getxinxi(this.carUserDara.carId,'today',this.today,this.today); //获取当前车辆状态的信息
+						setTimeout(()=>{//延迟2秒显示当车辆数据
+							this.loadModal = false; //关闭加载
+							this.showDaycarData = true;  //显示当车辆数据
+							this.daycarDataButton=true; //禁止刷新按钮
+						},1000);
+						setTimeout(()=>{this.daycarDataButton=false},10000);
+				}else{
+					//console.log('我是keyu或者是村账号',);
+						uni.showToast({
+							title: "你不是村村通驾驶员用户！",
+							icon: 'none',
+							mask: true
+						});
+					
+				}
 			},
 			//获取信息当天里程carId 车辆id startTime开始时间，endTime结束时间
 			getxinxi(carId,type,startTime,endTime){

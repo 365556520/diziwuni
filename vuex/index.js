@@ -10,7 +10,8 @@ const state={
 			id:'',
 			name:'',
 			headimg:'',
-			getUserData:{}
+			getUserData:{},
+			parmission:{}
 		},//用户信息
         hasEnter:false,//用户登录状态
 		
@@ -40,7 +41,7 @@ const mutations={
     setName(state,data,hasEnter=true){
         state.userdata = data;
 		state.userdata.hasEnter = hasEnter;
-			console.log('用户数据信息2',state.userdata);
+	//		console.log('用户数据信息2',state.userdata);
 		try {
 			uni.setStorageSync('userdata', state.userdata);//存到缓存中
 		} catch (e) {

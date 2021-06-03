@@ -75,7 +75,6 @@
 			    'setName',
 				'setdayikey',
 				'setcarUserDara'
-				
 			]),
 			/*  if (/^[a-zA-Z0-9]{2,15}$/.test(value))
 			*  if (/^[a-zA-Z0-9]{6,15}$/.test(value))
@@ -110,10 +109,20 @@
 					this.$api.postToken('/api/passport',token).then((res)=>{
 						if(res.statusCode=='200'){
 							let user=JSON.parse(res.data);
+							//权限转换为以为数组
+							let parmission =user.user['parmission'];
+							let parmis = [];
+							for (let x in parmission){
+								parmis.push(parmission[x]['name']);
+							}
+							user.user['parmission'] =  parmis; 
+							//用户信息设置本地
 							this.setName(user);
-							this.getdayikey();//获取平台key
-							//	console.log('用户数据信息',this.userdata.user[0].get_user_data);	
-							
+							if(this.userdata.user.parmission.includes('cuncuntong')||this.userdata.user.parmission.includes('keyun')){
+								//console.log('我是keyu或者是村账号',);		
+								this.getdayikey();//获取平台key
+							}
+							//console.log('用户数据信息',	user.user['parmission']);			
 						}
 					}).catch((err)=>{
 					    console.log('数据请求失败', err);
@@ -128,7 +137,9 @@
 						if(res.statusCode=='200'){
 							let dayikey=JSON.parse(res.data);
 							this.setdayikey(dayikey); //设置大一登录信息
-							this.getCarData(this.userdata.user[0].name,dayikey.data.sessionId);//如果是驾驶员用户就获取车龄id
+							if(this.userdata.user.parmission.includes('api.user')){ //普通车辆用户权限
+								this.getCarData(this.userdata.user[0].name,dayikey.data.sessionId);//如果是驾驶员用户就获取车龄id
+							}
 							console.log('测试数据返回有问题',res.data);
 						}
 					}).catch((err)=>{
