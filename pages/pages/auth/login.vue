@@ -43,8 +43,7 @@
 <script>
 	import {mapState,mapMutations,mapGetters} from 'vuex'; //mapState数据计算简化模式mapMutations方法的简化模式写法如下
 	export default {
-		components: {
-			
+		components: {	
 		},
 		data() {
 			return {
@@ -92,7 +91,7 @@
 						this.successLogin(userData); //登陆成功
 						console.log('打印tokenssss', res.data)
 					}
-				  //  this.res = '请求结果 : ' + JSON.stringify(res);
+					//this.res = '请求结果 : ' + JSON.stringify(res);
 				}).catch((err)=>{
 					let data = JSON.parse(err.data);
 					uni.showToast({
@@ -119,6 +118,7 @@
 							//用户信息设置本地
 							this.setName(user);
 							if(this.userdata.user.parmission.includes('cuncuntong')||this.userdata.user.parmission.includes('keyun')){
+								//判断账号是否有村村通和客运权限
 								//console.log('我是keyu或者是村账号',);		
 								this.getdayikey();//获取平台key
 							}
@@ -248,13 +248,13 @@
 				this.setToken(userData.token);//把token保存到vuex里面
 				 //获取用户信息
 				 //this.getuserdata(this.userToken);
-				 this.getuserdata(userData.token);
-				 uni.showToast({
+				this.getuserdata(userData.token);
+				uni.showToast({
 					 title: userData.message,
 					 icon: 'success',
 					 mask: true
-				 });
-				 uni.reLaunch({
+				});
+				uni.reLaunch({
 					url:'/pages/pages/my',
 				});
 			},

@@ -3,7 +3,7 @@
 		<view class="logo" @click="goLogin('/pages/pages/auth/login')" :hover-class="!login ? 'logo-hover' : ''">
 			<image class="logo-img" :src="userdata.hasEnter ? userImgUrl:avatarUrl"></image>
 			<view class="logo-title">
-				<text class="uer-name">Hi，{{userdata.hasEnter ? userdata.user[0].name : '您未登录!'}}</text>
+				<text class="uer-name">Hi，{{userdata.hasEnter ? userdata.user[0].name : '请点击此处登录！'}}</text>
 			</view>
 		</view>
 		<view class="cu-list menu sm-border  margin-top">
@@ -61,7 +61,7 @@
 			...mapState(['userToken','userdata']),
 			userImgUrl:function(){
 				let url = '';
-				if(this.userdata.user[0].headimg!=null){
+				if(this.userdata.user[0].headimg!=""){
 					url = this.userdata.user[0].headimg;
 				}else{
 					url = this.avatarUrl;
