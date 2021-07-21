@@ -24,11 +24,13 @@
 			#endif -->
 			<!-- #ifdef H5 -->
 			<view class="padding">
-				<view class="text-left padding">这是h5空的地方还没想好弄啥</view>
+				<view class="text-left padding"></view>
 			</view>
 			<!-- #endif -->
-			
-			<view class="nav-list">
+			<view class="padding">
+				<view class="text-left padding"></view>
+			</view>
+			<view class="nav-list ">
 				<view  hover-class='none' @click="isLogin(item)"   class="nav-li" navigateTo :class="'bg-'+item.color"
 				 :style="[{animation: 'show ' + ((index+1)*0.2+1) + 's 1'}]" v-for="(item,index) in elements" :key="index">
 					<view class="nav-title">{{item.title}}</view>
@@ -53,8 +55,8 @@
 			return {
 				elements: [{
 						title: '公交站点',
-						name: 'busroute',
-						route: '/pages/common/commonurl?url=http://m.diziw.cn/#/RouteBus&title=公交站点&backnav=pages/index/index',
+						name: 'transit',
+						route:'/pages/common/commonurl?url=http://m.diziw.cn/#/RouteBus&title=公交站点&backnav=pages/index/index',
 						color: 'purple',
 						icon: 'location',
 						isLogin : false

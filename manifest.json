@@ -1,7 +1,7 @@
 {
     "name" : "迪子",
     "appid" : "__UNI__0EA412D",
-    "description" : "信息新闻资讯",
+    "description" : "信息中心",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
@@ -69,7 +69,8 @@
                         "appsecret" : "36a8aa0f631e7621ba5b7fc76c930c1f",
                         "redirect_uri" : "http://www.diziw.cn/auth/weibo/callback"
                     }
-                }
+                },
+                "ad" : {}
             },
             "splashscreen" : {
                 "android" : {

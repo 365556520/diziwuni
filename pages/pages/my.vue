@@ -1,9 +1,11 @@
 <template>
 	<view class="center">
 		<view class="logo" @click="goLogin('/pages/pages/auth/login')" :hover-class="!login ? 'logo-hover' : ''">
-			<image class="logo-img" :src="userdata.hasEnter ? userImgUrl:avatarUrl"></image>
-			<view class="logo-title">
-				<text class="uer-name">Hi，{{userdata.hasEnter ? userdata.user[0].name : '请点击此处登录！'}}</text>
+			<view class="login-info"> 
+				<image class="logo-img" :src="userdata.hasEnter ? userImgUrl:avatarUrl"></image>
+				<view class="logo-title">
+					<text class="uer-name">Hi，{{userdata.hasEnter ? userdata.user[0].name : '请点击此处登录！'}}</text>
+				</view>
 			</view>
 		</view>
 		<view class="cu-list menu sm-border  margin-top">
@@ -135,22 +137,25 @@
 	
 	.logo {
 		width: 750upx;
-		height: 240upx;
-		padding: 20upx;
+		height: 390upx;
+		padding: 30upx;
 		box-sizing: border-box;
 		background-color: #aaaaff;
 		flex-direction: row;
 		align-items: center;
 	}
 	
+	.login-info{
+		margin-top:50upx;
+	}
 	.logo-hover {
 		opacity: 0.8;
 	}
 	
 	.logo-img {
-		width: 150upx;
-		height: 150upx;
-		border-radius: 150upx;
+		width: 200upx;
+		height: 200upx;
+		border-radius: 200upx;
 	}
 	
 	.logo-title {
@@ -164,8 +169,8 @@
 	
 	.uer-name {
 		height: 60upx;
-		line-height: 60upx;
-		font-size: 38upx;
+		line-height: 80upx;
+		font-size: 50upx;
 		color: #FFFFFF;
 	}
 	

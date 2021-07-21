@@ -2,8 +2,6 @@
 	<view class="content">
 		<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">村村通</block></cu-custom>
 	
-	
-	
 	<!-- 行驶历程图 -->
 		<view class="cu-bar bg-white solid-bottom margin-top bianju">
 			<view class="action text-xsl"  v-if="daycarData.list">
@@ -296,10 +294,7 @@
 
 <style>
 	.content {
-	  background-color: #FFFFFF;
-	  display: flex;
-	  flex-direction: column;
-	  flex: 1;
+		height: 400upx;
 	}
 	
 	.charts-box {

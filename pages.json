@@ -43,6 +43,7 @@
 		{
 			"path": "pages/pages/info",
 			"style": {
+				"titleNView":false, //app和5+app取消导航
 				"navigationBarTitleText": "日记"
 			}
 		},
@@ -93,6 +94,7 @@
 		{
 			"path": "pages/index/bus/bus",
 			"style": {
+				"titleNView":false, //app和5+app取消导航
 				"navigationBarTitleText": "班线查询"
 			}
 		},
@@ -106,7 +108,8 @@
 		{
 			"path": "pages/index/tkiqrcode",
 			"style": {
-				"navigationBarTitleText": "我的运动"
+				"titleNView":false, //app和5+app取消导航
+				"navigationBarTitleText": "生成二维码"
 			}
 		},
 		{

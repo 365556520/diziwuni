@@ -1,5 +1,6 @@
 <template>
 	<view class="content ">
+			<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">生成二维码</block></cu-custom>
 			<view class="qrimg">
 				<tki-qrcode
 				ref="qrcode"

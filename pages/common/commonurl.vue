@@ -1,13 +1,22 @@
 <template>
 	<view class="content ">
-		<web-view :webview-styles="webviewStyles" :src="url"></web-view>
+		<cu-custom bgColor="bg-gradual-pink" :isBack="true" ><block slot="content" :v-text="title"></block></cu-custom>
+		<web-view v-if="!loadModal" :webview-styles="webviewStyles" :src="url" ></web-view>
+		
+		<!-- start 加model -->
+			<view class="cu-load load-modal" v-if="loadModal">
+				 <view class="cuIcon-emoji"></view>
+		<!-- 		<image src="/static/logo.png" mode="aspectFit"></image> -->
+				<view class="gray-text">加载中...</view>
+			</view>
+			<!-- end 加model -->	
 	</view>
 </template>
 
 <script>
 	export default {
 		mounted(){
-			
+			this.showloadModal();
 		},
 		data() {
 			return {
@@ -19,6 +28,7 @@
 				url:'',
 				title:'',
 				backnav:1,
+				loadModal:false
 			}
 		},
 		onLoad: function (option) { //获取升一个页面传送过来的url
@@ -46,7 +56,12 @@
 			}
 		},
 		methods: {
-		
+			showloadModal(){
+				this.loadModal = true;
+				setTimeout(()=>{//延迟2秒显示前月图表
+					this.loadModal = false; //关闭加载
+				},3000);
+			}
 		}
 	}
 </script>
