@@ -27,8 +27,11 @@
 				<view class="text-left padding"></view>
 			</view>
 			<!-- #endif -->
-			<view class="padding">
-				<view class="text-left padding"></view>
+			
+			
+			<view class="action text-xl padding" >
+				<text class="cuIcon-titles text-orange "></text>
+				<text >便捷功能</text>
 			</view>
 			<view class="nav-list ">
 				<view  hover-class='none' @click="isLogin(item)"   class="nav-li" navigateTo :class="'bg-'+item.color"
