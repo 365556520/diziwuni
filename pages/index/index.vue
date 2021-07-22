@@ -1,13 +1,7 @@
 <template name="components">
 	<view>
 		<scroll-view scroll-y class="page">
-			<swiper class="screen-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
-			 :autoplay="true" interval="5000" duration="500">
-				<swiper-item v-for="(item,index) in swiperList" :key="index">
-					<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
-					<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false" objectFit="cover" v-if="item.type=='video'"></video>
-				</swiper-item>
-			</swiper>
+			
 			<!-- #ifndef H5  这里醋获取数据没获取到
 			<view class="padding">
 				<view class="text-left padding flex">
@@ -21,17 +15,26 @@
 				</view>
 				<view class="text-left padding"><text class="text-gray  flex-treble ">{{baiduapidate[0].index[0].des}}</text></view>
 			</view>
-			#endif -->
-			<!-- #ifdef H5 -->
-			<view class="padding">
-				<view class="text-left padding"></view>
+			#endif -->			
+			<view class="bg-img  flex align-center" style="background-image: url('/static/tu1.png');height: 600upx;">
+				<view class="padding-xl text-white">
+					
+						 <swiper class="swiper" autoplay="true" interval="1000" duration="500" v-for="(zimu,index) in zimus" :key="index">
+									<swiper-item>
+										<view class="  padding-xs text-xxl text-bold">
+											{{zimu.ch}}
+										</view>
+										<view class="padding-xs text-lg">
+											{{zimu.en}}
+										</view>
+									</swiper-item>
+						</swiper>	
+					
+				</view>
 			</view>
-			<!-- #endif -->
-			
 			
 			<view class="action text-xl padding" >
-				<text class="cuIcon-titles text-orange "></text>
-				<text >便捷功能</text>
+		
 			</view>
 			<view class="nav-list ">
 				<view  hover-class='none' @click="isLogin(item)"   class="nav-li" navigateTo :class="'bg-'+item.color"
@@ -106,41 +109,43 @@
 				
 				],
 				cardCur: 0, 
-				swiperList: [
+				baiduapidate:[], //天气预报数据
+				zimus:[
 					{
-						id: 0,
-						type: 'image',
-						url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big84000.jpg'
-					}, {
-						id: 1,
-						type: 'image',
-						url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big37006.jpg',
-					}, {
-						id: 2,
-						type: 'image',
-						url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big39000.jpg'
-					}, {
-						id: 3,
-						type: 'image',
-						url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg'
-					}, {
-						id: 4,
-						type: 'image',
-						url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big25011.jpg'
-					}, {
-						id: 5,
-						type: 'image',
-						url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big21016.jpg'
-					}, {
-						id: 6,
-						type: 'image',
-						url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big99008.jpg'
+						ch:'如果有一天',
+						en:'If one day'
 					},
-				],
-				dotStyle: true, //轮播图的样式
-				baiduapidate:[
+					{
+						ch:'你越来越沉默',
+						en:'You are mo and more silent'
+					},
+					{
+						ch:'越来越不想说话。',
+						en:"And don't want to talk"
+					},
 					
-				], //天气预报数据
+					{
+						ch:'这不是妥协',
+						en:"It's not compromise"
+					},
+					{
+						ch:'这不是懦弱',
+						en:"It's not cowardice"
+					},
+					{
+						ch:'这意味着看到了很多',
+						en:"It means you're talking a lot of"
+					},
+				
+					{
+						ch:'看清了很多人',
+						en:"	You saw a lot of people"
+					},
+					{
+						ch:'你越来越成熟了',
+						en:"You are more and more mature"
+					},	
+				],
 				location:{
 					'longitude':111.47658599066436,
 					'latitude':33.293153982273935

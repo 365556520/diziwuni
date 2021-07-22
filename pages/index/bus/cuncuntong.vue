@@ -69,17 +69,17 @@
 							/>
 						</view>
 				</view>
-			<!-- 提示语 -->
-			<view class="text-box" scroll-y="true">
-				<text space="emsp" class="text-orange">{{texts}}</text>
-			</view>
-					<!-- start 加model -->
-					<view class="cu-load load-modal" v-if="loadModal">
-						 <view class="cuIcon-emoji"></view>
-				<!-- 		<image src="/static/logo.png" mode="aspectFit"></image> -->
-						<view class="gray-text">加载中...</view>
-					</view>
-					<!-- end 加model -->	
+				<!-- 提示语 -->
+				<view class="text-box" scroll-y="true">
+					<text space="emsp" class="text-orange">{{texts}}</text>
+				</view>
+				<!-- start 加model -->
+				<view class="cu-load load-modal" v-if="loadModal">
+					 <view class="cuIcon-emoji"></view>
+			<!-- 		<image src="/static/logo.png" mode="aspectFit"></image> -->
+					<view class="gray-text">加载中...</view>
+				</view>
+				<!-- end 加model -->	
 			</view>
 		</view>
 	<!-- 行驶历程图end -->
