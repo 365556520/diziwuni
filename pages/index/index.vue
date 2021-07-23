@@ -16,27 +16,30 @@
 				<view class="text-left padding"><text class="text-gray  flex-treble ">{{baiduapidate[0].index[0].des}}</text></view>
 			</view>
 			#endif -->			
-			<view class="bg-img  flex align-center" style="background-image: url('/static/tu1.png');height: 600upx;">
+			<view class="bg-img  flex align-center" style="background-image: url('/static/tu1.png');height: 500upx;">
 				<view class="padding-xl text-white">
-					
-						 <swiper class="swiper" autoplay="true" interval="1000" duration="500" v-for="(zimu,index) in zimus" :key="index">
-									<swiper-item>
-										<view class="  padding-xs text-xxl text-bold">
-											{{zimu.ch}}
-										</view>
-										<view class="padding-xs text-lg">
-											{{zimu.en}}
-										</view>
-									</swiper-item>
+					<view class="padding-xs  text-bold" style="min-width: 550upx;">
+						<swiper class="swiper" autoplay="true" interval="2000" duration="300" >
+							<swiper-item v-for="(zimu,index) in zimus" :key="index">
+								<view  class="text-xxl">
+									{{zimu.ch}}
+								</view>
+								<view  class="padding-xs text-xl">
+									{{zimu.en}}
+								</view>
+							</swiper-item>
 						</swiper>	
-					
+					</view>
 				</view>
 			</view>
-			
-			<view class="action text-xl padding" >
-		
+			<view class="action text-xl padding"></view>
+			<view class="action text-xl padding">
+				<view class="action text-xxl" >
+					<text class="cuIcon-titles text-orange "></text>
+					<text >便捷功能</text>
+				</view>
 			</view>
-			<view class="nav-list ">
+			<view class=" nav-list ">
 				<view  hover-class='none' @click="isLogin(item)"   class="nav-li" navigateTo :class="'bg-'+item.color"
 				 :style="[{animation: 'show ' + ((index+1)*0.2+1) + 's 1'}]" v-for="(item,index) in elements" :key="index">
 					<view class="nav-title">{{item.title}}</view>
@@ -100,7 +103,7 @@
 						isLogin : false
 					},
 					{
-						title: '关于我们',
+						title: '关于',
 						name: 'card',
 						color: 'brown',
 						icon: 'newsfill',
@@ -139,7 +142,7 @@
 				
 					{
 						ch:'看清了很多人',
-						en:"	You saw a lot of people"
+						en:"You saw a lot of people"
 					},
 					{
 						ch:'你越来越成熟了',

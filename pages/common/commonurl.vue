@@ -1,6 +1,6 @@
 <template>
 	<view class="content ">
-		<cu-custom bgColor="bg-gradual-pink" :isBack="true" ><block slot="content" :v-text="title"></block></cu-custom>
+
 		<web-view v-if="!loadModal" :webview-styles="webviewStyles" :src="url" ></web-view>
 		
 		<!-- start 加model -->
