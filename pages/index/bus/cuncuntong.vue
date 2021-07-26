@@ -33,11 +33,13 @@
 				</view> 
 			</view>
 			<!-- end 车辆当日里程信息 -->
+		
 			<view class="cu-bar bg-white solid-bottom margin-top bianju">
 				<view class="action text-xsl" >
 					<text class="cuIcon-titles text-orange "></text>
 					<text >里程查询</text>
 				</view>
+				
 				<view class="action">
 					<view class="cu-form-group ">
 						<view class="title">选择月份</view>
@@ -54,12 +56,11 @@
 						<view class="cu-bar bg-white solid-bottom">
 							<view class="action">
 								<text class="cuIcon-title text-red"></text>
-								<text  class="text-blue text-bold ">{{showStartDate[0]+'年'+showStartDate[1]+"日"}}的总里程:{{monthcarData.mile}}</text>
+								<text  class="text-blue text-bold ">{{showStartDate[0]+'年'+showStartDate[1]+"日"}}的总里程:{{monthzong}}</text>
 							</view>
 						</view>
-						
 						<!-- 开启滚动条，需要开启拖动功能，即:ontouch="true" ，微信小程序需要开启canvas2d，否则会很卡，开启2d需要指定canvasId -->
-						<view class="charts-box">
+						<view class="charts-box" style="height: 500upx;">
 						  <qiun-data-charts 
 							type="column"
 							canvasId="scrollcolumnid"
@@ -70,7 +71,7 @@
 						</view>
 				</view>
 				<!-- 提示语 -->
-				<view class="text-box" scroll-y="true">
+				<view class="text-box margin-top"  style="margin: 10upx;">
 					<text space="emsp" class="text-orange">{{texts}}</text>
 				</view>
 				<!-- start 加model -->
@@ -112,10 +113,11 @@
 				showDaycarData:false, //显示当天信息面板
 				daycarDataButton:false,//刷新按钮的禁止
 				monthcarData:{},//当月车辆里程信息
+				monthzong:'',//当月车辆总里程
 				showdangyue:false,//显示当月面板
 				isdisabled:false,//日期选择开关
 				loadModal: false,//加载modal开关
-				texts:'   请选择月份可以查询整月的里程信息！注意：选择月份后需等10秒',
+				texts:'   选择月份可以查询整月的里程信息！注意：选择月份后需等10秒',
 				timeoutID:'', //定时器ID
 				cartDatayue:{
 					"categories": [
@@ -223,19 +225,26 @@
 				this.loadModal = true; //开启加载
 				this.showStartDate =this.startDate.split('-'); //字符串切割成数组
 				let isStorage = true; 
-				try {	//从缓存中读取数据
-				   const value = uni.getStorageSync(this.startDate); 
-				   if(value!=''){
-					  this.cartDatayue = value;
-					  isStorage = false; 
-					  console.log('从缓存读取数据');
-				   }
-				} catch (e) {
-					 console.log('读取缓存错误', e);
-					 isStorage = true;
-				    // error
+				let tdym = this.date.year + '-0' + this.date.month; //当前的日期
+				if(e.detail.value != tdym){ //判断选择的月份是否是当前岳峰如果不是就从缓存读取
+					try {	//从缓存中读取数据
+					   const value = uni.getStorageSync(this.startDate); 
+					   const monthzongv = uni.getStorageSync(this.startDate+'zong'); 
+					   if(value!=''){
+						  this.cartDatayue = value;
+						  isStorage = false; 
+						  console.log('从缓存读取数据');
+					   }
+					   if(monthzongv!=''){
+						   this.monthzong = monthzongv; 
+						     isStorage = false; 
+					   }
+					} catch (e) {
+						 console.log('读取缓存错误', e);
+						 isStorage = true;
+					    // error
+					}
 				}
-				
 				if(!this.isdisabled){
 					this.setIsdisabled(true);
 					//定时器
@@ -243,6 +252,7 @@
 						this.setIsdisabled(false);
 					}, 2000);//延迟后执行
 				}
+				//服务读取数据
 				if(isStorage){ //如果缓存读取失败就从新从服务器获取数据
 					var lastDay= new Date(this.showStartDate[0],this.showStartDate[1],0).getDate();//获取这个月的最后一天
 					let startTime = this.showStartDate[0]+this.showStartDate[1]+"01"; //开始查询时间
@@ -280,9 +290,12 @@
 					this.cartDatayue.categories.push(day+"日");
 					this.cartDatayue.series[0].data[i] = this.monthcarData.list[i].mile;	
 				}
+				//总里程
+				this.monthzong = this.monthcarData.mile;
 				 //把当月数据存储本地
 				 try {
 				     uni.setStorageSync(this.startDate,this.cartDatayue);
+					 uni.setStorageSync(this.startDate+'zong',this.monthcarData.mile);//存储总里程数
 				 } catch (e) {
 				     // error
 					 console.log('本地存储错误', err);
@@ -294,12 +307,12 @@
 
 <style>
 	.content {
-		height: 400upx;
+	
 	}
 	
 	.charts-box {
 	  width: 100%;
-	  height: 300px;
+	  height: 100%;
 	}
 	.bianju {
 		margin: 5px;

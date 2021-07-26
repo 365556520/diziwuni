@@ -64,6 +64,7 @@
 		{
 			"path": "pages/pages/auth/login",
 			"style": {
+				"titleNView":false, //app和5+app取消导航
 				"navigationBarTitleText": "登录"
 			}
 		},
@@ -76,7 +77,15 @@
 		{
 			"path": "pages/pages/auth/retrieve",
 			"style": {
+				"titleNView":false, //app和5+app取消导航
 				"navigationBarTitleText": "找回密码"
+			}
+		},
+		{
+			"path": "pages/pages/mys/terms",
+			"style": {
+				"titleNView":false, //app和5+app取消导航
+				"navigationBarTitleText": "服务及隐私条款"
 			}
 		},
 		{

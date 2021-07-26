@@ -1,6 +1,6 @@
 <template>
 	<view class="center">
-		<view class="logo" @click="goLogin('/pages/pages/auth/login')" :hover-class="!login ? 'logo-hover' : ''">
+		<view class="logo bg-gradual-pink " @click="goLogin('/pages/pages/auth/login')" :hover-class="!login ? 'logo-hover' : ''">
 			<view class="login-info"> 
 				<image class="logo-img" :src="userdata.hasEnter ? userImgUrl:avatarUrl"></image>
 				<view class="logo-title">
@@ -10,12 +10,12 @@
 		</view>
 		<view class="cu-list menu sm-border  margin-top">
 			<view class="cu-item ">
-				<button class="cu-btn content" open-type="contact">
+				<button class="cu-btn content" open-type="contact" @click="retrieve()">
 					<text class="cuIcon-profile text-grey"></text>
-					<text class="text-grey">账号管理</text>
+					<text class="text-grey">修改密码</text>
 				</button>
 			</view>
-			<view class="cu-item ">
+			<!-- <view class="cu-item ">
 				<button class="cu-btn content" open-type="contact">
 					<text class="cuIcon-markfill text-grey"></text>
 					<text class="text-grey">新消息通知</text>
@@ -23,15 +23,16 @@
 				<view class="action">
 					<view class="cu-tag round bg-orange light">30新消息</view>
 				</view>
-			</view>
-			<view class="cu-item ">
+			</view> -->
+			
+			<!-- <view class="cu-item ">
 				<button class="cu-btn content" open-type="contact">
 					<text class="cuIcon-settings text-grey"></text>
 					<text class="text-grey">设置</text>
 				</button>
-			</view>
+			</view> -->
 			<view class="cu-item ">
-				<button class="cu-btn content" open-type="contact">
+				<button class="cu-btn content" open-type="contact" @click="terms()">
 					<text class="cuIcon-circlefill text-grey"></text>
 					<text class="text-grey">服务条款及隐私</text>
 				</button>
@@ -88,6 +89,18 @@
 					}
 				}
 			},
+			//服务条款和隐私
+			terms(){
+				uni.navigateTo({
+					url: "/pages/pages/mys/terms"
+				});			
+			},
+			//修改密码
+			retrieve(){
+				uni.navigateTo({
+					url: "/pages/pages/auth/retrieve"
+				});			
+			},
 			 //退出用户
 			quitUser(){
 				//用户登录
@@ -140,7 +153,7 @@
 		height: 390upx;
 		padding: 30upx;
 		box-sizing: border-box;
-		background-color: #aaaaff;
+	
 		flex-direction: row;
 		align-items: center;
 	}

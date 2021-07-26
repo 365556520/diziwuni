@@ -1,5 +1,6 @@
 <template>
 	<view class="content">
+		<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">登录</block></cu-custom>
 		<form>
 			<view class="cu-form-group margin-top">
 				<view class="title">账 号 </view>
