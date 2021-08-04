@@ -47,12 +47,12 @@
 				"navigationBarTitleText": "日记"
 			}
 		},
-		{
+	/* 	{
 			"path": "pages/pages/menu/tabbar",
 			"style": {
 				"navigationBarTitleText": "发布"
 			}
-		},
+		}, */
 		{
 			"path": "pages/pages/tabbar/imgs",
 			"style": {}
