@@ -30,8 +30,13 @@
 							<text  :class="daycarData.list[0].mile>=mileage?'cuIcon-appreciatefill text-green':'cuIcon-warnfill text-red'"></text>
 					</view>
 					<view >{{daycarData.list[0].mile>=mileage?'今天的里程目标完成。':'今天的里程还没有完成,请继续加油!'}}</view>
+					<view class="padding flex flex-direction"> 
+						<view><text class="text-red">今天因设么事导致无法完成营运班次可点击下面申请停运一天。</text></view>
+						<button  class="cu-btn bg-green margin-tb-lg lg" @click="addBusesEvent()">停运申请</button>
+					</view>
 				</view> 
 			</view>
+			
 			<!-- end 车辆当日里程信息 -->
 		
 			<view class="cu-bar bg-white solid-bottom margin-top bianju">
@@ -70,6 +75,32 @@
 							/>
 						</view>
 				</view>
+				<!-- 申请停运model -->
+				<view class="cu-modal" :class="modalName?'show':''">
+					<view class="cu-dialog">
+						<view class="cu-bar bg-white justify-end">
+							<view class="content">停运申请</view>
+							<view class="action" @tap="hideModal">
+								<text class="cuIcon-close text-red"></text>
+							</view>
+						</view>
+						<view class="padding-xl">
+							<form>
+								<view class="cu-form-group margin-top">
+									<textarea maxlength="-1"  placeholder="请输入停车原因."></textarea>
+								</view>
+							</form>
+						</view>
+						<view class="cu-bar bg-white justify-end">
+							<view class="action">
+								<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
+								<button class="cu-btn bg-green margin-left" @tap="hideModal">确定</button>
+				
+							</view>
+						</view>
+					</view>
+				</view>
+				<!-- end申请停运model -->
 				<!-- 提示语 -->
 				<view class="text-box margin-top"  style="margin: 10upx;">
 					<text space="emsp" class="text-orange">{{texts}}</text>
@@ -119,6 +150,7 @@
 				loadModal: false,//加载modal开关
 				texts:'   选择月份可以查询整月的里程信息！注意：选择月份后需等10秒',
 				timeoutID:'', //定时器ID
+				modalName: false, //申请停运界面
 				cartDatayue:{
 					"categories": [
 						
@@ -151,6 +183,10 @@
 					});
 					console.log('未登录');
 				}
+			},
+			//添加停运申请
+			addBusesEvent(){
+				this.showModal();
 			},
 			//获取今天日期
 			getTime(){
@@ -300,7 +336,14 @@
 				     // error
 					 console.log('本地存储错误', err);
 				 }
-			}
+			},
+			//Modal显示和隐藏
+			showModal(e) {
+				this.modalName = true;
+			},
+			hideModal(e) {
+				this.modalName = false;
+			},
 		}
 	}
 </script>
