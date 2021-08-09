@@ -219,9 +219,9 @@
 				//获取当天时间
 				  this.nowDate = new Date()
 				  this.date = {
-				    year: nowDate.getFullYear(),
-				    month: nowDate.getMonth() + 1,
-				    date: nowDate.getDate()
+				    year: this.nowDate.getFullYear(),
+				    month: this.nowDate.getMonth() + 1,
+				    date: this.nowDate.getDate()
 				  }
 				const newmonth = this.date.month>10?this.date.month:'0'+this.date.month;
 				const day = this.date.date>10?this.date.date:'0'+this.date.date;
