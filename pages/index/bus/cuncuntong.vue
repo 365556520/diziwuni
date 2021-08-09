@@ -84,12 +84,36 @@
 								<text class="cuIcon-close text-red"></text>
 							</view>
 						</view>
-						<view class="padding-xl">
+						<view class="padding-xl bg-white">
 							<form>
 								<view class="cu-form-group margin-top">
 									<textarea maxlength="-1"  placeholder="请输入停车原因."></textarea>
 								</view>
+							<!--  上传图片 -->
+								<view class="cu-bar bg-white margin-top">
+									<view class="action">
+										图片上传
+									</view>
+									<view class="action">
+										{{imgList.length}}/1
+									</view>
+								</view>
+								<view class="cu-form-group">
+									<view class="grid col-4 grid-square flex-sub">
+										<view class="bg-img" v-for="(item,index) in imgList" :key="index" @tap="ViewImage" :data-url="imgList[index]">
+											<image :src="imgList[index]" mode="aspectFill"></image>
+											<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="index">
+												<text class='cuIcon-close'></text>
+											</view>
+										</view>
+										<view class="solids" @tap="ChooseImage" v-if="imgList.length<1">
+											<text class='cuIcon-cameraadd'></text>
+										</view>
+									</view>
+								</view>
+							<!-- end上传图片 -->
 							</form>
+							
 						</view>
 						<view class="cu-bar bg-white justify-end">
 							<view class="action">
@@ -134,6 +158,7 @@
 			return {
 				TabCur: 0,
 				scrollLeft: 0,
+				nowDate:'',//时间对象
 				date: '',
 				today:'',//今天时间
 				startDate:'', //开始查询月份
@@ -151,6 +176,7 @@
 				texts:'   选择月份可以查询整月的里程信息！注意：选择月份后需等10秒',
 				timeoutID:'', //定时器ID
 				modalName: false, //申请停运界面
+				imgList: [], //图片列表
 				cartDatayue:{
 					"categories": [
 						
@@ -191,7 +217,7 @@
 			//获取今天日期
 			getTime(){
 				//获取当天时间
-				 let nowDate = new Date()
+				  this.nowDate = new Date()
 				  this.date = {
 				    year: nowDate.getFullYear(),
 				    month: nowDate.getMonth() + 1,
@@ -313,6 +339,55 @@
 					this.cartDatayue.categories = [];
 					this.cartDatayue.series[0].data = [];
 				};
+			},
+			//选择上传图片
+			ChooseImage() {
+				uni.chooseImage({
+					count: 1, //默认9
+					sizeType: ["original",'compressed'], //original是原图 可以指定是原图还是压缩图，默认二者都有
+					sourceType: ['album'], //从相册选择
+					success: (res) => {
+						if (this.imgList.length != 0) {
+							this.imgList = this.imgList.concat(res.tempFilePaths)
+						} else {
+							this.imgList = res.tempFilePaths
+						}
+					}
+				});
+			},
+			//显示图片
+			ViewImage(e) {
+				uni.previewImage({
+					urls: this.imgList,
+					current: e.currentTarget.dataset.url
+				});
+			},
+			//删除图片
+			DelImg(e) {
+				this.imgList.splice(e.currentTarget.dataset.index, 1);
+			},
+			//end图片上传
+			//上传到七牛类
+			upqiniu(uploadToken){
+				// 上传类
+				uni.uploadFile({
+					url: 'http://upload-z2.qiniup.com',// 华北的地址，在七牛云中选择对应位置的网址
+					filePath: this.imgList[0],   //这里只上传1个所以是0下标
+					name: 'file',
+					formData: {
+						token: uploadToken,   //上戳token
+						key: 'diziw/busesevent/' + this.nowDate.valueOf()+'.jpg', //文件名称
+					},
+					success: (uploadFileRes) => {  //上传成功都会失败
+						console.log(uploadFileRes);
+					},
+					complete: (res) => { //上传成功和失败都
+						if (res.statusCode === 200) {
+							const name = JSON.parse(res.data).key;
+							this.images[i] = 'https://public.diziw.。cn/' + name;
+						}
+					},
+				})
 			},
 			//图表数据格式存到缓存里面
 			setcartDatayue(){
