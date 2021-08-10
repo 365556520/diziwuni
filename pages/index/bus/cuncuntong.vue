@@ -75,56 +75,6 @@
 							/>
 						</view>
 				</view>
-				<!-- 申请停运model -->
-				<view class="cu-modal" :class="modalName?'show':''">
-					<view class="cu-dialog">
-						<view class="cu-bar bg-white justify-end">
-							<view class="content">停运申请</view>
-							<view class="action" @tap="hideModal">
-								<text class="cuIcon-close text-red"></text>
-							</view>
-						</view>
-						<view class="padding-xl bg-white">
-							<form>
-								<view class="cu-form-group margin-top">
-									<textarea maxlength="-1"  placeholder="请输入停车原因."></textarea>
-								</view>
-							<!--  上传图片 -->
-								<view class="cu-bar bg-white margin-top">
-									<view class="action">
-										图片上传
-									</view>
-									<view class="action">
-										{{imgList.length}}/1
-									</view>
-								</view>
-								<view class="cu-form-group">
-									<view class="grid col-4 grid-square flex-sub">
-										<view class="bg-img" v-for="(item,index) in imgList" :key="index" @tap="ViewImage" :data-url="imgList[index]">
-											<image :src="imgList[index]" mode="aspectFill"></image>
-											<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="index">
-												<text class='cuIcon-close'></text>
-											</view>
-										</view>
-										<view class="solids" @tap="ChooseImage" v-if="imgList.length<1">
-											<text class='cuIcon-cameraadd'></text>
-										</view>
-									</view>
-								</view>
-							<!-- end上传图片 -->
-							</form>
-							
-						</view>
-						<view class="cu-bar bg-white justify-end">
-							<view class="action">
-								<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
-								<button class="cu-btn bg-green margin-left" @tap="hideModal">确定</button>
-				
-							</view>
-						</view>
-					</view>
-				</view>
-				<!-- end申请停运model -->
 				<!-- 提示语 -->
 				<view class="text-box margin-top"  style="margin: 10upx;">
 					<text space="emsp" class="text-orange">{{texts}}</text>
@@ -139,6 +89,57 @@
 			</view>
 		</view>
 	<!-- 行驶历程图end -->
+		<!-- 申请停运model -->
+		<view class="cu-modal" :class="modalName?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">停运申请</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl">
+					<form>
+						 <view class="uni-title uni-common-pl">停车描述</view>
+						<view class="cu-form-group margin-top ">
+							<textarea maxlength="-1"  placeholder="请输入停车原因." @blur="getmiaoshuval"></textarea>
+						</view>
+					<!--  上传图片 -->
+						<view class="cu-bar bg-white margin-top">
+							<view class="action">
+								图片上传
+							</view>
+							<view class="action">
+								{{imgList.length}}/1
+							</view>
+						</view>
+						<view class="cu-form-group">
+							<view class="grid col-4 grid-square flex-sub">
+								<view class="bg-img" v-for="(item,index) in imgList" :key="index" @tap="ViewImage" :data-url="imgList[index]">
+									<image :src="imgList[index]" mode="aspectFill"></image>
+									<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="index">
+										<text class='cuIcon-close'></text>
+									</view>
+								</view>
+								<view class="solids" @tap="ChooseImage" v-if="imgList.length<1">
+									<text class='cuIcon-cameraadd'></text>
+								</view>
+							</view>
+						</view>
+					<!-- end上传图片 -->
+					</form>
+					
+				</view>
+				<view class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
+						<button class="cu-btn bg-green margin-left" @tap="submit">提交</button>
+		
+					</view>
+				</view>
+			</view>
+		</view>
+		<!-- end申请停运model -->
 	</view>
 </template>
 
@@ -175,8 +176,10 @@
 				loadModal: false,//加载modal开关
 				texts:'   选择月份可以查询整月的里程信息！注意：选择月份后需等10秒',
 				timeoutID:'', //定时器ID
-				modalName: false, //申请停运界面
+				modalName: false, //显示？申请停运界面
 				imgList: [], //图片列表
+				imgQiniuUrl:'',//上传图片在七牛的地址
+				miaoshuval:'',//描述的内容
 				cartDatayue:{
 					"categories": [
 						
@@ -368,26 +371,37 @@
 			},
 			//end图片上传
 			//上传到七牛类
-			upqiniu(uploadToken){
-				// 上传类
-				uni.uploadFile({
-					url: 'http://upload-z2.qiniup.com',// 华北的地址，在七牛云中选择对应位置的网址
-					filePath: this.imgList[0],   //这里只上传1个所以是0下标
-					name: 'file',
-					formData: {
-						token: uploadToken,   //上戳token
-						key: 'diziw/busesevent/' + this.nowDate.valueOf()+'.jpg', //文件名称
-					},
-					success: (uploadFileRes) => {  //上传成功都会失败
-						console.log(uploadFileRes);
-					},
-					complete: (res) => { //上传成功和失败都
-						if (res.statusCode === 200) {
-							const name = JSON.parse(res.data).key;
-							this.images[i] = 'https://public.diziw.。cn/' + name;
+			upqiniu(upimg){
+				if(this.userToken!=""){
+					//获取上传token
+					this.$api.postToken('/api/getQiNiuTokenApi',this.userToken).then((res)=>{
+						if(res.statusCode=='200'){
+							let qiniutoken=JSON.parse(res.data);
+							// 上传类
+							uni.uploadFile({
+								url: 'http://upload-z2.qiniup.com',// 华北的地址，在七牛云中选择对应位置的网址
+								filePath: upimg,   //这里只上传1个所以是0下标
+								name: 'file',
+								formData: {
+									token: qiniutoken.data,   //上戳token
+									key: 'diziw/busesevent/' + this.nowDate.valueOf()+'.jpg', //文件名称
+								},
+								success: (uploadFileRes) => {  //上传成功
+									console.log('上传',uploadFileRes);
+								},
+								complete: (re) => { //上传成功和失败都
+									if (re.statusCode === 200) { //上传成功
+										const imagname = JSON.parse(re.data).key;//获取上传的文件名字
+										this.imgQiniuUrl = 'http://public.diziw.cn/' + imagname;  //上传图片的完整地址
+										this.upbuseseventdata();//上传数据到服务器
+									}
+								},
+							})						
 						}
-					},
-				})
+					}).catch((err)=>{
+					    console.log('数据请求失败', err);
+					})
+				}
 			},
 			//图表数据格式存到缓存里面
 			setcartDatayue(){
@@ -416,9 +430,55 @@
 			showModal(e) {
 				this.modalName = true;
 			},
+			//关闭申请停运弹框
 			hideModal(e) {
 				this.modalName = false;
 			},
+			//获取描述输入框的内容
+			getmiaoshuval(e){
+				this.miaoshuval = e.detail.value;
+				console.log(this.miaoshuval);
+			},
+			//上传数据到表单
+			upbuseseventdata(){
+				if(this.imgQiniuUrl!=''&&this.miaoshuval!=''){
+					let data =  {
+						'buses_id':this.carUserDara.carName,//车辆id就是车的名字
+						'content':this.miaoshuval, //申请描述内容
+						'event_photo':this.imgQiniuUrl, //上传图片地址
+						'event_time':this.today,//今天时间
+					}
+					this.$api.postToken('/api/addBusesEvent',this.userToken,data).then((response) => {
+						let data = JSON.parse(response.data);
+					    if(data.code == '200'){
+							this.imgList= [], //图片列表清空
+							this.imgQiniuUrl='',//上传图片在七牛的地址清空
+							this.miaoshuval='',//描述的内容清空
+							uni.showToast({
+								 title: data.msg,
+								 icon: 'none',
+								 mask: true
+							});
+					    }else{
+					        uni.showToast({
+					            title: data.msg,
+					            icon: 'none',
+					            mask: true
+					        });
+					    }
+					    console.log(data);
+					}).catch((error) =>{
+					    console.log(error);
+					});
+				}
+			},
+			//提交停运申请
+			submit(){
+				if(this.miaoshuval!=''){
+					this.upqiniu(this.imgList[0]);  //上传图片并上传服务器上
+				}
+			
+			}
 		}
 	}
 </script>
