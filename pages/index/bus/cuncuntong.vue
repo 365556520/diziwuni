@@ -31,8 +31,8 @@
 					</view>
 					<view >{{daycarData.list[0].mile>=mileage?'今天的里程目标完成。':'今天的里程还没有完成,请继续加油!'}}</view>
 					<view class="padding flex flex-direction"> 
-						<view><text class="text-red">今天因设么事导致无法完成营运班次可点击下面申请停运一天。</text></view>
-						<button  class="cu-btn bg-green margin-tb-lg lg" @click="addBusesEvent()">停运申请</button>
+						<view><text class="text-red">每天只能申请一次。</text></view>
+						<button :disabled="iftingyunbt" class="cu-btn bg-green margin-tb-lg lg" @click="addBusesEvent()">停运申请</button>
 					</view>
 				</view> 
 			</view>
@@ -128,14 +128,12 @@
 						</view>
 					<!-- end上传图片 -->
 					</form>
-					
+					<button :loading='submitloading' class="cu-btn block bg-green  margin-tb-sm lg" @tap="submit">提交</button>
+
+				
 				</view>
 				<view class="cu-bar bg-white justify-end">
-					<view class="action">
-						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
-						<button class="cu-btn bg-green margin-left" @tap="submit">提交</button>
-		
-					</view>
+					
 				</view>
 			</view>
 		</view>
@@ -160,8 +158,9 @@
 				TabCur: 0,
 				scrollLeft: 0,
 				nowDate:'',//时间对象
-				date: '',
+				date: '',//当前时间数组
 				today:'',//今天时间
+				today1:'',
 				startDate:'', //开始查询月份
 				endDate:'',//查询时间选项限制
 				showStartDate:'', //格式显示日期数组
@@ -180,6 +179,8 @@
 				imgList: [], //图片列表
 				imgQiniuUrl:'',//上传图片在七牛的地址
 				miaoshuval:'',//描述的内容
+				iftingyunbt:false ,//停运按钮是否禁用
+				submitloading:false,//状态
 				cartDatayue:{
 					"categories": [
 						
@@ -228,7 +229,8 @@
 				  }
 				const newmonth = this.date.month>10?this.date.month:'0'+this.date.month;
 				const day = this.date.date>10?this.date.date:'0'+this.date.date;
-				this.today = this.date.year + '' + newmonth + '' + day;
+				this.today = this.date.year + '' + newmonth + '' + day;   //时间格式
+				this.today1 = this.date.year + '-' + newmonth + '-' + day;//时间格式2
 				this.startDate = this.date.year + '-' + newmonth; //获取当前时间默认开始时间
 				//获取选择日期限制最后时间
 				this.endDate = this.date.date==1?this.date.year + '-' + this.date.month-1>10?this.date.month:'0'+this.date.month:this.date.year + '-' + newmonth;
@@ -370,39 +372,6 @@
 				this.imgList.splice(e.currentTarget.dataset.index, 1);
 			},
 			//end图片上传
-			//上传到七牛类
-			upqiniu(upimg){
-				if(this.userToken!=""){
-					//获取上传token
-					this.$api.postToken('/api/getQiNiuTokenApi',this.userToken).then((res)=>{
-						if(res.statusCode=='200'){
-							let qiniutoken=JSON.parse(res.data);
-							// 上传类
-							uni.uploadFile({
-								url: 'http://upload-z2.qiniup.com',// 华北的地址，在七牛云中选择对应位置的网址
-								filePath: upimg,   //这里只上传1个所以是0下标
-								name: 'file',
-								formData: {
-									token: qiniutoken.data,   //上戳token
-									key: 'diziw/busesevent/' + this.nowDate.valueOf()+'.jpg', //文件名称
-								},
-								success: (uploadFileRes) => {  //上传成功
-									console.log('上传',uploadFileRes);
-								},
-								complete: (re) => { //上传成功和失败都
-									if (re.statusCode === 200) { //上传成功
-										const imagname = JSON.parse(re.data).key;//获取上传的文件名字
-										this.imgQiniuUrl = 'http://public.diziw.cn/' + imagname;  //上传图片的完整地址
-										this.upbuseseventdata();//上传数据到服务器
-									}
-								},
-							})						
-						}
-					}).catch((err)=>{
-					    console.log('数据请求失败', err);
-					})
-				}
-			},
 			//图表数据格式存到缓存里面
 			setcartDatayue(){
 				this.clearcartDatayue();
@@ -432,12 +401,58 @@
 			},
 			//关闭申请停运弹框
 			hideModal(e) {
+				this.imgList= [], //图片列表清空
+				this.imgQiniuUrl='',//上传图片在七牛的地址清空
+				this.miaoshuval='',//描述的内容清空
 				this.modalName = false;
 			},
 			//获取描述输入框的内容
 			getmiaoshuval(e){
 				this.miaoshuval = e.detail.value;
 				console.log(this.miaoshuval);
+			},
+			//上传到七牛类
+			upqiniu(upimg){
+				if(this.userToken!=""){
+					//获取上传token
+					let buses_id = this.carUserDara.carName;
+					this.$api.postToken('/api/getQiNiuTokenApi',this.userToken,buses_id).then((res)=>{
+						let data = JSON.parse(res.data);
+					 	if(data.code=='200'){
+							// 上传类
+							uni.uploadFile({
+								url: 'http://upload-z2.qiniup.com',// 华北的地址，在七牛云中选择对应位置的网址
+								filePath: upimg,   //这里只上传1个所以是0下标
+								name: 'file',
+								formData: {
+									token: data.data,   //上戳token
+									key: 'diziw/busesevent/' + this.nowDate.valueOf()+'.jpg', //文件名称
+								},
+								success: (uploadFileRes) => {  //上传成功
+									console.log('上传',uploadFileRes);
+								},
+								complete: (re) => { //上传成功和失败都
+									if (re.statusCode === 200) { //上传成功
+										const imagname = JSON.parse(re.data).key;//获取上传的文件名字
+										this.imgQiniuUrl = 'http://public.diziw.cn/' + imagname;  //上传图片的完整地址
+										this.upbuseseventdata();//上传数据到服务器
+									}
+								},
+							})					
+						}else if(data.code=='111'){
+							this.submitloading = false;  //提交等待关闭
+							this.hideModal(); //关闭界面
+							uni.showToast({
+							    title: (data.data),
+							    icon: 'none',
+							    mask: true
+							});
+						}
+					}).catch((err)=>{
+						this.hideModal(); //关闭界面
+					    console.log('数据请求失败', err);
+					})
+				}
 			},
 			//上传数据到表单
 			upbuseseventdata(){
@@ -446,20 +461,21 @@
 						'buses_id':this.carUserDara.carName,//车辆id就是车的名字
 						'content':this.miaoshuval, //申请描述内容
 						'event_photo':this.imgQiniuUrl, //上传图片地址
-						'event_time':this.today,//今天时间
+						'event_time':this.today1,//今天时间
 					}
 					this.$api.postToken('/api/addBusesEvent',this.userToken,data).then((response) => {
 						let data = JSON.parse(response.data);
 					    if(data.code == '200'){
-							this.imgList= [], //图片列表清空
-							this.imgQiniuUrl='',//上传图片在七牛的地址清空
-							this.miaoshuval='',//描述的内容清空
+							this.submitloading = false;  //提交等待关闭
+							this.hideModal(); //关闭界面
 							uni.showToast({
 								 title: data.msg,
 								 icon: 'none',
 								 mask: true
 							});
 					    }else{
+							this.submitloading = false;  //提交等待关闭
+							this.hideModal(); //关闭界面
 					        uni.showToast({
 					            title: data.msg,
 					            icon: 'none',
@@ -468,16 +484,25 @@
 					    }
 					    console.log(data);
 					}).catch((error) =>{
+						this.hideModal(); //关闭界面
+						this.submitloading = false;  //提交等待关闭
 					    console.log(error);
 					});
 				}
 			},
 			//提交停运申请
 			submit(){
-				if(this.miaoshuval!=''){
+				if(this.miaoshuval!=''&&this.imgList.length!=0){
+					this.submitloading = true;  //提交等待
 					this.upqiniu(this.imgList[0]);  //上传图片并上传服务器上
+				}else{
+					this.hideModal(); //关闭界面
+					uni.showToast({
+					    title: '请填原因或添加图片',
+					    icon: 'none',
+					    mask: true
+					});
 				}
-			
 			}
 		}
 	}
