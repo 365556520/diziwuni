@@ -19,26 +19,38 @@
 		<view class="cu-card article no-card" >
 			<!-- strat 车辆当日里程信息 -->
 			<view class="padding-xs flex align-center" v-show="showDaycarData">
-			 	<view class="flex-sub text-center"  v-if="daycarData.list"> <!-- 这里判断下daycarData.list就会不会报不存在的错误-->
+			 	<view class="flex-sub"  v-if="daycarData.list"> <!-- 这里判断下daycarData.list就会不会报不存在的错误-->
 					<view class=" text-xl padding">
 						<text class="text-blue text-bold "></text>
 					</view>
-					<view class=" text-xsl ">
+					<view class=" text-xsl text-center">
 						<text :class="daycarData.list[0].mile>=mileage?'text-green':'text-red'">{{daycarData.list[0].mile}}km</text>
 					</view>
-					<view class=" text-xsl ">
+					<view class=" text-xsl text-center">
 							<text  :class="daycarData.list[0].mile>=mileage?'cuIcon-appreciatefill text-green':'cuIcon-warnfill text-red'"></text>
 					</view>
-					<view >{{daycarData.list[0].mile>=mileage?'今天的里程目标完成。':'今天的里程还没有完成,请继续加油!'}}</view>
+					<view  class="text-center">{{daycarData.list[0].mile>=mileage?'今天的里程目标完成。':'今天的里程还没有完成,请继续加油!'}}</view>
+		
 					<view class="padding flex flex-direction"> 
-						<view><text class="text-red">每天只能申请一次。</text></view>
-						<button :disabled="iftingyunbt" class="cu-btn bg-green margin-tb-lg lg" @click="addBusesEvent()">停运申请</button>
+						<view class="text-center"><text class="text-red">每天只能申请一次。</text></view>
+						<!-- 显示已经申请的停运消息 -->
+						<view class="cu-list menu sm-border card-menu " v-if="ifNotTingyun">
+							<view class="cu-item "  >
+								<view class="content">
+									<text class="text-grey">今日已申请停运</text>
+								</view>
+								<view class="action">
+									<view class="cu-tag round bg-orange light"  @click="delBusesEvent()">删除</view>
+								</view>
+							</view>
+						</view>
+						<!-- 显示已经申请的停运消息 -->
+						<button v-if="!ifNotTingyun"  class="cu-btn bg-green margin-tb-lg lg" @click="addBusesEvent()">停运申请</button>
 					</view>
 				</view> 
 			</view>
-			
 			<!-- end 车辆当日里程信息 -->
-		
+			
 			<view class="cu-bar bg-white solid-bottom margin-top bianju">
 				<view class="action text-xsl" >
 					<text class="cuIcon-titles text-orange "></text>
@@ -100,7 +112,7 @@
 				</view>
 				<view class="padding-xl">
 					<form>
-						 <view class="uni-title uni-common-pl">停车描述</view>
+						 <view class="uni-title uni-common-pl">停车原因</view>
 						<view class="cu-form-group margin-top ">
 							<textarea maxlength="-1"  placeholder="请输入停车原因." @blur="getmiaoshuval"></textarea>
 						</view>
@@ -129,12 +141,8 @@
 					<!-- end上传图片 -->
 					</form>
 					<button :loading='submitloading' class="cu-btn block bg-green  margin-tb-sm lg" @tap="submit">提交</button>
-
-				
 				</view>
-				<view class="cu-bar bg-white justify-end">
-					
-				</view>
+			
 			</view>
 		</view>
 		<!-- end申请停运model -->
@@ -179,8 +187,9 @@
 				imgList: [], //图片列表
 				imgQiniuUrl:'',//上传图片在七牛的地址
 				miaoshuval:'',//描述的内容
-				iftingyunbt:false ,//停运按钮是否禁用
 				submitloading:false,//状态
+				ifNotTingyun:false,//判断是否已经申请和停运按钮是否禁用
+				buseseventId:'',//申请停运的ID
 				cartDatayue:{
 					"categories": [
 						
@@ -240,14 +249,14 @@
 				//判断用户是否是村村通车辆用户
 				if(this.userdata.user.parmission.includes('cuncuntong')&&this.userdata.user.parmission.includes('api.user')){
 					this.loadModal = true; //开启加载
-					//	this.getCarData("豫RD29256");//获取车辆数据
-						this.getxinxi(this.carUserDara.carId,'today',this.today,this.today); //获取当前车辆状态的信息
-						setTimeout(()=>{//延迟2秒显示当车辆数据
-							this.loadModal = false; //关闭加载
-							this.showDaycarData = true;  //显示当车辆数据
-							this.daycarDataButton=true; //禁止刷新按钮
-						},1000);
-						setTimeout(()=>{this.daycarDataButton=false},10000);
+					this.getTodayBusesevent();  //获取车辆当天是否有请假停车
+					this.getxinxi(this.carUserDara.carId,'today',this.today,this.today); //获取当前车辆状态的信息
+					setTimeout(()=>{//延迟2秒显示当车辆数据
+						this.loadModal = false; //关闭加载
+						this.showDaycarData = true;  //显示当车辆数据
+						this.daycarDataButton=true; //禁止刷新按钮
+					},1000);
+					setTimeout(()=>{this.daycarDataButton=false},10000);
 				}else{
 					//console.log('我是keyu或者是村账号',);
 						uni.showToast({
@@ -257,6 +266,37 @@
 						});
 					
 				}
+			},
+			//获取车申请停运？
+			getTodayBusesevent(){
+				let buses_id  = this.carUserDara.carName;
+				this.$api.test('/api/getTodayBusesEvent/',buses_id).then((res) => {
+					let Busesevent =  JSON.parse(res.data); 
+					console.log('服务器得到数据',Busesevent);
+					if(Busesevent.code == 200){
+						this.ifNotTingyun = true;
+						this.buseseventId = Busesevent.data;  
+					}else if(Busesevent.code == 400){
+						this.ifNotTingyun = false;
+						this.buseseventId = '';
+					}
+				});
+			},
+			//删除今天停运申请
+			delBusesEvent(){
+			
+				this.$api.postToken('/api/delTodayBusesEvent/'+this.buseseventId+'/',this.userToken).then((res) => {
+				 	let Busesevent =  JSON.parse(res.data); 
+					console.log('服务器得到数据',Busesevent);
+					if(Busesevent.code == 200){
+						this.ifNotTingyun = false;
+						this.buseseventId = '';
+					}else if(Busesevent.code == 400){
+						this.ifNotTingyun = true;
+					} 
+				}).catch((err)=>{
+					    console.log('数据请求失败', err);
+				});
 			},
 			//获取信息当天里程carId 车辆id startTime开始时间，endTime结束时间
 			getxinxi(carId,type,startTime,endTime){
@@ -419,7 +459,7 @@
 					this.$api.postToken('/api/getQiNiuTokenApi',this.userToken,buses_id).then((res)=>{
 						let data = JSON.parse(res.data);
 					 	if(data.code=='200'){
-							// 上传类
+							// 上传七牛
 							uni.uploadFile({
 								url: 'http://upload-z2.qiniup.com',// 华北的地址，在七牛云中选择对应位置的网址
 								filePath: upimg,   //这里只上传1个所以是0下标
@@ -439,7 +479,7 @@
 									}
 								},
 							})					
-						}else if(data.code=='111'){
+						}else if(data.code=='111'){  //表示今天已经提交过
 							this.submitloading = false;  //提交等待关闭
 							this.hideModal(); //关闭界面
 							uni.showToast({
@@ -473,6 +513,7 @@
 								 icon: 'none',
 								 mask: true
 							});
+							this.getTodayBusesevent();  //获取车辆当天是否有请假停车
 					    }else{
 							this.submitloading = false;  //提交等待关闭
 							this.hideModal(); //关闭界面
