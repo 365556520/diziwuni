@@ -329,8 +329,10 @@
 		margin-left: 20px;
 	}
 	.img-list{
+		/* #ifndef APP-PLUS-NVUE */
 		flex-shrink: 0;
 		flex-direction: row;
+		/* #endif */
 		background-color: #fff;
 		width: 220px;
 		height: 140px;
