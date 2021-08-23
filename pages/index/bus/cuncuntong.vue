@@ -1,6 +1,8 @@
 <template>
 	<view class="content">
-		<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">村村通</block></cu-custom>
+		<!-- #ifdef H5 || APP-PLUS -->	
+			<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">村村通</block></cu-custom>
+		<!-- #endif -->
 	
 	<!-- 行驶历程图 -->
 		<view class="cu-bar bg-white solid-bottom margin-top bianju">

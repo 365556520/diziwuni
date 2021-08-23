@@ -1,6 +1,9 @@
 <template>
 	<view class="content ">
-		<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">修改密码</block></cu-custom>
+		<!-- #ifdef H5 || APP-PLUS -->
+				<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">修改密码</block></cu-custom>
+		<!-- #endif -->
+
 		<view class="bg-white padding">
 			<view class="cu-steps" >
 				<view class="cu-item" :class="index>num?'':'text-blue'" v-for="(item,index) in numList" :key="index">

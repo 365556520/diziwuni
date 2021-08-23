@@ -1,6 +1,9 @@
 <template>
 	<view class="content ">
-		<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">城乡联营客车</block></cu-custom>
+		<!-- #ifdef H5 || APP-PLUS -->
+				<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">城乡联营客车</block></cu-custom>
+		<!-- #endif -->
+
 		<form>
 			<view class="cu-form-group margin-top">
 				<view class="title">出发</view>

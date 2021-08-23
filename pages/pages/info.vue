@@ -1,6 +1,9 @@
 <template>
 	<view class="calendar-content-active" >
-		<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">记事本</block></cu-custom>
+		<!-- #ifdef H5 || APP-PLUS -->	
+			<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">记事本</block></cu-custom>
+		<!-- #endif -->
+
 			
 		<view class="example-info">
 			<view>{{ timeData.year + '年' + timeData.month + '月' + timeData.date + '日 （' + timeData.lunar.astro + ')' }}</view>

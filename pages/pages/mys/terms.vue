@@ -1,6 +1,9 @@
 <template>
 	<view class="content ">
-		<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">软件服务及隐私条款</block></cu-custom>
+		<!-- #ifdef H5 || APP-PLUS -->	
+			<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">软件服务及隐私条款</block></cu-custom>
+		<!-- #endif -->
+	
 		<view class="text-content">
 			<rich-text :nodes="strings"></rich-text>
 		</view>

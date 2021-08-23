@@ -1,6 +1,9 @@
 <template>
 	<view class="content ">
-			<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">生成二维码</block></cu-custom>
+		<!-- #ifdef H5 || APP-PLUS -->
+					<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">生成二维码</block></cu-custom>
+		<!-- #endif -->
+
 			<view class="qrimg">
 				<tki-qrcode
 				ref="qrcode"
