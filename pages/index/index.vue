@@ -16,7 +16,7 @@
 				<view class="text-left padding"><text class="text-gray  flex-treble ">{{baiduapidate[0].index[0].des}}</text></view>
 			</view>
 			#endif -->			
-			<view class="bg-img  flex align-center" style="background-image: url('/static/tu1.png');height: 500upx;">
+			<view class="bg-img  flex align-center" style="background-image: url('http://public.diziw.cn/wixinapp/tu1.png');height: 500upx;">
 				<view class="padding-xl text-white">
 					<view class="padding-xs  text-bold" style="min-width: 550upx;">
 						<swiper class="swiper" autoplay="true" interval="2000" duration="300" >
