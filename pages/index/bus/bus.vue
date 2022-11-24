@@ -3,7 +3,6 @@
 		<!-- #ifdef H5 || APP-PLUS -->
 				<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">线路查询</block></cu-custom>
 		<!-- #endif -->
-		
 		<scroll-view scroll-x class="bg-red nav text-center">
 			<view class="cu-item " :class="TabCur==0?'text-white cur':''"   @tap="tabSelect" :data-id="0">
 				村村通公交
