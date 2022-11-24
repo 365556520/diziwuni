@@ -1,56 +1,99 @@
 <template>
 	<view class="content ">
 		<!-- #ifdef H5 || APP-PLUS -->
-				<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">城乡联营客车</block></cu-custom>
+				<cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="content">线路查询</block></cu-custom>
 		<!-- #endif -->
-
-		<form>
-			<view class="cu-form-group margin-top">
-				<view class="title">出发</view>
-				<picker @change="PickerChangestart" :value="startindex" :range="start">
-					<view class="picker">
-						{{startindex>-1?start[startindex]:'请选择出发地'}}
-					</view>
-				</picker>
+		
+		<scroll-view scroll-x class="bg-red nav text-center">
+			<view class="cu-item " :class="TabCur==0?'text-white cur':''"   @tap="tabSelect" :data-id="0">
+				村村通公交
 			</view>
-				<view class="cu-form-group ">
-				<view class="title">终点</view>
-				<picker @change="PickerChangeend" :value="endindex" :range="end">
-					<view class="picker">
-						{{endindex>-1?end[endindex]:'请选择目的地'}}
-					</view>
-				</picker>
+			<view class="cu-item " :class="TabCur==1?'text-white cur':''"  @tap="tabSelect" :data-id="1">
+				城乡联营公交
 			</view>
-			<view class="padding flex flex-direction">
-					<button class="cu-btn bg-red margin-tb-sm lg" @click="search"><text class="cuIcon-search"></text> 查询</button>
-			</view>
-		</form>
-		<view  v-for="v in busdata" :key="v.id"  >
-			<view class="solids-bottom padding-xs flex align-center">
-				<view class="flex-sub text-center">
-					<view class="padding"><text class="text-bold text-red">线路:{{v.buses_start}}→{{v.buses_midway}}→{{v.buses_end}} </text></view>
-					<view class="solid-bottom text-sm padding" v-for="vl in v.get_buses" :key="vl.id"  >
-						<view class="flex    ">
-							<view class="flex-treble  padding-sm margin-xs radius text-orange">{{vl.buses_name}}</view>
-							<view class="flex-treble  padding-sm margin-xs radius text-cyan"><text  @click="mymakePhoneCall(vl.buses_phone)">电话:{{vl.buses_phone}}</text></view>
+		</scroll-view>
+		<view   v-if="TabCur==0" class=" padding margin ">
+			<div v-for="vr in cuncuntongbusdata " :key="vr.id">
+				<view class="solids-bottom padding-xs flex align-center">
+					<view class="flex-sub" >
+						<view class="padding">
+						<text class="text-bold text-red  text-center">
+							{{vr.get_buses_route.buses_start}}-{{vr.get_buses_route.buses_end}}
+						</text>
 						</view>
-						<view class="flex    ">
-							<view class="flex-treble  padding-sm margin-xs radius"> <text class="text-grey">发车时间:{{vl.buses_start_date}}</text> </view>
-							<view class="flex-treble  padding-sm margin-xs radius"><text class="text-grey">返回时间:{{vl.buses_end_date}}</text>  </view>
+						<view class="solid-bottom text-sm padding"  >
+							<view class="flex  ">
+								<text class="text-bold text-red">
+								中途经过：{{vr.get_buses_route.buses_midway}}
+								</text>
+								
+							</view>
+							<view class="flex  ">
+								<view class="flex-treble padding-sm   margin-xs radius text-orange ">车号：{{vr.buses_name}}</view>
+								<view class="flex-treble  padding-sm margin-xs radius text-cyan"><text  @click="mymakePhoneCall('{{vr.buses_phone}}')">电话:{{vr.buses_phone}}</text></view>
+							</view>
+								<view class="flex-treble   margin-xs radius"> <text class="text-grey">发车时间:{{vr.buses_start_date}}</text> </view>
+				
+						</view>
+					</view>
+				</view>
+			</div>
+			
+		</view>
+		<view   v-if="TabCur==1" class=" padding margin text-center">
+			<!-- 班车 -->
+			<form>
+				<view class="cu-form-group margin-top">
+					<view class="title">出发</view>
+					<picker @change="PickerChangestart" :value="startindex" :range="start">
+						<view class="picker">
+							{{startindex>-1?start[startindex]:'请选择出发地'}}
+						</view>
+					</picker>
+				</view>
+					<view class="cu-form-group ">
+					<view class="title">终点</view>
+					<picker @change="PickerChangeend" :value="endindex" :range="end">
+						<view class="picker">
+							{{endindex>-1?end[endindex]:'请选择目的地'}}
+						</view>
+					</picker>
+				</view>
+				<view class="padding flex flex-direction">
+						<button class="cu-btn bg-red margin-tb-sm lg" @click="search"><text class="cuIcon-search"></text> 查询</button>
+				</view>
+			</form>
+			<view  v-for="v in busdata" :key="v.id"  >
+				<view class="solids-bottom padding-xs flex align-center">
+					<view class="flex-sub text-center">
+						<view class="padding"><text class="text-bold text-red">线路:{{v.buses_start}}→{{v.buses_midway}}→{{v.buses_end}} </text></view>
+						<view class="solid-bottom text-sm padding" v-for="vl in v.get_buses" :key="vl.id"  >
+							<view class="flex    ">
+								<view class="flex-treble  padding-sm margin-xs radius text-orange">{{vl.buses_name}}</view>
+								<view class="flex-treble  padding-sm margin-xs radius text-cyan"><text  @click="mymakePhoneCall(vl.buses_phone)">电话:{{vl.buses_phone}}</text></view>
+							</view>
+							<view class="flex    ">
+								<view class="flex-treble  padding-sm margin-xs radius"> <text class="text-grey">发车时间:{{vl.buses_start_date}}</text> </view>
+								<view class="flex-treble  padding-sm margin-xs radius"><text class="text-grey">返回时间:{{vl.buses_end_date}}</text>  </view>
+							</view>
 						</view>
 					</view>
 				</view>
 			</view>
+			<!-- 班车end -->
 		</view>
+	
 	</view>
 </template>
 <script>
 	export default {
 		mounted(){
 			this.getBuserR();
+			this.getBusergetBusercuncuntong();
 		},
 		data() {
 			return {
+				TabCur: 0,
 				startindex: -1,
 				start: [],
 				endindex: -1,
@@ -60,13 +103,39 @@
 				    start: '',
 				    end: '',
 				},
-				busdata:[]
+				busdata:[],
+				cuncuntongbusdata:[],
 			}
 		},
 		onLoad() {
 
 		},
 		methods: {
+			getBusergetBusercuncuntong(){
+		
+				this.$api.test('/api/getBusesAll/村村通公交').then((res) => {
+					let bues =  JSON.parse(res.data); 
+					console.log('所有数据',bues);		
+					if(bues.code == 200){
+						this.cuncuntongbusdata = bues.data;
+						uni.showToast({
+							title:bues.msg,
+							icon: 'none',
+							mask: true
+						});
+					}
+					if(bues.code == 400){
+						uni.showToast({
+						    title:bues.msg,
+						    icon: 'none',
+						    mask: true
+						});
+					}
+					
+				}).catch((err)=>{
+					console.log('数据请求失败', err);
+				})
+			},
 			getBuserR(){
 				//获班线数据
 				this.$api.test('/api/getBusesRouteall').then((res)=>{
@@ -147,6 +216,10 @@
 					phoneNumber: data //仅为示例
 				});
 				console.log('电话', data);
+			},
+			//导航控制
+			tabSelect(e) {
+				this.TabCur = e.currentTarget.dataset.id;
 			}
 		}
 	}
